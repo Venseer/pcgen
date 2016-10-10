@@ -36,14 +36,16 @@ import pcgen.base.formula.visitor.StaticVisitor;
 import pcgen.base.util.FormatManager;
 import pcgen.output.channel.ChannelUtilities;
 
+/**
+ * InputFunction is a function designed to allow pulling information from a channel (as
+ * defined by the argument to the input function).
+ */
 public class InputFunction implements Function
 {
 
 	/**
 	 * Returns the function name for this function. This is how it is called by
 	 * a user in a formula.
-	 * 
-	 * @see pcgen.base.formula.base.Function#getFunctionName()
 	 */
 	@Override
 	public String getFunctionName()
@@ -51,9 +53,6 @@ public class InputFunction implements Function
 		return "INPUT";
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public final FormatManager<?> allowArgs(SemanticsVisitor visitor, Node[] args,
 		FormulaSemantics semantics)
@@ -80,8 +79,8 @@ public class InputFunction implements Function
 		String inputName = ((SimpleNode) inputNode).getText();
 		String varName = ChannelUtilities.createVarName(inputName);
 		VariableLibrary varLib =
-				semantics.peek(FormulaSemantics.FMANAGER).getFactory();
-		LegalScope scope = semantics.peek(FormulaSemantics.SCOPE);
+				semantics.get(FormulaSemantics.FMANAGER).getFactory();
+		LegalScope scope = semantics.get(FormulaSemantics.SCOPE);
 		FormatManager<?> formatManager =
 				varLib.getVariableFormat(scope, varName);
 		if (formatManager == null)

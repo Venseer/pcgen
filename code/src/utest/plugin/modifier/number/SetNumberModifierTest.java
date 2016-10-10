@@ -17,18 +17,23 @@
  */
 package plugin.modifier.number;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
+import org.junit.Test;
+
 import pcgen.base.format.NumberManager;
 import pcgen.base.formula.base.EvaluationManager;
 import pcgen.base.formula.base.LegalScope;
+import pcgen.base.formula.base.ManagerFactory;
 import pcgen.base.formula.inst.SimpleLegalScope;
+import pcgen.base.formula.inst.SimpleVariableStore;
 import pcgen.base.solver.IndividualSetup;
 import pcgen.base.solver.Modifier;
 import pcgen.base.solver.SplitFormulaSetup;
 import pcgen.base.util.FormatManager;
-
-import org.junit.Test;
 import plugin.modifier.testsupport.EvalManagerUtilities;
-import static org.junit.Assert.*;
 
 public class SetNumberModifierTest
 {
@@ -42,7 +47,7 @@ public class SetNumberModifierTest
 		try
 		{
 			SetModifierFactory m = new SetModifierFactory();
-			m.getModifier(100, null, null, null, null);
+			m.getModifier(100, null, new ManagerFactory(){}, null, null, null);
 			fail("Expected SetModifier with null set value to fail");
 		}
 		catch (IllegalArgumentException | NullPointerException e)
@@ -196,8 +201,8 @@ public class SetNumberModifierTest
 	{
 		SetModifierFactory factory = new SetModifierFactory();
 		Modifier<Number> modifier =
-				factory.getModifier(35, "6.5", null, varScope, numManager);
-		assertEquals((35l<<32)+factory.getInherentPriority(), modifier.getPriority());
+				factory.getModifier(35, "6.5", new ManagerFactory(){}, null, varScope, numManager);
+		assertEquals((35L<<32)+factory.getInherentPriority(), modifier.getPriority());
 		assertSame(Number.class, modifier.getVariableFormat());
 		assertEquals(6.5, modifier.process(EvalManagerUtilities.getInputEM(4.3)));
 	}
@@ -208,14 +213,14 @@ public class SetNumberModifierTest
 		SplitFormulaSetup setup = new SplitFormulaSetup();
 		setup.loadBuiltIns();
 		setup.getLegalScopeLibrary().registerScope(varScope);
-		IndividualSetup iSetup = new IndividualSetup(setup, "Global");
+		IndividualSetup iSetup = new IndividualSetup(setup, "Global", new SimpleVariableStore());
 		SetModifierFactory factory = new SetModifierFactory();
 		Modifier<Number> modifier =
-				factory.getModifier(35, "6+5", iSetup.getFormulaManager(), varScope, numManager);
-		assertEquals((35l<<32)+factory.getInherentPriority(), modifier.getPriority());
+				factory.getModifier(35, "6+5", new ManagerFactory(){}, iSetup.getFormulaManager(), varScope, numManager);
+		assertEquals((35L<<32)+factory.getInherentPriority(), modifier.getPriority());
 		assertSame(Number.class, modifier.getVariableFormat());
 		EvaluationManager evalManager = EvalManagerUtilities.getInputEM(4.3);
-		evalManager.push(EvaluationManager.FMANAGER, iSetup.getFormulaManager());
-		assertEquals(11, modifier.process(evalManager));
+		assertEquals(11, modifier.process(
+			evalManager.getWith(EvaluationManager.FMANAGER, iSetup.getFormulaManager())));
 	}
 }

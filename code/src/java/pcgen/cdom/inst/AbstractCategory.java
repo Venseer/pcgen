@@ -21,7 +21,6 @@ import java.net.URI;
 
 import pcgen.cdom.base.Categorized;
 import pcgen.cdom.base.Category;
-import pcgen.cdom.base.Loadable;
 import pcgen.cdom.reference.CDOMAllRef;
 import pcgen.cdom.reference.CDOMCategorizedSingleRef;
 import pcgen.cdom.reference.CDOMGroupRef;
@@ -46,6 +45,7 @@ public abstract class AbstractCategory<T extends Categorized<T>> implements
 	}
 
 	@Override
+	@SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
 	public Category<T> getParentCategory()
 	{
 		return null;
@@ -168,6 +168,7 @@ public abstract class AbstractCategory<T extends Categorized<T>> implements
 	}
 
 	@Override
+	@SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
 	public ManufacturableFactory<T> getParent()
 	{
 		return null;

@@ -23,12 +23,12 @@ import java.util.Set;
 import pcgen.base.calculation.PCGenModifier;
 import pcgen.base.formula.base.Function;
 import pcgen.base.formula.base.LegalScope;
-import pcgen.base.formula.base.WriteableVariableStore;
+import pcgen.base.formula.base.ManagerFactory;
+import pcgen.base.formula.inst.SimpleVariableStore;
 import pcgen.base.solver.IndividualSetup;
 import pcgen.base.solver.Modifier;
 import pcgen.base.solver.SplitFormulaSetup;
 import pcgen.base.util.FormatManager;
-import pcgen.cdom.formula.MonitorableVariableStore;
 import pcgen.cdom.formula.PluginFunctionLibrary;
 import pcgen.cdom.formula.scope.LegalScopeUtilities;
 import pcgen.rules.persistence.MasterModifierFactory;
@@ -37,6 +37,8 @@ public class VariableContext
 {
 
 	private final SplitFormulaSetup formulaSetup = new SplitFormulaSetup();
+	private final ManagerFactory managerFactory = new ManagerFactory(){};
+
 	private MasterModifierFactory modFactory = null;
 	private IndividualSetup dummySetup = null;
 
@@ -61,7 +63,8 @@ public class VariableContext
 	{
 		if (dummySetup == null)
 		{
-			dummySetup = new PCGenFormulaSetup(formulaSetup, "Global");
+			dummySetup = new IndividualSetup(formulaSetup, "Global",
+				new SimpleVariableStore());
 		}
 		return dummySetup;
 	}
@@ -85,8 +88,8 @@ public class VariableContext
 	public <T> PCGenModifier<T> getModifier(String modType, String modValue,
 		int priorityNumber, LegalScope varScope, FormatManager<T> formatManager)
 	{
-		return getModFactory().getModifier(modType, modValue, priorityNumber,
-			varScope, formatManager);
+		return getModFactory().getModifier(modType, modValue, managerFactory,
+			priorityNumber, varScope, formatManager);
 	}
 
 	public Set<LegalScope> getKnownLegalScopes(String varName)
@@ -137,18 +140,9 @@ public class VariableContext
 		return formulaSetup;
 	}
 
-	public static class PCGenFormulaSetup extends IndividualSetup
+	public ManagerFactory getManagerFactory()
 	{
-		public PCGenFormulaSetup(SplitFormulaSetup parent, String globalName)
-		{
-			super(parent, globalName);
-		}
-
-		@Override
-		public WriteableVariableStore buildVariableStore()
-		{
-			return new MonitorableVariableStore();
-		}
+		return managerFactory;
 	}
 
 }
