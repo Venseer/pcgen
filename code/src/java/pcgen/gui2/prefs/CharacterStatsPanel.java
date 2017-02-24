@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 26/10/2008 14:38:01
  *
- * $Id: $
  */
 package pcgen.gui2.prefs;
 
@@ -57,7 +55,6 @@ import pcgen.system.LanguageBundle;
  * the character stats preferences.
  * 
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 @SuppressWarnings("serial")
 public class CharacterStatsPanel extends PCGenPrefsPanel
@@ -76,7 +73,6 @@ public class CharacterStatsPanel extends PCGenPrefsPanel
 	private JComboBoxEx abilityPurchaseModeCombo;
 	private JComboBoxEx abilityRolledModeCombo = null;
 	private JComboBoxEx abilityScoreCombo;
-	private JButton purchaseModeButton;
 	private PurchaseModeFrame pmsFrame = null;
 
 	private ActionListener rolledModeListener;
@@ -231,9 +227,8 @@ public class CharacterStatsPanel extends PCGenPrefsPanel
 		gridbag.setConstraints(label, c);
 		this.add(label);
 		Utility.buildConstraints(c, 1, row++, 3, 1, 0, 0);
-		purchaseModeButton =
-				new JButton(LanguageBundle
-					.getString("in_Prefs_purchaseModeConfig"));
+		JButton purchaseModeButton = new JButton(LanguageBundle
+				.getString("in_Prefs_purchaseModeConfig"));
 		gridbag.setConstraints(purchaseModeButton, c);
 		this.add(purchaseModeButton);
 		purchaseModeButton.addActionListener(new PurchaseModeButtonListener());

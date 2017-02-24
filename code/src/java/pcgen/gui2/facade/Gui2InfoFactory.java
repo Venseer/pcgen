@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 07/02/2011 7:13:32 PM
  *
- * $Id$
  */
 package pcgen.gui2.facade;
 
@@ -129,15 +127,15 @@ import pcgen.util.Delta;
 import pcgen.util.Logging;
 import pcgen.util.enumeration.Tab;
 import pcgen.util.enumeration.View;
+import pcgen.util.enumeration.Visibility;
 
 /**
- * The Class <code>Gui2InfoFactory</code> provides character related information 
+ * The Class {@code Gui2InfoFactory} provides character related information
  * on various facade objects. The information is displayed to the user via the 
  * new user interface. 
  *
  * <br>
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 public class Gui2InfoFactory implements InfoFactory
 {
@@ -2417,7 +2415,9 @@ public class Gui2InfoFactory implements InfoFactory
 		{
 			if (def.getUsableLocation().isAssignableFrom(cl))
 			{
-				if (def.getVisibility().isVisibleTo(View.VISIBLE_DISPLAY))
+				Visibility visibility = def.getVisibility();
+				if (visibility != null && 
+						visibility.isVisibleTo(View.VISIBLE_DISPLAY))
 				{
 					FactKey<?> fk = def.getFactKey();
 					Indirect<?> fact = cdo.get(fk);
@@ -2439,7 +2439,9 @@ public class Gui2InfoFactory implements InfoFactory
 		{
 			if (def.getUsableLocation().isAssignableFrom(cl))
 			{
-				if (def.getVisibility().isVisibleTo(View.VISIBLE_DISPLAY))
+				Visibility visibility = def.getVisibility();
+				if (visibility != null &&
+						visibility.isVisibleTo(View.VISIBLE_DISPLAY))
 				{
 					FactSetKey<?> fk = def.getFactSetKey();
 					String s = getSetString(cdo, fk);

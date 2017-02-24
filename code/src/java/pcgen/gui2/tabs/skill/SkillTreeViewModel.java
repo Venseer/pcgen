@@ -16,7 +16,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * Created on Jul 6, 2010, 3:53:51 PM
  */
 package pcgen.gui2.tabs.skill;
 
@@ -49,11 +48,8 @@ import pcgen.gui2.util.treeview.TreeViewModel;
 import pcgen.gui2.util.treeview.TreeViewPath;
 import pcgen.system.LanguageBundle;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  *
- * @author Connor Petty &lt;cpmeister@users.sourceforge.net&gt;
  */
 public class SkillTreeViewModel implements TreeViewModel<SkillFacade>,
 		DataView<SkillFacade>, SkillBonusListener, ListSelectionListener
@@ -211,7 +207,7 @@ public class SkillTreeViewModel implements TreeViewModel<SkillFacade>,
 		Object displayPath[];
 		if (path.length > 0 && StringUtils.isEmpty(String.valueOf(path[path.length - 1])))
 		{
-			displayPath = Arrays.copyOf(path, path.length);
+			displayPath = Arrays.copyOf(path, path.length - 1);
 		}
 		else
 		{

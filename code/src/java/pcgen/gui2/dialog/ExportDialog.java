@@ -16,7 +16,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * Created on Nov 6, 2011, 12:26:57 PM
  */
 package pcgen.gui2.dialog;
 
@@ -57,15 +56,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
-
 import pcgen.cdom.base.Constants;
 import pcgen.core.Globals;
 import pcgen.core.SettingsHandler;
@@ -82,10 +72,18 @@ import pcgen.system.ConfigurationSettings;
 import pcgen.system.PCGenSettings;
 import pcgen.util.Logging;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
+
 /**
  * The dialog provides the list of output sheets for a character or party to
  * be exported to.
- * @author Connor Petty &lt;cpmeister@users.sourceforge.net&gt;
  */
 @SuppressWarnings("serial")
 public final class ExportDialog extends JDialog implements ActionListener, ListSelectionListener
@@ -347,7 +345,7 @@ public final class ExportDialog extends JDialog implements ActionListener, ListS
 				path = new File(PCGenSettings.getPcgDir());
 			}
 			name = character.getTabNameRef().get();
-			if (name == null || "".equals(name))
+			if (StringUtils.isEmpty(name))
 			{
 				name = character.getNameRef().get();
 			}
@@ -679,8 +677,7 @@ public final class ExportDialog extends JDialog implements ActionListener, ListS
 				return Collections.emptyList();
 			}
 			IOFileFilter fileFilter = FileFilterUtils.notFileFilter(new SuffixFileFilter(".fo"));
-			IOFileFilter dirFilter = FileFilterUtils.makeSVNAware(TrueFileFilter.INSTANCE);
-			return FileUtils.listFiles(dir, fileFilter, dirFilter);
+			return FileUtils.listFiles(dir, fileFilter, TrueFileFilter.INSTANCE);
 		}
 
 		@Override

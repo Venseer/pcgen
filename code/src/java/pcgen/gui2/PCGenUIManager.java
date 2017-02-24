@@ -1,5 +1,4 @@
 /*
- * PCGenUIManager.java
  * Copyright 2008 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -15,19 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * 
- * Created on Jul 14, 2008, 8:43:48 PM
  */
 package pcgen.gui2;
 
-import gmgen.GMGenSystem;
 import javax.swing.SwingUtilities;
-import org.apache.commons.lang3.SystemUtils;
+
 import pcgen.gui2.dialog.PreferencesDialog;
 import pcgen.gui2.facade.GMGenMessageHandler;
 import pcgen.gui2.plaf.MacGUIHandler;
 import pcgen.pluginmgr.PluginManager;
 import pcgen.system.Main;
+
+import gmgen.GMGenSystem;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * The PCGenUIManager is responsible for starting up and shutting down PCGen's
@@ -35,7 +34,6 @@ import pcgen.system.Main;
  * frameworks such as the application toolbar for Macs.
  *
  * @see pcgen.gui2.PCGenFrame
- * @author Connor Petty &lt;cpmeister@users.sourceforge.net&gt;
  */
 public final class PCGenUIManager
 {
@@ -60,16 +58,7 @@ public final class PCGenUIManager
 
 	public static void startGUI()
 	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-
-			@Override
-			public void run()
-			{
-				pcgenFrame.startPCGenFrame();
-			}
-
-		});
+		SwingUtilities.invokeLater(pcgenFrame::startPCGenFrame);
 	}
 
 	public static void displayPreferencesDialog()
@@ -93,7 +82,7 @@ public final class PCGenUIManager
 		Main.shutdown();
 	}
 
-	public static void displayGmGen()
+	static void displayGmGen()
 	{
 		if (GMGenSystem.inst == null)
 		{

@@ -18,7 +18,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA.
  *
- * Created on August 18th, 2002.
  */
 package pcgen.gui2.tools; // hm.binkley.gui;
 
@@ -47,7 +46,7 @@ import pcgen.system.PropertyContext;
  * the divider.
  * 
  * <p>({@code JSplitPane} is used to divide two (and only two)
- * {@code Component}s.  The two <code>Component</code>s are graphically
+ * {@code Component}s.  The two {@code Component}s are graphically
  * divided based on the look and feel implementation, and the two
  * {@code Component}s can then be interactively resized by the user.
  * Information on using {@code JSplitPane} is in <a
@@ -72,7 +71,6 @@ import pcgen.system.PropertyContext;
  * the divider unmovable, and the popup menu only has an "Unlocked" item.
  * Locking is also recursive for {@code FlippingSplitPane} components.
  *
- * @author &lt;a href="mailto:binkley@alumni.rice.edu"&gt;B. K. Oxley (binkley)&lt;/a&gt;
  */
 public class FlippingSplitPane extends JSplitPane
 {
@@ -332,7 +330,7 @@ public class FlippingSplitPane extends JSplitPane
 	 * {@code invertOrientation} is a convenience function to turn horizontal
 	 * into vertical orientations and the converse.
 	 *
-	 * @param orientation {@code int}, either <code>HORIZONTAL_ORIENTATION</code>
+	 * @param orientation {@code int}, either {@code HORIZONTAL_ORIENTATION}
 	 * or {@code VERTICAL_ORIENTATION}
 	 *
 	 * @return {@code int}, the inverse

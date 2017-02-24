@@ -16,7 +16,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Current Ver: $Revision$
  */
 package pcgen.core.npcgen;
 
@@ -32,10 +31,9 @@ import pcgen.core.Skill;
  * to treat them special.
  * 
  * <p>As an example, if the user specifies that TYPE.Profession skills are to 
- * have a certain weight the assumption is that that weight applies to picking
+ * have a certain weight the assumption is that weight applies to picking
  * a single Profession skill and not to each Profession skill individually.
  * 
- * @author boomer70 &lt;boomer70@yahoo.com&gt;
  * 
  */
 public class SkillChoice

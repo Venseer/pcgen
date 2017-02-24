@@ -87,12 +87,12 @@ public class PreFactSetParser extends AbstractPrerequisiteListParser
 		{
 			throw new PersistenceLayerException(parseResult.toString());
 		}
-		if (formula.indexOf("[") >= 0 || formula.indexOf("]") >= 0)
+		if (formula.contains("[") || formula.contains("]"))
 		{
 			throw new PersistenceLayerException("Prerequisite " + kind
 				+ " can not contain []: " + formula);
 		}
-		if (formula.indexOf("|") >= 0)
+		if (formula.contains("|"))
 		{
 			throw new PersistenceLayerException("Prerequisite " + kind
 				+ " can not contain |: " + formula);
@@ -145,7 +145,7 @@ public class PreFactSetParser extends AbstractPrerequisiteListParser
 		{
 			// Token now contains all of the possible matches,
 			// min contains the target number (if there is one)
-			// number contains the number of 'tokens' that be be at least 'min'
+			// number contains the number of 'tokens' that be at least 'min'
 			prereq.setOperator(PrerequisiteOperator.GTEQ);
 			// we have more than one option, so use a group
 			prereq.setKind(null);

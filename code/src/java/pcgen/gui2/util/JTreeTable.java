@@ -11,7 +11,6 @@
  * it only in accordance with the terms of the license agreement
  * you entered into with Sun.
  *
- * Current Ver: $Revision: 5184 $
  *
  **/
 package pcgen.gui2.util;
@@ -66,8 +65,6 @@ import pcgen.util.Logging;
  * particular column in the JTable.
  *
  *
- * @author Philip Milne
- * @author Scott Violet
  **/
 public class JTreeTable extends JTableEx
 {
@@ -268,7 +265,7 @@ public class JTreeTable extends JTableEx
 	 * Makes sure all the path components in path are expanded (except
 	 * for the last path component) and scrolls so that the
 	 * node identified by the path is displayed. Only works when this
-	 * {@code JTree} is contained in a <code>JScrollPane</code>.
+	 * {@code JTree} is contained in a {@code JScrollPane}.
 	 *
 	 * @param path  the {@code TreePath} identifying the node to
 	 *         bring into view
@@ -295,8 +292,6 @@ public class JTreeTable extends JTableEx
 	 * the AbstractTableModel.
 	 *
 	 *
-	 * @author Philip Milne
-	 * @author Scott Violet
 	 */
 	private static class TreeTableModelAdapter extends AbstractTableModel
 			implements SortableTableModel, TreeModelListener,
@@ -741,7 +736,7 @@ public class JTreeTable extends JTableEx
 		}
 
 		/**
-		 * If <code>updatingListSelectionModel</code> is false,
+		 * If {@code updatingListSelectionModel} is false,
 		 * this will reset the selected paths from the selected
 		 * rows in the list selection model.
 		 **/

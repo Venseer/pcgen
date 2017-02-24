@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on December 15, 2003, 12:21 PM
  *
- * Current Ver: $Revision$
  *
  */
 package pcgen.io.exporttoken;
@@ -62,7 +60,7 @@ public class EqTypeToken extends EqToken
 		//Merge
 		String token = aTok.nextToken();
 		int merge = Constants.MERGE_ALL;
-		if (token.indexOf("MERGE") >= 0)
+		if (token.contains("MERGE"))
 		{
 			merge = returnMergeType(token);
 			token = aTok.nextToken();

@@ -16,17 +16,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 16/11/2008 11:00:00
  *
- * $Id: $
  */
 package pcgen.gui2.prefs;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
@@ -53,7 +49,6 @@ import pcgen.util.Logging;
  * preferences to be edited by the user.
  * 
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 @SuppressWarnings("serial")
 public class SourcesPanel extends PCGenPrefsPanel

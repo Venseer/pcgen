@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 26/10/2008 14:51:48
  *
- * $Id: $
  */
 package pcgen.gui2.prefs;
 
@@ -26,7 +24,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -51,7 +48,6 @@ import pcgen.system.LanguageBundle;
  * managing the language and unit set preferences.
  * 
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 @SuppressWarnings("serial")
 public class LanguagePanel extends PCGenPrefsPanel

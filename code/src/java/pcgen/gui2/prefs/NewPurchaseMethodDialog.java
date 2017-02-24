@@ -17,9 +17,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on August 20, 2002, 1:57 PM
  *
- * $Id$
  */
 package pcgen.gui2.prefs;
 
@@ -30,13 +28,10 @@ import pcgen.gui2.tools.Utility;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * @author Greg Bingleman &lt;byngl@hotmail.com&gt;
  */
 class NewPurchaseMethodDialog extends JDialog
 {

@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 20/01/2012 3:48:05 PM
  *
- * $Id$
  */
 package pcgen.system;
 
@@ -36,7 +34,6 @@ import pcgen.util.Logging;
  *
  * <br>
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 public class ConsoleUIDelegate implements UIDelegate
 {
@@ -89,17 +86,7 @@ public class ConsoleUIDelegate implements UIDelegate
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see pcgen.core.facade.UIDelegate#showWarningPrompt(java.lang.String, java.lang.String)
-	 */
-    @Override
-	public boolean showWarningPrompt(String title, String message)
-	{
-		Logging.log(Logging.WARNING, title + " - " + message);
-		return true;
-	}
-
-    @Override
+	@Override
 	public void showWarningMessage(String title, String message)
 	{
 		Logging.log(Logging.WARNING, title + " - " + message);

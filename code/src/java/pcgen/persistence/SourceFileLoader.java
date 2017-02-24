@@ -16,7 +16,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on Apr 30, 2010, 10:02:45 PM
  */
 package pcgen.persistence;
 
@@ -26,7 +25,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -123,7 +121,6 @@ import pcgen.util.Logging;
 
 /**
  *
- * @author Connor Petty &lt;cpmeister@users.sourceforge.net&gt;
  */
 public class SourceFileLoader extends PCGenTask implements Observer
 {

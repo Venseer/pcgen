@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 18/01/2009 11:31:57 AM
  *
- * $Id$
  */
 
 package pcgen.gui2.converter.panel;
@@ -82,7 +80,6 @@ import pcgen.util.Logging;
  * the conversion is being run.
  * 
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 public class RunConvertPanel extends ConvertSubPanel implements Observer, ConversionDecider
 {
@@ -329,7 +326,7 @@ public class RunConvertPanel extends ConvertSubPanel implements Observer, Conver
 	/**
 	 * Keeps track if there has been set an error message.
 	 *
-	 * @param errorState <code>true</code> if there was an error message
+	 * @param errorState {@code true} if there was an error message
 	 */
 	public void setErrorState(boolean errorState)
 	{
@@ -564,15 +561,16 @@ public class RunConvertPanel extends ConvertSubPanel implements Observer, Conver
 	 */
 	private void sortCampaignsByRank(final List<Campaign> aSelectedCampaignsList)
 	{
-		Collections.sort(aSelectedCampaignsList, new Comparator<Campaign>()
-		{
-			@Override
-			public int compare(Campaign c1, Campaign c2)
-			{
-				return c1.getSafe(IntegerKey.CAMPAIGN_RANK) - c2.getSafe(IntegerKey.CAMPAIGN_RANK);
-			}
+		aSelectedCampaignsList.sort(new Comparator<Campaign>()
+        {
+            @Override
+            public int compare(Campaign c1, Campaign c2)
+            {
+                return c1.getSafe(IntegerKey.CAMPAIGN_RANK) -
+                        c2.getSafe(IntegerKey.CAMPAIGN_RANK);
+            }
 
-		});
+        });
 
 	}
 

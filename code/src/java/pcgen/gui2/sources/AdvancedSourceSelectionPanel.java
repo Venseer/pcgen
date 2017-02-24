@@ -16,7 +16,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * Created on Feb 21, 2009, 7:15:03 PM
  */
 package pcgen.gui2.sources;
 
@@ -83,7 +82,6 @@ import pcgen.util.Logging;
 
 /**
  *
- * @author Connor Petty &lt;cpmeister@users.sourceforge.net&gt;
  */
 class AdvancedSourceSelectionPanel extends JPanel
 		implements ListSelectionListener, ListListener<CampaignFacade>, ActionListener
@@ -691,7 +689,7 @@ class AdvancedSourceSelectionPanel extends JPanel
 	}
 
 	/**
-	 * The Class <code>CampaignRenderer</code> displays the tree cells of the
+	 * The Class {@code CampaignRenderer} displays the tree cells of the
 	 * source table.  
 	 */
 	private class CampaignRenderer extends TreeColumnCellRenderer

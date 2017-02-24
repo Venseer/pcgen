@@ -16,7 +16,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * Created on Jan 3, 2016, 9:14:07 PM
  */
 package pcgen.util.fop;
 
@@ -58,7 +57,6 @@ import pcgen.util.Logging;
  * which you can point to a file, or a Renderer. The Renderer is used by print preview and for
  * direct printing.
  *
- * @author Connor Petty &lt;cpmeister@users.sourceforge.net&gt;
  */
 public final class FopTask implements Runnable
 {
@@ -154,7 +152,7 @@ public final class FopTask implements Runnable
 
 	/**
 	 * Creates a new FopTask that transforms the input stream using the given xsltFile and outputs a
-	 * pdf document to the given Renderer. This task can can be used for both previewing a pdf
+	 * pdf document to the given Renderer. This task can be used for both previewing a pdf
 	 * document as well as printing a pdf
 	 *
 	 * @param inputXmlStream the fop xml input stream

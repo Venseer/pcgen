@@ -38,7 +38,6 @@ import java.awt.Font;
  * <li>x-small
  * <li>xx-small
  * </ul>
- * @author Vincent Lhote
  */
 public class FontManipulation
 {
@@ -62,7 +61,7 @@ public class FontManipulation
 	}
 
 	/**
-	 * For extra extra large font.
+	 * For extra large font.
 	 * 
 	 * @param f
 	 *            base font
@@ -73,7 +72,7 @@ public class FontManipulation
 	}
 
 	/**
-	 * For extra extra large font.
+	 * For extra large font.
 	 * 
 	 * @param container
 	 *            element to change the font of

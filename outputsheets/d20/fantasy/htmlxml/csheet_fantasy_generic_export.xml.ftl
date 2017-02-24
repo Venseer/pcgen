@@ -1,7 +1,6 @@
 <#ftl encoding="UTF-8" strip_whitespace=true >
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: base.xml 24177 2014-06-16 22:41:07Z jdempsey $
 -->
 <character>
 	<export>
@@ -2550,6 +2549,15 @@
 	<pfs_chronicles>
 	<@abilityBlock category="PFS Chronicle" nature="ALL" hidden=false typeName="PFSChronicle" nodeName="pfs_chronicle" />
 	</pfs_chronicles>
+	<!--
+	  ====================================
+	  ====================================
+			PFS Boons
+	  ====================================
+	  ====================================-->
+	<pfs_boons>
+	<@abilityBlock category="PFS Boon" nature="ALL" hidden=false typeName="PFSBoon" nodeName="pfs_boon" />
+	</pfs_boons>
 	<!--
 	====================================
 	  ====================================

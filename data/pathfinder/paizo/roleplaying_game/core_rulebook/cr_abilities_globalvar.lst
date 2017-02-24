@@ -102,11 +102,6 @@ CATEGORY=Class|Barbarian.MOD	DEFINE:Barbarian_CF_ClassSkills|0
 CATEGORY=Class|Barbarian.MOD	DEFINE:Barbarian_CF_WeaponProficiencies|0
 CATEGORY=Class|Barbarian.MOD	DEFINE:Barbarian_CF_ArmorProficiencies|0
 
-CATEGORY=Class|Barbarian.MOD									ABILITY:Barbarian Class Feature|AUTOMATIC|Barbarian ~ Weapon and Armor Proficiency|PREVAREQ:Barbarian_CF_Proficiencies,0
-CATEGORY=Class|Barbarian.MOD									ABILITY:Internal|AUTOMATIC|Weapon Prof ~ Martial|Weapon Prof ~ Simple|PREVAREQ:Barbarian_CF_Weapon_Proficiencies,0
-CATEGORY=Class|Barbarian.MOD									ABILITY:Internal|AUTOMATIC|Shield Prof|TYPE=ArmorProfMedium|PREVAREQ:Barbarian_CF_Armor_Proficiencies,0
-CATEGORY=Class|Barbarian.MOD
-CATEGORY=Class|Barbarian.MOD									ABILITY:Barbarian Class Feature|AUTOMATIC|Barbarian ~ Uncanny Dodge Tracker
 CATEGORY=Class|Barbarian.MOD																														BONUS:VAR|Barbarian_CF_Proficiencies|1|TYPE=Boolean|PREFACT:1,ABILITIES,Barbarian_CF_Proficiencies=True
 #,Barbarian_CF_WeaponProficiencies=True,Barbarian_CF_ArmorProficiencies=True
 CATEGORY=Class|Barbarian.MOD																														BONUS:VAR|Barbarian_CF_Rage|1|TYPE=Boolean|PREFACT:1,ABILITIES,Barbarian_CF_Rage=True
@@ -342,6 +337,8 @@ CATEGORY=Class|Druid.MOD	DEFINE:Druid_CF_ClassSkills|0
 CATEGORY=Class|Druid.MOD	DEFINE:Druid_CF_WildShape6|0
 CATEGORY=Class|Druid.MOD	DEFINE:Druid_CF_WildShape8|0
 
+CATEGORY=Class|Druid.MOD	DEFINE:Druid_CF_DruidDomain|0
+CATEGORY=Class|Druid.MOD	DEFINE:Druid_CF_AnimalCompanion|0
 
 CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Druid_CF_SpontaneousCasting|1|TYPE=Boolean|PREFACT:1,ABILITIES,Druid_CF_SpontaneousCasting=True
 CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Druid_CF_NatureSense|1|TYPE=Boolean|PREFACT:1,ABILITIES,Druid_CF_NatureSense=True
@@ -357,6 +354,9 @@ CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Drui
 CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Druid_CF_ClassSkills|1|TYPE=Boolean|PREFACT:1,ABILITIES,Druid_CF_ClassSkills=True
 CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Druid_CF_WildShape6|1|TYPE=Boolean|PREFACT:1,ABILITIES,Druid_CF_WildShape=True
 CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Druid_CF_WildShape8|1|TYPE=Boolean|PREFACT:1,ABILITIES,Druid_CF_WildShape=True
+
+CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Druid_CF_DruidDomain|1|TYPE=Boolean|PREFACT:1,ABILITIES,Druid_CF_DruidDomain=True
+CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Druid_CF_AnimalCompanion|1|TYPE=Boolean|PREFACT:1,ABILITIES,Druid_CF_AnimalCompanion=True
 
 # Old Style
 CATEGORY=Class|Druid.MOD																																										BONUS:VAR|Druid_CF_SpontaneousCasting|1|TYPE=Boolean|PREABILITY:1,CATEGORY=Archetype,TYPE.DruidSpontaneousCasting
@@ -526,19 +526,6 @@ CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_KiPoolAbilities1|1|TYPE=Boolean|PREFA
 CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_KiPoolAbilities7|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_KiPoolAbilities7=True
 CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_KiPoolAbilities10|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_KiPoolAbilities10=True
 CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_KiPoolAbilities16|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_KiPoolAbilities16=True
-
-
-
-
-
-
-
-
-
-
-
-
-
 CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_SlowFall10|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_SlowFall10=True
 CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_SlowFall20|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_SlowFall20=True
 CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_SlowFall30|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_SlowFall30=True
@@ -549,8 +536,6 @@ CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_SlowFall70|1|TYPE=Boolean|PREFACT:1,A
 CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_SlowFall80|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_SlowFall80=True
 CATEGORY=Class|Monk.MOD		BONUS:VAR|Monk_CF_SlowFall90|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_SlowFall90=True
 
-
-
 CATEGORY=Class|Monk.MOD																										BONUS:VAR|Monk_CF_WeaponProficiencies|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_WeaponProficiencies=True
 CATEGORY=Class|Monk.MOD																										BONUS:VAR|Monk_CF_BonusFeat18|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_BonusFeat18=True
 CATEGORY=Class|Monk.MOD																										BONUS:VAR|Monk_CF_BonusFeat10|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_BonusFeat10=True
@@ -558,13 +543,6 @@ CATEGORY=Class|Monk.MOD																										BONUS:VAR|Monk_CF_BonusFeat6|1|
 CATEGORY=Class|Monk.MOD																										BONUS:VAR|Monk_CF_BonusFeat2|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_BonusFeat2=True
 CATEGORY=Class|Monk.MOD																										BONUS:VAR|Monk_CF_BonusFeat1|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_BonusFeat1=True
 CATEGORY=Class|Monk.MOD																										BONUS:VAR|Monk_CF_Alignment|1|TYPE=Boolean|PREFACT:1,ABILITIES,Monk_CF_Alignment=True
-
-
-
-
-
-
-
 
 CATEGORY=Class|Monk.MOD
 CATEGORY=Class|Monk.MOD								ABILITY:Special Ability|AUTOMATIC|Weapon and Armor Proficiency ~ Monk|PREVAREQ:Monk_CF_Proficiencies,0

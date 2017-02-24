@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 19/10/2013
  *
- * $Id: SkillsOutputOrder.java 21773 2013-10-19 08:36:38Z jdempsey $
  */
 package pcgen.cdom.enumeration;
 
@@ -27,7 +25,6 @@ import pcgen.system.LanguageBundle;
 /**
  * SkillsExport defines which skills are to be displayed on an output sheet.
  * 
- * @author Stefan Radermacher &lt;zaister@users.sourceforge.net&gt;
  */
 public enum SkillFilter
 {
@@ -55,7 +52,8 @@ public enum SkillFilter
 	 * character's skill tab.
 	 * 
 	 *  @deprecated - the user's skill setting is now always used if present. This is retained for compatibility with saved characters. */
-	SkillsTab(4, "", LanguageBundle.getString("in_Prefs_skillFilterSkillTab")),
+
+	@Deprecated SkillsTab(4, "", LanguageBundle.getString("in_Prefs_skillFilterSkillTab")),
 
 	Selected(5, "SELECTED", null);
 

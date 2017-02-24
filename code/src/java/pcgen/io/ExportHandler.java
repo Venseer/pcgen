@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on March 07, 2002, 8:30 PM
  *
- * Current Ver: $Revision$
  *
  */
 package pcgen.io;
@@ -36,7 +34,6 @@ import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -106,7 +103,6 @@ import pcgen.util.enumeration.View;
  * code in here deals with replacing tokens and dealing with the FOR and IIF 
  * constructs that can be found in the character sheet templates. 
  *
- * @author Thomas Behr
  */
 public final class ExportHandler
 {
@@ -348,7 +344,7 @@ public final class ExportHandler
 		{
 			String message = "Error exporting character using template " + templateFile;
 			Logging.errorPrint(message, exc);
-			throw new ExportException(exc, message + " : " + exc.getLocalizedMessage());
+			throw new ExportException(message + " : " + exc.getLocalizedMessage(), exc);
 		}
 		finally
 		{
@@ -517,7 +513,7 @@ public final class ExportHandler
 
 					// Either deal with an EQTYPE or a straight EQ token
 					EqToken token = null;
-					if (aString.indexOf("EQTYPE") > -1)
+					if (aString.contains("EQTYPE"))
 					{
 						token = new EqTypeToken();
 					}
@@ -886,7 +882,7 @@ public final class ExportHandler
 			{
 				return leftString.equals(rightString.substring(1));
 			}
-			return 0 <= leftString.toUpperCase().indexOf(rightString.toUpperCase());
+			return leftString.toUpperCase().contains(rightString.toUpperCase());
 		}
 	}
 
@@ -1719,13 +1715,13 @@ public final class ExportHandler
 		boolean inFormula = false;
 		for (String string : splitStr)
 		{
-			if (string.indexOf("(") >= 0
+			if (string.contains("(")
 				&& (string.indexOf(")") < string.indexOf("(")))
 			{
 				inFormula = true;
 				buf.append(string);
 			}
-			else if (inFormula && string.indexOf(")") >= 0)
+			else if (inFormula && string.contains(")"))
 			{
 				inFormula = false;
 				buf.append(",");
@@ -2160,10 +2156,10 @@ public final class ExportHandler
 	private boolean containsMathematicalToken(String testString)
 	{
 		if ((testString.indexOf('+') >= 0) || (testString.indexOf('-') >= 0)
-			|| (testString.indexOf(".INTVAL") >= 0)
-			|| (testString.indexOf(".SIGN") >= 0)
-			|| (testString.indexOf(".NOZERO") >= 0)
-			|| (testString.indexOf(".TRUNC") >= 0)
+			|| (testString.contains(".INTVAL"))
+			|| (testString.contains(".SIGN"))
+			|| (testString.contains(".NOZERO"))
+			|| (testString.contains(".TRUNC"))
 			|| (testString.indexOf('*') >= 0) || (testString.indexOf('/') >= 0))
 		{
 			return true;
@@ -3821,7 +3817,6 @@ public final class ExportHandler
 	/**
 	 * {@code PStringTokenizer}
 	 *
-	 * @author Bryan McRoberts &lt;merton_monk@users.sourceforge.net&gt;
 	 */
 	private static final class PStringTokenizer
 	{

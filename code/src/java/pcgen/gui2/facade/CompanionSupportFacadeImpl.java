@@ -16,7 +16,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on Mar 18, 2012, 11:38:13 PM
  */
 package pcgen.gui2.facade;
 
@@ -63,7 +62,6 @@ import pcgen.util.enumeration.Tab;
  * used to help implement companion support for the
  * CharacterFacade.
  * @see pcgen.gui2.facade.CharacterFacadeImpl
- * @author Connor Petty &lt;cpmeister@users.sourceforge.net&gt;
  */
 public class CompanionSupportFacadeImpl implements CompanionSupportFacade, ListListener<CharacterFacade>
 {
@@ -507,7 +505,7 @@ public class CompanionSupportFacadeImpl implements CompanionSupportFacade, ListL
 	}
 
 	/**
-	 * The Class <code>DelegateFileListener</code> tracks the file name of a companion and 
+	 * The Class {@code DelegateFileListener} tracks the file name of a companion and
 	 * keeps the associated Follower record up to date.
 	 */
 	private class DelegateFileListener implements ReferenceListener<File> 
@@ -527,7 +525,7 @@ public class CompanionSupportFacadeImpl implements CompanionSupportFacade, ListL
 	}
 
 	/**
-	 * The Class <code>DelegateNameListener</code> tracks the name of a companion and 
+	 * The Class {@code DelegateNameListener} tracks the name of a companion and
 	 * keeps the associated Follower record up to date.
 	 */
 	private class DelegateNameListener implements ReferenceListener<String> 

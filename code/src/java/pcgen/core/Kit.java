@@ -23,7 +23,6 @@ package pcgen.core;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -47,7 +46,7 @@ import pcgen.util.enumeration.View;
 import pcgen.util.enumeration.Visibility;
 
 /**
- * <code>Kit</code>.
+ * {@code Kit}.
  *
  * @author   Greg Bingleman &lt;byngl@hotmail.com&gt;
  */

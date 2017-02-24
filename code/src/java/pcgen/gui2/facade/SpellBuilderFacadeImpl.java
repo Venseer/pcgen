@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 10/10/2013
  *
- * $Id$
  */
 package pcgen.gui2.facade;
 
@@ -70,7 +68,6 @@ import pcgen.util.Logging;
  * choices to match the choices already made.
  * 
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 public class SpellBuilderFacadeImpl implements SpellBuilderFacade
 {
@@ -366,7 +363,7 @@ public class SpellBuilderFacadeImpl implements SpellBuilderFacade
 					}
 
 					if (!("".equals(reqSpellType))
-						&& (reqSpellType.indexOf(aClass.getSpellType()) < 0))
+						&& (!reqSpellType.contains(aClass.getSpellType())))
 					{
 						continue;
 					}
@@ -486,7 +483,7 @@ public class SpellBuilderFacadeImpl implements SpellBuilderFacade
 				if (aClass != null)
 				{
 					if (!("".equals(spellType))
-						&& (spellType.indexOf(aClass.getSpellType()) < 0))
+						&& (!spellType.contains(aClass.getSpellType())))
 					{
 						continue;
 					}
@@ -511,7 +508,7 @@ public class SpellBuilderFacadeImpl implements SpellBuilderFacade
 			else if (spellList instanceof DomainSpellList)
 			{
 				if (!("".equals(spellType))
-					&& (spellType.indexOf("Divine") < 0))
+					&& (!spellType.contains("Divine")))
 				{
 					continue;
 				}

@@ -16,9 +16,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on March 11, 2002, 8:30 PM
  *
- * Current Ver: $Revision$
  *
  */
 package pcgen.io;
@@ -69,7 +67,6 @@ import org.jetbrains.annotations.Nullable;
  * {@code PCGIOHandler}<br>
  * Reading and Writing PlayerCharacters in PCGen's own format (PCG).
  *
- * @author Thomas Behr 11-03-02
  */
 public final class PCGIOHandler extends IOHandler
 {
@@ -325,7 +322,8 @@ public final class PCGIOHandler extends IOHandler
 	 * @param pcToBeWritten the PlayerCharacter to write
 	 * @param out           the stream to be written to
 	 */
-    @Override
+    @Deprecated
+	@Override
 	public void write(PlayerCharacter pcToBeWritten, GameMode mode, List<CampaignFacade> campaigns, OutputStream out)
 	{
 		final String pcgString;
