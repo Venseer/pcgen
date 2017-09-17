@@ -15,8 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 
 package pcgen.cdom.content;
@@ -151,7 +149,7 @@ public class CampaignURL implements Comparable<CampaignURL>
 		if (obj instanceof CampaignURL)
 		{
 			CampaignURL that = (CampaignURL) obj;
-			return that.getUrlKind().equals(urlKind)
+			return that.getUrlKind() == urlKind
 					&& that.getUrlName().equals(urlName)
 					&& that.getUri().equals(uri)
 					&& urlDesc.equals(that.getUrlDesc());

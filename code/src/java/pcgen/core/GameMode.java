@@ -1,5 +1,4 @@
 /*
- * GameMode.java
  * Copyright 2001 (C) Greg Bingleman <byngl@hotmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,11 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on September 22, 2002, 4:30 PM
- *
- * Current Ver: $Revision$
- *
  */
 package pcgen.core;
 
@@ -69,8 +63,6 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Handles game modes.
- *
- * @author Greg Bingleman &lt;byngl@hotmail.com&gt;
  */
 public final class GameMode implements Comparable<Object>, GameModeFacade
 {
@@ -601,12 +593,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	public void addLevelInfo(final String xpTableName, final LevelInfo levInfo)
 	{
-		XPTable xpTable = xpTableInfo.get(xpTableName);
-		if (xpTable == null)
-		{
-			xpTable = new XPTable(xpTableName);
-			xpTableInfo.put(xpTableName, xpTable);
-		}
+		XPTable xpTable = xpTableInfo.computeIfAbsent(xpTableName, XPTable::new);
 		xpTable.addLevelInfo(levInfo.getLevelString(), levInfo);
 	}
 
@@ -1215,7 +1202,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	public void setXPAwards(final String aString)
 	{
-		String sTmp = "";;
+		String sTmp = "";
 		StringTokenizer aTok = new StringTokenizer(aString, "|", false);
 		
 		while (aTok.hasMoreTokens())
@@ -1319,9 +1306,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return alignmentName;
 	}
 
-	/**
-	 * 
-	 */
+
 	public List<String> getAllowedModes()
 	{
 		if (allowedModes == null)
@@ -1335,9 +1320,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return allowedModes;
 	}
 
-	/**
-	 * 
-	 */
+
 	String getAltHPAbbrev()
 	{
 		return althpAbbrev;
@@ -1445,17 +1428,13 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return hpAbbrev;
 	}
 
-	/**
-	 * 
-	 */
+
 	String getHPText()
 	{
 		return hpName;
 	}
 
-	/**
-	 * 
-	 */
+
 	List<String> getLoadStrings()
 	{
 		return loadStrings;
@@ -1470,9 +1449,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return currencyUnit;
 	}
 
-	/**
-	 * 
-	 */
+
 	public String getRankModFormula()
 	{
 		return rankModFormula;
@@ -1888,7 +1865,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 				final PointBuyCost pbc = pointBuyStatCosts.get(statValue);
 				if (pbc.qualifies(pc, null))
 				{
-					lastStat = statValue.intValue();
+					lastStat = statValue;
 				}
 			}
 		}
@@ -2089,12 +2066,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	private boolean isPurchaseStatModeAllowed()
 	{
-		if ((pointBuyStatCosts == null) || (pointBuyStatCosts.isEmpty()))
-		{
-			return false;
-		}
-
-		return true;
+		return !((pointBuyStatCosts == null) || (pointBuyStatCosts.isEmpty()));
 	}
 
 	/**
@@ -2350,9 +2322,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return ac;
 	}
 
-	/**
-	 *
-	 */
+
 	private AbilityCategory silentlyGetAbilityCategory(final String aKey)
 	{
 		AbilityCategory cat = getContext().getReferenceContext()
@@ -2405,33 +2375,25 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return Collections.unmodifiableCollection(catList);
 	}
 
-	/**
-	 *
-	 */
+
 	public void setPreviewDir(final String aDir)
 	{
 		thePreviewDir = aDir;
 	}
 
-	/**
-	 *
-	 */
+
 	private String getPreviewDir()
 	{
 		return thePreviewDir;
 	}
 
-	/**
-	 *
-	 */
+
 	public void setDefaultPreviewSheet(final String aSheet)
 	{
 		theDefaultPreviewSheet = aSheet;
 	}
 
-	/**
-	 *
-	 */
+
 	public String getDefaultPreviewSheet()
 	{
 		return theDefaultPreviewSheet;
@@ -2452,15 +2414,13 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 			String aString = aTok.nextToken();
 			// in case there is training\leading whitespace after the comma split
 			aString = aString.trim();
-			String minValue;
-			String maxValue;
 
 			try
 			{
 			if (aString.contains("MIN="))
 				{
 					String[] t = aString.split("MIN=");
-					minValue = t[1];
+					String minValue = t[1];
 					int die = Integer.parseInt(minValue);
 					setMinDieSize(die);
 					list.add(die);
@@ -2468,7 +2428,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 				else if (aString.contains("MAX="))
 				{
 					String[] t = aString.split("MAX=");
-					maxValue = t[1];
+					String maxValue = t[1];
 					int die = Integer.parseInt(maxValue);
 					setMaxDieSize(die);
 					list.add(die);
@@ -2496,7 +2456,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		{
 			dieSizes[i] = list.get(i);
 		}
-		list = null;
 		this.setDieSizes(dieSizes);
 	}
 
@@ -2637,9 +2596,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	private LoadContext modeContext = new RuntimeLoadContext(gameRefContext, masterLCS);
 	private String defaultSourceTitle;
 
-	/**
-	 *
-	 */
+
 	public void clearLoadContext()
 	{
 		masterLCS = new ConsolidatedListCommitStrategy();
@@ -2667,19 +2624,12 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 
 	private AbstractReferenceContext getRefContext()
 	{
-		if (SettingsHandler.inputUnconstructedMessages())
-		{
-			return new TrackingReferenceContext();
-		}
-		else
-		{
-			return new RuntimeReferenceContext();
-		}
+		return SettingsHandler.inputUnconstructedMessages() ?
+				new TrackingReferenceContext() :
+				new RuntimeReferenceContext();
 	}
 
-	/**
-	 *
-	 */
+
 	static <T extends Loadable> void resolveReferenceManufacturer(
 			AbstractReferenceContext rc, ReferenceManufacturer<T> rm)
 	{
@@ -2703,41 +2653,31 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		rm.injectConstructed(mfg);
 	}
 
-	/**
-	 *
-	 */
+
 	public LoadContext getContext()
 	{
 		return context;
 	}
 
-	/**
-	 *
-	 */
+
 	public LoadContext getModeContext()
 	{
 		return modeContext;
 	}
 
-	/**
-	 *
-	 */
+
 	public MasterListInterface getMasterLists()
 	{
 		return masterLCS;
 	}
 
-	/**
-	 *
-	 */
+
 	public void addHiddenType(Class<?> cl, String s)
 	{
-		Set<String> set = hiddenTypes.get(cl);
-		if (set == null)
-		{
-			set = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
-			hiddenTypes.put(cl, set);
-		}
+		Set<String> set = hiddenTypes.computeIfAbsent(
+				cl,
+				k -> new TreeSet<>(String.CASE_INSENSITIVE_ORDER)
+		);
 		set.add(s);
 	}
 
@@ -2882,9 +2822,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return defaultSourceTitle;
 	}
 
-	/**
-	 *
-	 */
+
 	public String getTabName(Tab tab)
 	{
 		TabInfo ti = getContext().getReferenceContext().silentlyGetConstructedCDOMObject(
@@ -2892,9 +2830,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return ti.getResolvedName();
 	}
 
-	/**
-	 *
-	 */
+
 	public boolean getTabShown(Tab tab)
 	{
 		TabInfo ti = getContext().getReferenceContext().silentlyGetConstructedCDOMObject(
@@ -2902,9 +2838,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return ti.isVisible();
 	}
 
-	/**
-	 *
-	 */
+
 	public void setTabVisible(CDOMSingleRef<TabInfo> ref, Boolean set)
 	{
 		if (visibleTabs == null)
@@ -2914,9 +2848,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		visibleTabs.put(ref, set);
 	}
 
-	/**
-	 *
-	 */
+
 	public Boolean getTabVisibility(TabInfo ti)
 	{
 		if (visibleTabs == null)
@@ -2937,9 +2869,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 * End SHOWTAB compatibility
 	 */
 
-	/**
-	 *
-	 */
+
 	public LoadInfo getLoadInfo()
 	{
 		return getModeContext().getReferenceContext().silentlyGetConstructedCDOMObject(
@@ -3072,14 +3002,9 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	@Override
 	public String getHeightUnit()
 	{
-		if ("ftin".equals(getUnitSet().getHeightUnit()))
-		{
-			return "inches";
-		}
-		else
-		{
-			return getUnitSet().getHeightUnit();
-		}
+		return "ftin".equals(getUnitSet().getHeightUnit()) ?
+				"inches" :
+				getUnitSet().getHeightUnit();
 	}
 
 	@Override
@@ -3088,17 +3013,13 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return getUnitSet().getWeightUnit();
 	}
 
-	/**
-	 *
-	 */
+
 	AbilityCategory getFeatTemplate()
 	{
 		return featTemplate;
 	}
 
-	/**
-	 *
-	 */
+
 	public void setFeatTemplate(AbilityCategory featTemplate)
 	{
 		this.featTemplate = featTemplate;

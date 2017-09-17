@@ -1,5 +1,4 @@
 /**
- * EquipIconLoader.java
  * Copyright James Dempsey, 2011
  *
  * This library is free software; you can redistribute it and/or
@@ -32,13 +31,12 @@ import pcgen.util.Logging;
 /**
  * The Class {@code EquipIconLoader} loads the equipIcon.lst game mode file.
  *
- * <br>
  * 
  */
 public class EquipIconLoader extends LstLineFileLoader
 {
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.LstLineFileLoader#parseLine(pcgen.rules.context.LoadContext, java.lang.String, java.net.URI)
 	 */
 	@Override

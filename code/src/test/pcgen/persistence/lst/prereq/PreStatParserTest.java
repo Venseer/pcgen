@@ -1,5 +1,4 @@
 /*
- * PreStatLstParserTest.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  * Copyright 2003 (C) Chris Ward <frugal@purplewombat.co.uk>
  *
@@ -16,9 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
  */
 package pcgen.persistence.lst.prereq;
 
@@ -32,9 +28,7 @@ import pcgen.core.prereq.Prerequisite;
 import pcgen.util.TestHelper;
 import plugin.pretokens.parser.PreStatParser;
 
-/**
- *
- */
+
 @SuppressWarnings("nls")
 public class PreStatParserTest extends EnUsLocaleDependentTestCase
 {

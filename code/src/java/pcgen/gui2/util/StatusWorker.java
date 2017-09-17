@@ -1,5 +1,4 @@
 /*
- * StatusWorker.java
  * Missing License Header, Copyright 2016 (C) Andrew Maitland <amaitland@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,7 +18,6 @@
  */
 
 /**
- * @author Kim Winz &lt;kwinz@users.sourceforge.net&gt;
  * 
  * StatusWorker extends SwingWorker to handle progress display in the status bar.
  * 		It replaces TaskExecutor, which was a private class inside PCGenStatusBar.
@@ -34,6 +32,7 @@ import java.util.logging.LogRecord;
 import javax.swing.SwingUtilities;
 
 import pcgen.gui2.PCGenStatusBar;
+import pcgen.gui2.util.SwingWorker;
 import pcgen.system.PCGenTask;
 import pcgen.system.PCGenTaskEvent;
 import pcgen.system.PCGenTaskListener;

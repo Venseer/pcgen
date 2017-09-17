@@ -1,5 +1,4 @@
 /*
- * RequestOpenPlayerCharacterMessage.java
  * Copyright James Dempsey, 2014
  *
  * This library is free software; you can redistribute it and/or
@@ -16,9 +15,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on 17/02/2014 7:47:27 am
  *
- * $Id$
  */
 package pcgen.pluginmgr.messages;
 
@@ -33,9 +30,7 @@ import pcgen.pluginmgr.PCGenMessage;
  * ask that the character be added to the message for later use, however this 
  * should not be assumed to be present until all message processing is completed.
  *
- * <br>
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 @SuppressWarnings("serial")
 public class RequestOpenPlayerCharacterMessage extends PCGenMessage

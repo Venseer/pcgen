@@ -1,5 +1,4 @@
 /*
- * AbstractListMap.java
  * Copyright 2008 (C) Connor Petty <mistercpp2000@gmail.com>
  * 
  * This library is free software; you can redistribute it and/or
@@ -22,9 +21,7 @@ package pcgen.util;
 import java.util.Collection;
 import java.util.List;
 
-/**
- *
- */
+
 public abstract class AbstractListMap<K, V, L extends List<V>>
 	extends AbstractCollectionMap<K, V, L> implements ListMap<K, V, L>
 {
@@ -59,7 +56,7 @@ public abstract class AbstractListMap<K, V, L extends List<V>>
     public V get(Object key, int index)
     {
 	L list = get(key);
-	if (list != null && list.size() > index && index >= 0)
+	if ((list != null) && (list.size() > index) && (index >= 0))
 	{
 	    return list.get(index);
 	}

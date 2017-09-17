@@ -1,6 +1,5 @@
 /*
  * Copyright 2008 (C) Tom Parker <thpr@users.sourceforge.net>
- * Derived from EquipmentModifier.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  * 
  * This library is free software; you can redistribute it and/or modify it under
@@ -29,9 +28,13 @@ import pcgen.core.EquipmentModifier;
 import pcgen.core.spell.Spell;
 import pcgen.util.Delta;
 
-public class EqModSpellInfo
+public final class EqModSpellInfo
 {
 	private static final String s_CHARGES = "CHARGES";
+
+	private EqModSpellInfo()
+	{
+	}
 
 	public static String getSpellInfoString(final String listEntry,
 			final String desiredInfo)

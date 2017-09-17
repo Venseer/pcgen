@@ -1,5 +1,4 @@
 /*
- * InfoGuidePane.java
  * Copyright 2011 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -48,7 +47,6 @@ import pcgen.system.LanguageBundle;
 /**
  * This class provides a guide for first time 
  * users on what to do next and what sources are loaded.
- * <br>
  * Note: this class extends UIResource so that the component can be added
  * as a child of a JTabbedPane without it becoming a tab
  */

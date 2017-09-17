@@ -1,5 +1,4 @@
 /*
- * CoreUtility.java
  * Copyright 2002 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,10 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on Feb 18, 2002, 5:20:42 PM
- *
- * $Id$
  */
 package pcgen.core.utils;
 
@@ -45,12 +40,11 @@ import pcgen.util.Logging;
  * (the two biggest classes in the project.) Some of this code seems awfully
  * similar, and should probably be further refactored.
  * 
- * @author Jonas Karlsson &lt;pjak@yahoo.com&gt;
  */
 public final class CoreUtility
 {
 
-	static final private double epsilon = 0.0001d;
+	private static final double epsilon = 0.0001d;
 
 	public static final Comparator<Equipment> equipmentComparator = new Comparator<Equipment>()
 	{
@@ -130,7 +124,6 @@ public final class CoreUtility
 
 	private CoreUtility()
 	{
-		super();
 	}
 
 	/**

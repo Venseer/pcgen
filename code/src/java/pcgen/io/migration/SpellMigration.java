@@ -1,5 +1,4 @@
 /*
- * SpellMigration.java
  * Copyright 2016 (C) Andrew Maitland <drew0500@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -37,6 +36,12 @@ public final class SpellMigration
 {
 	private static Map<int[], List<MigrationRule>> spellChangesForVer = new HashMap<>();
 
+
+
+	private SpellMigration()
+	{
+	}
+
 	/**
 	 * Find the new spell key to replace the provided one.
 	 * 
@@ -46,14 +51,12 @@ public final class SpellMigration
 	 */
 	public static String getNewSpellKey(String spellKey, int[] pcgVer, String gameModeName)
 	{
-		List<MigrationRule> spellChangeList = spellChangesForVer.get(pcgVer);
-		if (spellChangeList == null)
-		{
-			spellChangeList =
-					MigrationUtils.getChangeList(pcgVer, gameModeName,
-						ObjectType.SPELL);
-			spellChangesForVer.put(pcgVer, spellChangeList);
-		}
+		List<MigrationRule> spellChangeList = spellChangesForVer.computeIfAbsent(
+				pcgVer,
+				v -> MigrationUtils.getChangeList(v, gameModeName,
+						ObjectType.SPELL
+				)
+		);
 
 		for (MigrationRule rule : spellChangeList)
 		{

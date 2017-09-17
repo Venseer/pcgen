@@ -18,11 +18,7 @@
 package plugin.initiative;
 
 /**
- * <p>
  * Models a generic 1d20+/-X check.
- * </p>
- * 
- *
  */
 public class CheckModel extends DiceRollModel
 {
@@ -45,7 +41,7 @@ public class CheckModel extends DiceRollModel
 		super(objectString);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

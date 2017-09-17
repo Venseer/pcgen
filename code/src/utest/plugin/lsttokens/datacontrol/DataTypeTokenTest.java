@@ -51,7 +51,7 @@ public class DataTypeTokenTest extends TestCase
 	protected static CampaignSourceEntry testCampaign;
 
 	@BeforeClass
-	public static final void classSetUp() throws URISyntaxException
+	public static void classSetUp() throws URISyntaxException
 	{
 		testCampaign =
 				new CampaignSourceEntry(new Campaign(), new URI(
@@ -109,7 +109,7 @@ public class DataTypeTokenTest extends TestCase
 		{
 			assertFalse(token.parseToken(context, cd, "NotAType").passed());
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException | IllegalArgumentException e)
 		{
 			//This is ok too
 		}

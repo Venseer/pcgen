@@ -1,5 +1,4 @@
 /*
- * ImagePreviewer.java
  * Copyright 2011 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -31,14 +30,12 @@ import javax.swing.UIManager;
 import pcgen.system.LanguageBundle;
 import pcgen.util.Logging;
 
-/**
- *
- */
+
 class ImagePreviewer extends JComponent
 {
 
 	private static final int SIZE = 200;
-	private static String in_notAnImage = LanguageBundle.getString("in_ImagePreview_notAnImage");
+	private static final String in_notAnImage = LanguageBundle.getString("in_ImagePreview_notAnImage");
 	private BufferedImage image;
 
 	public ImagePreviewer()
@@ -48,7 +45,7 @@ class ImagePreviewer extends JComponent
 
 	public void setImage(File file)
 	{
-		if (null == file || !file.exists())
+		if (file == null || !file.exists())
 		{
 			image = null;
 			return;
@@ -78,7 +75,7 @@ class ImagePreviewer extends JComponent
 		final int textX = getFontHeightHint(g);
 		final int textY = SIZE - getFontHeightHint(g);
 
-		if (null != image)
+		if (image != null)
 		{
 			final int width = image.getWidth(null);
 			final int height = image.getHeight(null);

@@ -1,5 +1,4 @@
 /*
- * AbstractPrerequisiteIntegerParser.java
  *
  * Copyright 2003 (C) Chris Ward <frugal@purplewombat.co.uk>
  *
@@ -27,9 +26,7 @@ package pcgen.persistence.lst.prereq;
 import pcgen.core.prereq.Prerequisite;
 import pcgen.persistence.PersistenceLayerException;
 
-/**
- *
- */
+
 public abstract class AbstractPrerequisiteIntegerParser extends
 		AbstractPrerequisiteParser
 {

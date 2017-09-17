@@ -1,5 +1,4 @@
 /*
- * EquipSetMigration.java
  * Copyright James Dempsey, 2013
  *
  * This library is free software; you can redistribute it and/or
@@ -37,14 +36,17 @@ import pcgen.core.utils.CoreUtility;
  * The Class {@code EquipSetMigration} updates a character's equipment
  * sets to match newer requirements.
  *
- * <br>
  * 
  */
-public class EquipSetMigration
+public final class EquipSetMigration
 {
 
 	private static EquipSetOutputOrderComparator comparator =
 			new EquipSetOutputOrderComparator();
+
+	private EquipSetMigration()
+	{
+	}
 
 	/**
 	 * Update the character's equipment sets, if required.

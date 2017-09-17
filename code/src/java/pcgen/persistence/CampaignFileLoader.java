@@ -1,5 +1,4 @@
 /*
- * CampaignFileLoader.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -36,8 +35,7 @@ import pcgen.util.Logging;
 
 import org.apache.commons.lang3.StringUtils;
 
-/**
- */
+
 public class CampaignFileLoader extends PCGenTask
 {
 	private File alternateSourceFolder = null;

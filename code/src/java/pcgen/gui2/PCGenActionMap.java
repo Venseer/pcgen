@@ -1,5 +1,4 @@
 /*
- * PCGenActionMap.java
  * Copyright 2008 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -537,7 +536,7 @@ public final class PCGenActionMap extends ActionMap
 	private class NewAction extends PCGenAction
 	{
 
-		private ReferenceFacade<?> ref;
+		private final ReferenceFacade<?> ref;
 
 		public NewAction()
 		{
@@ -627,7 +626,7 @@ public final class PCGenActionMap extends ActionMap
 	private class SaveAction extends PCGenAction implements ReferenceListener<CharacterFacade>
 	{
 
-		private FileRefListener fileListener = new FileRefListener();
+		private final FileRefListener fileListener = new FileRefListener();
 
 		public SaveAction()
 		{
@@ -1204,7 +1203,7 @@ public final class PCGenActionMap extends ActionMap
 	private abstract class CharacterAction extends PCGenAction
 	{
 
-		private ReferenceFacade<?> ref;
+		private final ReferenceFacade<?> ref;
 
 		public CharacterAction(String prop)
 		{

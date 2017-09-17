@@ -1,5 +1,4 @@
 /**
- * DescriptionFacadeImpl.java
  * Copyright James Dempsey, 2011
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -48,7 +45,6 @@ import pcgen.system.LanguageBundle;
  * the DescriptionFacade interface for the new user interface. It is 
  * intended to provide a full implementation of the new ui/core 
  * interaction layer.
- *
  */
 class DescriptionFacadeImpl implements DescriptionFacade
 {
@@ -74,9 +70,9 @@ class DescriptionFacadeImpl implements DescriptionFacade
 	private final PlayerCharacter theCharacter;
 	private final CharacterDisplay charDisplay;
 	private final DefaultListFacade<ChronicleEntryFacade> chronicleEntries;
-	private DefaultListFacade<NoteFacade> notes;
+	private final DefaultListFacade<NoteFacade> notes;
 
-	private Map<BiographyField, WriteableReferenceFacade<String>> bioData = new EnumMap<>(BiographyField.class);
+	private final Map<BiographyField, WriteableReferenceFacade<String>> bioData = new EnumMap<>(BiographyField.class);
 
 	private final DefaultListFacade<BiographyField> customBiographyFields;
 
@@ -158,7 +154,7 @@ class DescriptionFacadeImpl implements DescriptionFacade
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.DescriptionFacade#createChronicleEntry()
 	 */
 	@Override
@@ -170,7 +166,7 @@ class DescriptionFacadeImpl implements DescriptionFacade
 		return chronicleEntry;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.DescriptionFacade#removeChronicleEntry(pcgen.core.ChronicleEntry)
 	 */
 	@Override
@@ -183,7 +179,7 @@ class DescriptionFacadeImpl implements DescriptionFacade
 		chronicleEntries.removeElement(chronicleEntry);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.DescriptionFacade#getChronicleEntries()
 	 */
 	@Override

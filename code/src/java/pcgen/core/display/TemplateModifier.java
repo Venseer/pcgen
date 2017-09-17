@@ -1,6 +1,5 @@
 /*
  * Copyright 2008 (C) Tom Parker <thpr@users.sourceforge.net>
- * Derived from PCTemplate.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  * 
  * This library is free software; you can redistribute it and/or modify it under
@@ -38,7 +37,7 @@ import pcgen.core.PCTemplate;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.analysis.BonusCalc;
 
-public class TemplateModifier
+public final class TemplateModifier
 {
 
 	private static DamageReductionFacet drFacet = FacetLibrary.getFacet(DamageReductionFacet.class);

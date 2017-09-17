@@ -1,5 +1,4 @@
 /*
- * KitPanel.java
  * Copyright James Dempsey, 2012
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.kits;
 
@@ -65,7 +62,6 @@ import pcgen.system.LanguageBundle;
  * The Class {@code KitPanel} displays an available/selected table pair to
  * allow the allocation of kit to the currently selected character. 
  *
- * <br>
  * 
  */
 @SuppressWarnings("serial")
@@ -77,8 +73,8 @@ public class KitPanel extends FlippingSplitPane
 	private final JButton addButton;
 	private final InfoPane infoPane;
 	private final CharacterFacade character;
-	private QualifiedTreeCellRenderer renderer;
-	private AddAction addAction;
+	private final QualifiedTreeCellRenderer renderer;
+	private final AddAction addAction;
 	private final FilterButton<Object, KitFacade> qFilterButton;
 
 	/**
@@ -143,9 +139,7 @@ public class KitPanel extends FlippingSplitPane
 		setResizeWeight(0.75);
 	}
 
-	/**
-	 * 
-	 */
+
 	private void initDefaults()
 	{
 		InfoHandler infoHandler = new InfoHandler(character);
@@ -187,7 +181,7 @@ public class KitPanel extends FlippingSplitPane
 	private class InfoHandler implements ListSelectionListener
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public InfoHandler(CharacterFacade character)
 		{
@@ -228,7 +222,7 @@ public class KitPanel extends FlippingSplitPane
 	private class AddAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public AddAction(CharacterFacade character)
 		{
@@ -263,7 +257,7 @@ public class KitPanel extends FlippingSplitPane
 		private final List<DefaultDataViewColumn> columns;
 		private final CharacterFacade character;
 		private final boolean isAvailModel;
-		private FilteredListFacade<CharacterFacade, KitFacade> kits;
+		private final FilteredListFacade<CharacterFacade, KitFacade> kits;
 
 		public KitTreeViewModel(CharacterFacade character, boolean isAvailModel)
 		{

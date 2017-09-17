@@ -1,5 +1,4 @@
 /*
- * SkillChoice.java
  * Copyright 2006 (C) Aaron Divinsky <boomer70@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package pcgen.core.npcgen;
 
@@ -39,7 +37,7 @@ import pcgen.core.Skill;
 public class SkillChoice
 {
 	private String theKey = null;
-	private WeightedCollection<Skill> theSkillList = new WeightedCollection<>();
+	private final WeightedCollection<Skill> theSkillList = new WeightedCollection<>();
 	
 	/**
 	 * Creates a new SkillChoice.
@@ -141,19 +139,29 @@ public class SkillChoice
 	public boolean equals(Object obj)
 	{
 		if (this == obj)
+		{
 			return true;
+		}
 		if (obj == null)
+		{
 			return false;
+		}
 		if (getClass() != obj.getClass())
+		{
 			return false;
+		}
 		final SkillChoice other = (SkillChoice) obj;
 		if (theKey == null)
 		{
 			if (other.theKey != null)
+			{
 				return false;
+			}
 		}
 		else if (!theKey.equals(other.theKey))
+		{
 			return false;
+		}
 		return true;
 	}
 }

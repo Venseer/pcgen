@@ -1,5 +1,4 @@
 /*
- * PCGenStatusBar.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -45,10 +44,10 @@ import pcgen.util.Logging;
  */
 public final class PCGenStatusBar extends JPanel
 {
-	private PCGenFrame frame;
-	private JLabel messageLabel;
-	private JProgressBar progressBar;
-	private JLabel loadStatusLabel;
+	private final PCGenFrame frame;
+	private final JLabel messageLabel;
+	private final JProgressBar progressBar;
+	private final JLabel loadStatusLabel;
 
 	public PCGenStatusBar(PCGenFrame frame)
 	{

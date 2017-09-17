@@ -1,5 +1,4 @@
 /*
- * PCGenSettings.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -196,7 +195,7 @@ public final class PCGenSettings extends PropertyContext
 	{
 		if (path.startsWith(SystemUtils.USER_DIR + File.separator))
 		{
-			path = "@" + path.substring(SystemUtils.USER_DIR.length() + 1);
+			path = '@' + path.substring(SystemUtils.USER_DIR.length() + 1);
 		}
 		return path;
 	}

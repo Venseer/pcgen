@@ -1,5 +1,4 @@
 /*
- * EquipmentModifier.java
  * Copyright 2001 (C) Greg Bingleman <byngl@hotmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,11 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on November 19, 2001, 4:28 PM
- *
- * Current Ver: $Revision$
- *
  */
 package pcgen.core;
 
@@ -28,6 +22,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import pcgen.base.formula.Formula;
+import pcgen.base.formula.base.VarScoped;
 import pcgen.base.lang.StringUtil;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.Constants;
@@ -48,10 +43,8 @@ import pcgen.util.Delta;
 
 /**
  * Definition and games rules for an equipment modifier.
- *
- * @author   Greg Bingleman &lt;byngl@hotmail.com&gt;
  */
-public final class EquipmentModifier extends PObject implements Comparable<Object>, EquipModFacade
+public final class EquipmentModifier extends PObject implements Comparable<Object>, EquipModFacade, Cloneable
 {
 	private static final String PERCENT_CHOICE_PATTERN = Pattern
 								.quote(Constants.LST_PERCENT_CHOICE);
@@ -311,5 +304,24 @@ public final class EquipmentModifier extends PObject implements Comparable<Objec
 	{
 		List<Type> trueTypeList = getTrueTypeList(true);
 		return StringUtil.join(trueTypeList, ".");
+	}
+
+	@Override
+	public String getLocalScopeName()
+	{
+		return "EQUIPMENT.PART";
+	}
+
+	private VarScoped variableParent;
+
+	public void setVariableParent(VarScoped vs)
+	{
+		variableParent = vs;
+	}
+
+	@Override
+	public VarScoped getVariableParent()
+	{
+		return variableParent;
 	}
 }

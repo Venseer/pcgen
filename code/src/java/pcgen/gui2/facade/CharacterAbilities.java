@@ -1,5 +1,4 @@
 /**
- * CharacterAbilities.java
  * Copyright James Dempsey, 2011
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -71,7 +68,6 @@ import pcgen.util.enumeration.View;
  * reflect the changes. The lists automatically notify any listeners in the 
  * UI of the changes.
  *   
- * <br>
  * 
  * 
  */
@@ -80,12 +76,12 @@ public class CharacterAbilities
 
 	private final PlayerCharacter theCharacter;
 	private final CharacterDisplay charDisplay;
-	private UIDelegate delegate;
+	private final UIDelegate delegate;
 
 	private Map<AbilityCategoryFacade, DefaultListFacade<AbilityFacade>> abilityListMap;
 	private DefaultListFacade<AbilityCategoryFacade> activeCategories;
 	private CharID charID;
-	private DataSetFacade dataSetFacade;
+	private final DataSetFacade dataSetFacade;
 	private final List<ChangeListener> abilityCatSelectionListeners;
 	private final TodoManager todoManager;
 	private GrantedAbilityChangeHandler grantedAbilityChangeHandler;

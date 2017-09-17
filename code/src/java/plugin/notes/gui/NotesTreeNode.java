@@ -48,12 +48,11 @@ import pcgen.util.Logging;
 import gmgen.GMGenSystem;
 import gmgen.gui.ExtendedHTMLDocument;
 import gmgen.gui.ExtendedHTMLEditorKit;
-import gmgen.util.MiscUtilities;
+import org.apache.commons.io.FileUtils;
 
 /**
  * This defines the preferences tree
  *
- * @author devon
  */
 public class NotesTreeNode implements MutableTreeNode, DocumentListener
 {
@@ -445,23 +444,25 @@ public class NotesTreeNode implements MutableTreeNode, DocumentListener
 			{
 				try
 				{
-					BufferedReader br =
-							new BufferedReader(new FileReader(notes));
-					StringBuilder sb = new StringBuilder();
-					String newLine;
-
-					do 
+					StringBuilder sb;
+					try (BufferedReader br = new BufferedReader(new FileReader(notes)))
 					{
-						newLine = br.readLine();
+						sb = new StringBuilder();
+						String newLine;
 
-						if (newLine != null)
+						do
 						{
-							sb.append(newLine).append(Constants.LINE_SEPARATOR);
-						}
-					}
-					while (newLine != null);
+							newLine = br.readLine();
 
-					br.close();
+							if (newLine != null)
+							{
+								sb.append(newLine).append(Constants.LINE_SEPARATOR);
+							}
+						}
+						while (newLine != null);
+
+						br.close();
+					}
 					pane.setText(sb.toString());
 				}
 				catch (Exception e)
@@ -513,23 +514,25 @@ public class NotesTreeNode implements MutableTreeNode, DocumentListener
 			{
 				try
 				{
-					BufferedReader br =
-							new BufferedReader(new FileReader(notes));
-					StringBuilder sb = new StringBuilder();
-					String newLine;
-
-					do
+					StringBuilder sb;
+					try (BufferedReader br = new BufferedReader(new FileReader(notes)))
 					{
-						newLine = br.readLine();
+						sb = new StringBuilder();
+						String newLine;
 
-						if (newLine != null)
+						do
 						{
-							sb.append(newLine).append(Constants.LINE_SEPARATOR);
-						}
-					}
-					while (newLine != null);
+							newLine = br.readLine();
 
-					br.close();
+							if (newLine != null)
+							{
+								sb.append(newLine).append(Constants.LINE_SEPARATOR);
+							}
+						}
+						while (newLine != null);
+
+						br.close();
+					}
 					pane.setText(sb.toString());
 				}
 				catch (Exception e)
@@ -913,14 +916,15 @@ public class NotesTreeNode implements MutableTreeNode, DocumentListener
 			List fileList =
 					((List) t.getTransferData(DataFlavor.javaFileListFlavor));
 
-			for (int i = 0; i < fileList.size(); i++)
+			for (Object aFileList : fileList)
 			{
-				File newFile = (File) fileList.get(i);
+				File newFile = (File) aFileList;
 
 				if (newFile.exists())
 				{
-					MiscUtilities.copy(newFile, new File(dir.getAbsolutePath()
-						+ File.separator + newFile.getName()));
+
+					FileUtils.copyFile(newFile, new File(dir.getAbsolutePath()
+							+ File.separator + newFile.getName()));
 				}
 			}
 		}
@@ -1303,7 +1307,7 @@ public class NotesTreeNode implements MutableTreeNode, DocumentListener
 	{
 		if (dirty)
 		{
-			return "*" + getUserObject().toString();
+			return '*' + getUserObject().toString();
 		}
 		return getUserObject().toString();
 	}

@@ -1,5 +1,4 @@
 /*
- * PreArmourTypeParser.java
  *
  * Copyright 2003 (C) Chris Ward <frugal@purplewombat.co.uk>
  *
@@ -20,7 +19,6 @@
  *
  * 
  * 
- *
  */
 package plugin.pretokens.parser;
 
@@ -28,7 +26,6 @@ import pcgen.persistence.lst.prereq.AbstractPrerequisiteListParser;
 
 /**
  * A prerequisite parser class that handles the parsing of pre armour tokens.
- *
  */
 public class PreArmorTypeParser extends AbstractPrerequisiteListParser
 {

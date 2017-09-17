@@ -1,5 +1,4 @@
 /**
- * EquipIconLstToken.java
  * Copyright James Dempsey, 2011
  *
  * This library is free software; you can redistribute it and/or
@@ -28,7 +27,6 @@ import pcgen.core.GameMode;
  * The Interface {@code EquipIconLstToken} defines a token
  * as being callable by the EquipIconLoader.
  *
- * <br>
  * 
  */
 public interface EquipIconLstToken extends LstToken

@@ -1,5 +1,4 @@
 /*
- * AbstractRadioListMenu.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -30,9 +29,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 import pcgen.facade.util.event.ListEvent;
 
-/**
- *
- */
+
 public abstract class AbstractRadioListMenu<E> extends AbstractListMenu<E> implements ItemListener
 {
 

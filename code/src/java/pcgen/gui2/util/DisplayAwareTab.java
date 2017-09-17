@@ -1,5 +1,4 @@
 /*
- * DisplayAwareTab.java
  * Copyright James Dempsey, 2012
  *
  * This library is free software; you can redistribute it and/or
@@ -23,7 +22,6 @@ package pcgen.gui2.util;
 /**
  * {@code DisplayAwareTab} identifies a tab that wants to be advised when it is displayed.
  *
- * <br>
  * 
  */
 public interface DisplayAwareTab

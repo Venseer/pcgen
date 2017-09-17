@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package plugin.lsttokens;
 
@@ -100,9 +99,6 @@ import pcgen.rules.persistence.token.ParseResult;
  * {@code ABILITY:CLASSFEATURE|VIRTUAL|CATEGORY=FEAT:Stunning Fist}<br>
  * Adds the Stunning Fist feat as a virtual class feature.
  * <p>
- *
- *
- *
  */
 public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 		implements CDOMPrimaryToken<CDOMObject>, DeferredToken<CDOMObject>
@@ -174,7 +170,7 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 				+ getTokenName() + ": " + value, context);
 		}
 
-		String lkString = "GA_CA_" + cat + "_" + natureKey;
+		String lkString = "GA_CA_" + cat + '_' + natureKey;
 		ListKey glk = ListKey.getKeyFor(ChooseSelectionActor.class, lkString);
 		ListKey<ChooseSelectionActor<?>> lk = glk;
 
@@ -337,7 +333,7 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 				context.getObjectContext().getListChanges(obj,
 					ListKey.NEW_CHOOSE_ACTOR);
 		Collection<ChooseSelectionActor<?>> listAdded = listChanges.getAdded();
-		if (listAdded != null && !listAdded.isEmpty())
+		if ((listAdded != null) && !listAdded.isEmpty())
 		{
 			for (ChooseSelectionActor<?> csa : listAdded)
 			{
@@ -424,7 +420,7 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 					sb.append(nature);
 					List<CDOMReference<Ability>> clearList = clear
 							.removeListFor(nature, category, prereqs);
-					if (clearList != null && !clearList.isEmpty())
+					if ((clearList != null) && !clearList.isEmpty())
 					{
 						sb.append(Constants.PIPE);
 						sb.append(Constants.LST_DOT_CLEAR_DOT);
@@ -434,7 +430,7 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 					sb.append(Constants.PIPE);
 					sb.append(ReferenceUtilities.joinLstFormat(m.getListFor(
 							nature, category, prereqs), Constants.PIPE));
-					if (prereqs != null && !prereqs.isEmpty())
+					if ((prereqs != null) && !prereqs.isEmpty())
 					{
 						sb.append(Constants.PIPE);
 						sb.append(getPrerequisiteString(context, prereqs));
@@ -457,7 +453,7 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 					sb.append(ReferenceUtilities.joinLstFormat(clear
 							.getListFor(nature, category, prereqs),
 							Constants.PIPE + Constants.LST_DOT_CLEAR_DOT));
-					if (prereqs != null && !prereqs.isEmpty())
+					if ((prereqs != null) && !prereqs.isEmpty())
 					{
 						sb.append(Constants.PIPE);
 						sb.append(getPrerequisiteString(context, prereqs));
@@ -487,7 +483,7 @@ public class AbilityLst extends AbstractTokenWithSeparator<CDOMObject>
 							sb.append(ats.getNature()).append(Constants.PIPE)
 								.append(cra.getLstFormat());
 							List<Prerequisite> prereqs = ats.getPrerequisiteList();
-							if (prereqs != null && !prereqs.isEmpty())
+							if ((prereqs != null) && !prereqs.isEmpty())
 							{
 								sb.append(Constants.PIPE);
 								sb.append(getPrerequisiteString(context, prereqs));

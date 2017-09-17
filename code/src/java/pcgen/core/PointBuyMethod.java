@@ -1,5 +1,4 @@
 /*
- * PointBuyMethod.java
  * Copyright 2002 (C) Greg Bingleman <byngl@hotmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,10 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on August 17, 2002, 11:45 PM
- *
- * $Id$
  */
 package pcgen.core;
 
@@ -35,7 +30,6 @@ import pcgen.core.bonus.BonusObj;
 /**
  * {@code PointBuyMethod}.
  * 
- * @author Greg Bingleman &lt;byngl@hotmail.com&gt;
  */
 public final class PointBuyMethod implements BonusContainer, Loadable
 {

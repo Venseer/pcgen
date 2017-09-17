@@ -1,6 +1,5 @@
 /*
  * Copyright 2009 (C) Tom Parker <thpr@users.sourceforge.net>
- * Derived from PCClass.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  * 
  * This library is free software; you can redistribute it and/or modify it under
@@ -37,8 +36,12 @@ import pcgen.gui2.util.PrettyIntegerFormat;
 import pcgen.system.LanguageBundle;
 import pcgen.util.chooser.ChooserFactory;
 
-public class StatApplication
+public final class StatApplication
 {
+
+	private StatApplication()
+	{
+	}
 
 	//
 	// Ask user to select a stat to increment. This can happen before skill

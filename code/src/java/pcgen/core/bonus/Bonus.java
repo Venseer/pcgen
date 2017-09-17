@@ -1,5 +1,4 @@
 /*
- * Bonus.java
  * Copyright 2002 (C) Greg Bingleman <byngl@hotmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,11 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on December 13, 2002, 9:19 AM
- *
- * Current Ver: $Revision$
- *
  */
 package pcgen.core.bonus;
 
@@ -38,11 +32,6 @@ import pcgen.rules.context.LoadContext;
 import pcgen.rules.persistence.TokenLibrary;
 import pcgen.util.Logging;
 
-/**
- * {@code Bonus}
- *
- * @author  Greg Bingleman &lt;byngl@hotmail.com&gt;
- */
 public final class Bonus
 {
 	static final String BONUS_UNDEFINED = "*UNDEFINED";
@@ -217,7 +206,7 @@ public final class Bonus
 		if (!val.isValid())
 		{
 			Logging.errorPrint("Could not create bonusObj for:" + bonusString
-					+ " since Formula " + bValue + " is not valid: " + val.toString());
+					+ " since Formula " + bValue + " is not valid: " + val);
 			return null;
 		}
 

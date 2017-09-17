@@ -20,8 +20,6 @@ package plugin.lsttokens.choose;
 
 import java.net.URISyntaxException;
 
-import org.junit.Test;
-
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.identifier.SpellSchool;
@@ -49,11 +47,8 @@ import plugin.primitive.spell.SpellTypeToken;
 import plugin.primitive.spell.SubSchoolToken;
 
 /**
- * The Class <code>SpellsTokenTest</code> verifies the parsing and 
+ * The Class {@code SpellsTokenTest} verifies the parsing and
  * unparsing of the CHOOSE:SPELLS subtoken.
- *
- * <br/>
- * 
  */
 public class SpellsTokenTest extends
 		AbstractChooseTokenTestCase<CDOMObject, Spell>

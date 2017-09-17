@@ -1,5 +1,4 @@
 /*
- * FopTask.java
  * Copyright 2016 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -56,7 +55,6 @@ import pcgen.util.Logging;
  * source of the task: files or inputstreams. The output of this task can either be an OutputStream
  * which you can point to a file, or a Renderer. The Renderer is used by print preview and for
  * direct printing.
- *
  */
 public final class FopTask implements Runnable
 {

@@ -1,5 +1,4 @@
 /*
- * JTreeViewTable.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -66,7 +65,6 @@ import pcgen.util.ListMap;
  * arbitrary objects as a tree instead of TreeTableNodes. In addition, the
  * TreeViewModel supports multiple viewing methods and column visibility
  * controls.
- * <br>
  * <br>Node: Methods whose usage would endanger the integrity of this class are
  * the following:
  * <br>getModel()

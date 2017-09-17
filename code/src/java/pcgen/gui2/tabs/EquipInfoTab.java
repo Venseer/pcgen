@@ -1,5 +1,4 @@
 /*
- * EquipInfoTab.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -99,9 +98,6 @@ import pcgen.util.enumeration.Tab;
  * EquipInfoTab is a character tab for managing where gear is distributed for a
  * character. Each set of distribution information is called an EquipSet.
  * Multiple EquipSets can be managed to reflect different configurations.
- *
- * <br>
- *
  */
 @SuppressWarnings("serial")
 public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab, TodoHandler
@@ -397,8 +393,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 		return targets;
 	}
 
-	/**
-	 */
+
 	public void setLoadLabel(String text)
 	{
 		// bold / highlight text based on encumbrance value
@@ -624,7 +619,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 	private class EquipInfoHandler implements ListSelectionListener
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 		private String text;
 
 		public EquipInfoHandler(CharacterFacade character)
@@ -678,7 +673,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 						sb.append(character.getInfoFactory().getHTMLInfo(equip));
 					}
 				}
-				text = "<html>" + sb.toString() + "</html>"; //$NON-NLS-1$ //$NON-NLS-2$
+				text = "<html>" + sb + "</html>"; //$NON-NLS-1$ //$NON-NLS-2$
 				infoPane.setText(text);
 			}
 		}
@@ -688,7 +683,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 	private class EquipmentRenderer extends DefaultTableCellRenderer
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public EquipmentRenderer(CharacterFacade character)
 		{
@@ -721,12 +716,11 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 	private static class EquipNodeSelection implements Transferable
 	{
 
-		private static DataFlavor[] FLAVORS = new DataFlavor[]
-		{
+		private static final DataFlavor[] FLAVORS = {
 			equipNodeArrayFlavor,
 			equipmentArrayFlavor
 		};
-		private EquipNode[] nodeArray;
+		private final EquipNode[] nodeArray;
 
 		public EquipNodeSelection(EquipNode[] nodeArray)
 		{
@@ -769,7 +763,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 	private class EquipmentTransferHandler extends TransferHandler
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public EquipmentTransferHandler(CharacterFacade character)
 		{
@@ -829,7 +823,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 			}
 			catch (UnsupportedFlavorException | IOException ex)
 			{
-				Logger.getLogger(EquipInfoTab.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(EquipmentTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
 			}
 			return equipNodeArray;
 		}
@@ -863,7 +857,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 	private class EquipmentSetTransferHandler extends TransferHandler
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public EquipmentSetTransferHandler(CharacterFacade character)
 		{
@@ -912,7 +906,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 			}
 			catch (UnsupportedFlavorException | IOException ex)
 			{
-				Logger.getLogger(EquipInfoTab.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(EquipmentSetTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
 			}
 			return equipmentArray;
 		}
@@ -926,7 +920,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 			}
 			catch (UnsupportedFlavorException | IOException ex)
 			{
-				Logger.getLogger(EquipInfoTab.class.getName()).log(Level.SEVERE, null, ex);
+				Logger.getLogger(EquipmentSetTransferHandler.class.getName()).log(Level.SEVERE, null, ex);
 			}
 			return equipNodeArray;
 		}
@@ -1121,8 +1115,7 @@ public class EquipInfoTab extends FlippingSplitPane implements CharacterInfoTab,
 			}
 
 			// Set the before and after nodes
-			EquipNode[] relativeNodes = new EquipNode[]
-			{
+			EquipNode[] relativeNodes = {
 				null, null
 			};
 			if (beforeRow >= 0)

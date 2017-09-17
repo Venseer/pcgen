@@ -1,5 +1,4 @@
 /*
- * PropertyContextFactory.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -27,9 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 import pcgen.util.Logging;
 
-/**
- *
- */
+
 public class PropertyContextFactory
 {
 

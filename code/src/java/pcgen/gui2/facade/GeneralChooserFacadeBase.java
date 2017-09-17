@@ -1,5 +1,4 @@
 /*
- * GeneralChooserFacadeBase.java
  * Copyright James Dempsey, 2012
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -39,7 +36,6 @@ import pcgen.system.LanguageBundle;
  * ChooserFacade may be simply implemented. The implementing class need only call 
  * the constructor and implement the commit to process the selections.
  *
- * <br>
  * 
  */
 
@@ -52,9 +48,9 @@ public abstract class GeneralChooserFacadeBase implements ChooserFacade
 	private final List<InfoFacade> origSelected;
 	private final int maxNewSelections;
 	
-	private DefaultListFacade<InfoFacade> availableList;
-	private DefaultListFacade<InfoFacade> selectedList;
-	private DefaultReferenceFacade<Integer> numSelectionsRemain;
+	private final DefaultListFacade<InfoFacade> availableList;
+	private final DefaultListFacade<InfoFacade> selectedList;
+	private final DefaultReferenceFacade<Integer> numSelectionsRemain;
 
 	private final String availableTableTypeNameTitle;
 	private final String selectedTableTitle;

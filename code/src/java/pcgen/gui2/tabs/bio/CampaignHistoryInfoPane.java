@@ -1,5 +1,4 @@
 /*
- * CampaignHistoryInfoPane.java
  * Copyright 2011 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -32,7 +31,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -48,9 +46,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.Scrollable;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import pcgen.cdom.base.Constants;
 import pcgen.facade.core.CharacterFacade;
 import pcgen.facade.core.ChronicleEntryFacade;
@@ -59,6 +54,9 @@ import pcgen.gui2.tabs.CharacterInfoTab;
 import pcgen.gui2.tabs.TabTitle;
 import pcgen.gui2.tabs.models.TextFieldListener;
 import pcgen.gui2.tools.Icons;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * The CampaignHistoryInfoPane displays a set of chronicles that the user can fill in for his
@@ -130,7 +128,7 @@ public class CampaignHistoryInfoPane extends JPanel implements CharacterInfoTab
 		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		add(pane);
 		add(Box.createVerticalStrut(10));
-		addButton.setAlignmentX((float) 0.5);
+		addButton.setAlignmentX(0.5f);
 		add(addButton);
 		add(Box.createVerticalStrut(5));
 		add(Box.createVerticalGlue());
@@ -276,15 +274,15 @@ public class CampaignHistoryInfoPane extends JPanel implements CharacterInfoTab
 	private static class ChroniclePane extends JPanel implements ActionListener
 	{
 
-		private JCheckBox checkBox = new JCheckBox();
-		private JButton deleteButton = new JButton();
-		private JTextField campaignField = new JTextField();
-		private JTextField adventureField = new JTextField();
-		private JTextField partyField = new JTextField();
-		private JTextField dateField = new JTextField();
-		private JFormattedTextField xpField = new JFormattedTextField(NumberFormat.getIntegerInstance());
-		private JTextField gmField = new JTextField();
-		private JTextArea textArea = new JTextArea()
+		private final JCheckBox checkBox = new JCheckBox();
+		private final JButton deleteButton = new JButton();
+		private final JTextField campaignField = new JTextField();
+		private final JTextField adventureField = new JTextField();
+		private final JTextField partyField = new JTextField();
+		private final JTextField dateField = new JTextField();
+		private final JFormattedTextField xpField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		private final JTextField gmField = new JTextField();
+		private final JTextArea textArea = new JTextArea()
 		{
 			@Override
 			public Dimension getMinimumSize()
@@ -363,7 +361,6 @@ public class CampaignHistoryInfoPane extends JPanel implements CharacterInfoTab
 		private boolean fieldsNotBlank()
 		{
 			return StringUtils.isNotBlank(campaignField.getText()) ||
-					StringUtils.isNotBlank(adventureField.getText()) ||
 					StringUtils.isNotBlank(adventureField.getText()) ||
 					StringUtils.isNotBlank(partyField.getText()) ||
 					StringUtils.isNotBlank(dateField.getText()) ||
@@ -536,7 +533,7 @@ public class CampaignHistoryInfoPane extends JPanel implements CharacterInfoTab
 	private static class ChroniclesPane extends JPanel implements Scrollable
 	{
 
-		private ChroniclePane dummyPane = new ChroniclePane();
+		private final ChroniclePane dummyPane = new ChroniclePane();
 
 		public ChroniclesPane()
 		{

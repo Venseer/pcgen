@@ -1,5 +1,4 @@
 /*
- * HtmlInfoBuilder.java
  * Copyright 2007 (C) Koen Van Daele
  *
  * This library is free software; you can redistribute it and/or
@@ -186,7 +185,7 @@ public class HtmlInfoBuilder
 		buffer.append("<img src=\"").append(iconPath).append("\" >&nbsp;");
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

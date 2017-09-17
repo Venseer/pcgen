@@ -1,5 +1,4 @@
 /*
- * TreeViewModelWrapper.java
  * Copyright 2008 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -23,9 +22,7 @@ import pcgen.facade.util.DefaultListFacade;
 import pcgen.facade.util.ListFacade;
 import pcgen.facade.util.ListFacades;
 
-/**
- *
- */
+
 public class TreeViewModelWrapper<E> implements TreeViewModel<E>
 {
 

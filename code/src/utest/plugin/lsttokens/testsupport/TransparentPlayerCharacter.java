@@ -62,7 +62,6 @@ public class TransparentPlayerCharacter extends PlayerCharacter
 
 	public TransparentPlayerCharacter()
 	{
-		super();
 		display = new TransparentCharacterDisplay(getCharID());
 	}
 
@@ -100,7 +99,7 @@ public class TransparentPlayerCharacter extends PlayerCharacter
 		{
 			return classMap.keySet();
 		}
-		
+
 		@Override
 		public Race getRace()
 		{
@@ -240,13 +239,8 @@ public class TransparentPlayerCharacter extends PlayerCharacter
 	@Override
 	public List<CNAbility> getCNAbilities(Category<Ability> cat)
 	{
-		List<CNAbility> list = abilitySet.stream()
-		                                 .filter(cna -> cna.getAbilityCategory()
-		                                                   .equals(cat))
-		                                 .collect(Collectors.toList());
-		return list;
+		return abilitySet.stream()
+		                 .filter(cna -> cna.getAbilityCategory().equals(cat))
+		                 .collect(Collectors.toList());
 	}
-	
-	
-	
 }

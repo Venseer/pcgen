@@ -1,5 +1,4 @@
 /*
- * EquipmentChoice.java
  * Copyright 2004 (C) James Dempsey <jdempsey@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,11 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on Sep 12, 2004
- *
- * $Id$
- *
  */
 package pcgen.core;
 
@@ -49,9 +43,6 @@ import pcgen.util.enumeration.Visibility;
  * This supports either the user manually choosing which option
  * they want, or the generator creating one object for each
  * combination of choices.
- *
- *
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 
 public final class EquipmentChoice
@@ -480,7 +471,6 @@ public final class EquipmentChoice
 			addSelectableAbilities(type, "FEAT");
 		}
 
-		// Used by internal equipment modifier "Add Type" see LstSystemLoader.java
 		else if ("EQTYPES".equalsIgnoreCase(type))
 		{
 			Collection<Type> types =

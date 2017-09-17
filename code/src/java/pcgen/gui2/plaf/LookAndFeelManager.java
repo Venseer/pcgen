@@ -1,5 +1,4 @@
 /*
- * UIFactory.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package pcgen.gui2.plaf;
 
@@ -41,7 +39,6 @@ import com.l2fprod.gui.plaf.skin.SkinLookAndFeel;
 
 /**
  * {@code UIFactory}.
- *
  */
 public final class LookAndFeelManager
 {
@@ -295,7 +292,7 @@ public final class LookAndFeelManager
 	public static class LookAndFeelHandler extends AbstractAction
 	{
 
-		private String className;
+		private final String className;
 
 		LookAndFeelHandler(String name, String className, String tooltip)
 		{

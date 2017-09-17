@@ -1,5 +1,4 @@
 /*
- * PostLevelUpDialog.java
  * Copyright James Dempsey, 2012
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.dialog;
 
@@ -63,7 +60,6 @@ import pcgen.system.LanguageBundle;
  * The Class {@code PostLevelUpDialog} provides a display of the results
  * of levelling up a character. 
  *
- * <br>
  * 
  */
 @SuppressWarnings("serial")
@@ -73,7 +69,7 @@ public final class PostLevelUpDialog extends JDialog implements ActionListener
 	private final CharacterLevelsFacade levels;
 	private final LevelTableModel tableModel;
 	private final int oldLevel;
-	private int numLevels;
+	private final int numLevels;
 
 	private PostLevelUpDialog(Frame frame, CharacterFacade character, int oldLevel)
 	{

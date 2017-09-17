@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
  package pcgen.core.doomsdaybook;
 
@@ -132,7 +131,7 @@ public class RuleSet extends ArrayList<String> implements DataElement
 		// Determine which entry to choose
 		Dice die = new Dice(1, rangeTop, 0);
 		int choice = die.roll();
-		choice = choice + modifier;
+		choice += modifier;
 		choice = (choice < 0) ? rangeTop : choice;
 
 		//select the detail to return
@@ -146,7 +145,7 @@ public class RuleSet extends ArrayList<String> implements DataElement
 
 			if (valueWeight > 0)
 			{
-				aWeight = aWeight + valueWeight;
+				aWeight += valueWeight;
 
 				if (aWeight >= choice)
 				{
@@ -183,7 +182,7 @@ public class RuleSet extends ArrayList<String> implements DataElement
 
 			if (valueWeight > 0)
 			{
-				aWeight = aWeight + valueWeight;
+				aWeight += valueWeight;
 
 				if (aWeight >= choice)
 				{
@@ -248,7 +247,7 @@ public class RuleSet extends ArrayList<String> implements DataElement
 		for (String key : this)
 		{
 			Rule value = (Rule) allVars.getDataElement(key);
-			rangeTop = rangeTop + value.getWeight();
+			rangeTop += value.getWeight();
 		}
 
 		if (rangeTop <= 0)
@@ -282,7 +281,7 @@ public class RuleSet extends ArrayList<String> implements DataElement
 		// Determine which entry to choose
 		Dice die = new Dice(1, rangeTop, 0);
 		int choice = die.roll();
-		choice = choice + modifier;
+		choice += modifier;
 
 		choice = (choice < 0) ? rangeTop : choice;
 
@@ -297,7 +296,7 @@ public class RuleSet extends ArrayList<String> implements DataElement
 
 			if (valueWeight > 0)
 			{
-				aWeight = aWeight + valueWeight;
+				aWeight += valueWeight;
 
 				if (aWeight >= choice)
 				{
@@ -331,7 +330,7 @@ public class RuleSet extends ArrayList<String> implements DataElement
 
 			if (valueWeight > 0)
 			{
-				aWeight = aWeight + valueWeight;
+				aWeight += valueWeight;
 
 				if (aWeight >= choice)
 				{

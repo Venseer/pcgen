@@ -1,5 +1,4 @@
 /*
- * DataInstaller.java
  * Copyright 2007 (C) James Dempsey
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 
 package pcgen.gui2.dialog;
@@ -191,7 +188,7 @@ public class DataInstaller extends JFrame
 			return createFiles(dataSet, destDir, files);
 		}
 
-		/* (non-Javadoc)
+		/**
 		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 		 */
         @Override
@@ -406,7 +403,7 @@ public class DataInstaller extends JFrame
 	private JButton closeButton;
 	
 	/** The listener. */
-	private ActionListener listener = new InstallerButtonListener();
+	private final ActionListener listener = new InstallerButtonListener();
 	
 	/** The campaign. */
 	private InstallableCampaign campaign;
@@ -419,7 +416,6 @@ public class DataInstaller extends JFrame
 
 	/**
 	 * Instantiates a new data installer.
-	 *
 	 */
 	public DataInstaller()
 	{

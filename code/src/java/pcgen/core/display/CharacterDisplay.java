@@ -93,6 +93,7 @@ import pcgen.cdom.facet.analysis.NonAbilityFacet;
 import pcgen.cdom.facet.analysis.NonProficiencyPenaltyFacet;
 import pcgen.cdom.facet.analysis.RaceTypeFacet;
 import pcgen.cdom.facet.analysis.RacialSubTypesFacet;
+import pcgen.cdom.facet.analysis.ResultFacet;
 import pcgen.cdom.facet.analysis.SpecialAbilityFacet;
 import pcgen.cdom.facet.analysis.SubRaceFacet;
 import pcgen.cdom.facet.analysis.TotalWeightFacet;
@@ -253,6 +254,7 @@ public class CharacterDisplay
 			.getFacet(PortraitThumbnailRectFacet.class);
 	private PreviewSheetFacet previewSheetFacet = FacetLibrary.getFacet(PreviewSheetFacet.class);
 	private SkillFilterFacet skillFilterFacet = FacetLibrary.getFacet(SkillFilterFacet.class);
+	private final ResultFacet resultFacet = FacetLibrary.getFacet(ResultFacet.class);
 
 	public CharacterDisplay(CharID id)
 	{
@@ -388,7 +390,7 @@ public class CharacterDisplay
 	public String getRaceType()
 	{
 		RaceType rt = raceTypeFacet.getRaceType(id);
-		return rt == null ? Constants.NONE : rt.toString();
+		return (rt == null) ? Constants.NONE : rt.toString();
 	}
 
 	public int getTotalLevels()
@@ -452,8 +454,8 @@ public class CharacterDisplay
 
 		for (PCTemplate lt : pct.getSafeListFor(ListKey.HD_TEMPLATES))
 		{
-			if (lt.get(IntegerKey.HD_MAX) <= hitdice
-				&& lt.get(IntegerKey.HD_MIN) >= hitdice)
+			if ((lt.get(IntegerKey.HD_MAX) <= hitdice)
+					&& (lt.get(IntegerKey.HD_MIN) >= hitdice))
 			{
 				Formula ltReduction = lt.getSafe(ObjectKey.SR).getReduction();
 				int ltSR =
@@ -493,14 +495,11 @@ public class CharacterDisplay
 	{
 		List<PCTemplate> tl = new ArrayList<>();
 
-		TreeSet<PCTemplate> treeSet = new TreeSet<>(CDOMObjectUtilities.CDOM_SORTER);
-		for (PCTemplate template : templateFacet.getSet(id))
-		{
-			if (template.getSafe(ObjectKey.VISIBILITY).isVisibleTo(v))
-			{
-				treeSet.add(template);
-			}
-		}
+		Collection<PCTemplate> treeSet = new TreeSet<>(CDOMObjectUtilities::compareKeys);
+		templateFacet.getSet(id)
+		             .stream()
+		             .filter(template -> template.getSafe(ObjectKey.VISIBILITY).isVisibleTo(v))
+		             .forEach(treeSet::add);
 		tl.addAll(treeSet);
 		return tl;
 	}
@@ -625,7 +624,7 @@ public class CharacterDisplay
 	@Deprecated
 	public SortedSet<PCClass> getFavoredClasses()
 	{
-		SortedSet<PCClass> favored = new TreeSet<>(CDOMObjectUtilities.CDOM_SORTER);
+		SortedSet<PCClass> favored = new TreeSet<>(CDOMObjectUtilities::compareKeys);
 		favored.addAll(favClassFacet.getSet(id));
 		return favored;
 	}
@@ -695,7 +694,7 @@ public class CharacterDisplay
 	public Rectangle getPortraitThumbnailRect()
 	{
 		Rectangle rect = portraitThumbnailRectFacet.get(id);
-		return rect == null ? null : (Rectangle) rect.clone();
+		return (rect == null) ? null : (Rectangle) rect.clone();
 	}
 
 	public String getName()
@@ -746,7 +745,7 @@ public class CharacterDisplay
 
 	public Set<Domain> getSortedDomainSet()
 	{
-		SortedSet<Domain> domains = new TreeSet<>(CDOMObjectUtilities.CDOM_SORTER);
+		SortedSet<Domain> domains = new TreeSet<>(CDOMObjectUtilities::compareKeys);
 		domains.addAll(domainFacet.getSet(id));
 		return domains;
 	}
@@ -782,6 +781,11 @@ public class CharacterDisplay
 	public PCAlignment getPCAlignment()
 	{
 		return alignmentFacet.get(id);
+	}
+
+	public Object getGlobal(String varName)
+	{
+		return resultFacet.getGlobalVariable(id, varName);
 	}
 
 	/**
@@ -1389,13 +1393,13 @@ public class CharacterDisplay
 
 		// If you aren't multi-classed, don't display redundant class level
 		// information in addition to the total PC level
-		displayClass = classFacet.getCount(id) > 1 ? getFullDisplayClassName() : getDisplayClassName();
+		displayClass = (classFacet.getCount(id) > 1) ? getFullDisplayClassName() : getDisplayClassName();
 
-		return new StringBuilder(100).append(getName()).append(" the ").append(levels).append(getOrdinal(levels))
-				.append(" level ").append(getDisplayRaceName()).append(' ').append(displayClass).toString();
+		return getName() + " the " + levels + getOrdinal(levels) +
+				" level " + getDisplayRaceName() + ' ' + displayClass;
 	}
 
-	private String getOrdinal(final int cardinal)
+	private static String getOrdinal(final int cardinal)
 	{
 		switch (cardinal)
 		{
@@ -1451,11 +1455,10 @@ public class CharacterDisplay
 
 	public String getFullDisplayClassName(PCClass pcClass)
 	{
-		final StringBuilder buf = new StringBuilder(40);
-	
-		buf.append(getDisplayClassName(pcClass));
-	
-		return buf.append(" ").append(getLevel(pcClass)).toString();
+		String buf = getDisplayClassName(pcClass) +
+				" " + getLevel(pcClass);
+
+		return buf;
 	}
 
 	public String getDisplayClassName(PCClass pcClass)
@@ -1463,7 +1466,7 @@ public class CharacterDisplay
 		if (pcClass != null)
 		{
 			String subClassKey = getSubClassName(pcClass);
-			if (subClassKey != null && (!subClassKey.isEmpty())
+			if ((subClassKey != null) && (!subClassKey.isEmpty())
 					&& !subClassKey.equals(Constants.NONE))
 			{
 				SubClass sc = pcClass.getSubClassKeyed(subClassKey);

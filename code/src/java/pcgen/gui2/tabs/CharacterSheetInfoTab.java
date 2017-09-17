@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.tabs;
 
@@ -62,9 +60,7 @@ import pcgen.util.enumeration.Tab;
  * The Class {@code CharacterSheetInfoTab} is a placeholder for the
  * character sheet tab.
  *
- * <br>
  * -0800 (Tue, 22 Feb 2011) $
- *
  */
 public class CharacterSheetInfoTab extends FlippingSplitPane implements CharacterInfoTab, DisplayAwareTab
 {
@@ -184,8 +180,8 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 		/**
 		 * Prefs key for the character sheet for a game mode.
 		 */
-		private CharacterFacade character;
-		private ComboBoxModel model;
+		private final CharacterFacade character;
+		private final ComboBoxModel model;
 
 		public BoxHandler(CharacterFacade character)
 		{
@@ -253,7 +249,7 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 	private class CSheetHandler implements ListListener<Object>, ReferenceListener<Object>
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 		private String sheetDir;
 
 		public CSheetHandler(CharacterFacade character)
@@ -350,7 +346,7 @@ public class CharacterSheetInfoTab extends FlippingSplitPane implements Characte
 		 */
 		private static final long serialVersionUID = -2157540968522498242L;
 
-		private ListListener<TempBonusFacade> listener = new ListListener<TempBonusFacade>()
+		private final ListListener<TempBonusFacade> listener = new ListListener<TempBonusFacade>()
 		{
 
 			@Override

@@ -15,18 +15,22 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- *  Created on May 24, 2003
  */
 package gmgen.gui;
 
+import java.util.Enumeration;
+
 import javax.swing.event.DocumentEvent.EventType;
 import javax.swing.event.UndoableEditEvent;
-import javax.swing.text.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Element;
+import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.html.HTML.Tag;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.undo.UndoableEdit;
-import java.util.Enumeration;
 
 /**
  * {@code ExtendedHTMLDocument} is used by Swing for improved HTML
@@ -34,6 +38,7 @@ import java.util.Enumeration;
  * methods <em>never called by PCGen</em>, so code analysis tools will flag
  * methods as unused.  This is fine.  Do not remove or deprecate them.
  */
+@SuppressWarnings("unused")
 public class ExtendedHTMLDocument extends HTMLDocument {
 	private static final Element[] EMPTY_ELEMENT_ARRAY = new Element[0];
 
@@ -142,12 +147,10 @@ public class ExtendedHTMLDocument extends HTMLDocument {
 				MutableAttributeSet attr
 						= (MutableAttributeSet) e.getAttributes();
 				Enumeration<?> aNames = attr.getAttributeNames();
-				Object value;
-				Object aName;
 
 				while (aNames.hasMoreElements()) {
-					aName = aNames.nextElement();
-					value = attr.getAttribute(aName);
+					Object aName = aNames.nextElement();
+					Object value = attr.getAttribute(aName);
 
 					if ((value != null) && !value.toString()
 							.equalsIgnoreCase(tag.toString())) {

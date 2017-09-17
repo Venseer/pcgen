@@ -1,5 +1,4 @@
 /*
- * AbstractPrerequisiteSimpleParser.java
  *
  * Copyright 2003 (C) Chris Ward <frugal@purplewombat.co.uk>
  *
@@ -28,9 +27,7 @@ import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteOperator;
 import pcgen.persistence.PersistenceLayerException;
 
-/**
- *
- */
+
 public abstract class AbstractPrerequisiteSimpleParser extends
 		AbstractPrerequisiteParser
 {

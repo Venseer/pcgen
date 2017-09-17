@@ -29,7 +29,6 @@ import java.util.TreeMap;
 
 import pcgen.base.util.GenericMapToList;
 import pcgen.base.util.MapToList;
-import pcgen.base.util.WrappedMapSet;
 import pcgen.cdom.base.PCGenIdentifier;
 import pcgen.cdom.facet.event.ScopeFacetChangeEvent;
 import pcgen.cdom.facet.event.ScopeFacetChangeListener;
@@ -64,17 +63,13 @@ public class AbstractScopeFacet<IDT extends PCGenIdentifier, S, T> extends
 			throw new IllegalArgumentException("Object cannot be null");
 		}
 		Map<S, Map<T, Set<Object>>> map = getConstructingInfo(id);
-		Map<T, Set<Object>> scopeMap = map.get(scope);
-		if (scopeMap == null)
-		{
-			scopeMap = new IdentityHashMap<>();
-			map.put(scope, scopeMap);
-		}
+		Map<T, Set<Object>> scopeMap =
+				map.computeIfAbsent(scope, k -> new IdentityHashMap<>());
 		Set<Object> sources = scopeMap.get(obj);
 		boolean isNew = (sources == null);
 		if (isNew)
 		{
-			sources = new WrappedMapSet<>(IdentityHashMap.class);
+			sources = Collections.newSetFromMap(new IdentityHashMap<>());
 			scopeMap.put(obj, sources);
 		}
 		sources.add(source);
@@ -96,19 +91,15 @@ public class AbstractScopeFacet<IDT extends PCGenIdentifier, S, T> extends
 			throw new IllegalArgumentException("Collection cannot be null");
 		}
 		Map<S, Map<T, Set<Object>>> map = getConstructingInfo(id);
-		Map<T, Set<Object>> scopeMap = map.get(scope);
-		if (scopeMap == null)
-		{
-			scopeMap = new IdentityHashMap<>();
-			map.put(scope, scopeMap);
-		}
+		Map<T, Set<Object>> scopeMap =
+				map.computeIfAbsent(scope, k -> new IdentityHashMap<>());
 		for (T obj : coll)
 		{
 			Set<Object> sources = scopeMap.get(obj);
 			boolean isNew = (sources == null);
 			if (isNew)
 			{
-				sources = new WrappedMapSet<>(IdentityHashMap.class);
+				sources = Collections.newSetFromMap(new IdentityHashMap<>());
 				scopeMap.put(obj, sources);
 			}
 			sources.add(source);

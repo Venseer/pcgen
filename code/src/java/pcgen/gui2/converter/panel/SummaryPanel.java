@@ -1,5 +1,4 @@
 /*
- * SummaryPanel.java
  * Copyright 2008 (C) James Dempsey
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 
 package pcgen.gui2.converter.panel;
@@ -50,7 +47,7 @@ import pcgen.gui2.util.FontManipulation;
 public class SummaryPanel extends ConvertSubPanel
 {
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.gui2.converter.panel.ConvertSubPanel#autoAdvance(pcgen.cdom.base.CDOMObject)
 	 */
 	@Override
@@ -59,7 +56,7 @@ public class SummaryPanel extends ConvertSubPanel
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.gui2.converter.panel.ConvertSubPanel#performAnalysis(pcgen.cdom.base.CDOMObject)
 	 */
 	@Override
@@ -69,7 +66,7 @@ public class SummaryPanel extends ConvertSubPanel
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.gui2.converter.panel.ConvertSubPanel#setupDisplay(javax.swing.JPanel, pcgen.cdom.base.CDOMObject)
 	 */
 	@Override

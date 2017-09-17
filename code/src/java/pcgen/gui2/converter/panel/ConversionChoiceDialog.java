@@ -1,5 +1,4 @@
 /*
- * ConversionChoiceDialog.java
  * Copyright 2009 (C) James Dempsey
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.converter.panel;
 
@@ -52,14 +49,14 @@ public class ConversionChoiceDialog extends JDialog implements
 	ActionListener
 {
 	
-	private List<String> choices;
-	private String introText;
+	private final List<String> choices;
+	private final String introText;
 	
 	/** The result selected by the user. */
 	private int result = -1;
 
 	private JComboBox choiceCombo;
-	private int defaultChoice;
+	private final int defaultChoice;
 	
 	/**
 	 * Instantiates a new decision dialog for the data converter.
@@ -151,7 +148,7 @@ public class ConversionChoiceDialog extends JDialog implements
 		
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override

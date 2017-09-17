@@ -49,12 +49,12 @@ import pcgen.util.Logging;
 
 public class TokenSupport
 {
-	private TokenFamily localTokens = new TokenFamily(new Revision(0, 0, 0));
+	private final TokenFamily localTokens = new TokenFamily(new Revision(0, 0, 0));
 	
-	private DoubleKeyMapToList<Class<?>, String, CDOMToken<?>> tokenCache =
+	private final DoubleKeyMapToList<Class<?>, String, CDOMToken<?>> tokenCache =
             new DoubleKeyMapToList<>();
 
-	private TripleKeyMapToList<Class<?>, String, String, CDOMToken<?>> subTokenCache =
+	private final TripleKeyMapToList<Class<?>, String, String, CDOMToken<?>> subTokenCache =
             new TripleKeyMapToList<>(HashMap.class, CaseInsensitiveMap.class, CaseInsensitiveMap.class);
 
 	public <T extends Loadable> boolean processToken(LoadContext context,
@@ -90,20 +90,20 @@ public class TokenSupport
 				if (Logging.isLoggable(Logging.LST_INFO))
 				{
 					Logging.addParseMessage(Logging.LST_INFO,
-						"Failed in parsing typeStr: " + typeStr + " " + argument);
+						"Failed in parsing typeStr: " + typeStr + ' ' + argument);
 				}
 			}
 		}
 		if (typeStr.startsWith(" "))
 		{
 			Logging.addParseMessage(Logging.LST_ERROR, "Illegal whitespace at start of token '" + typeStr
-				+ "' '" + argument + "' for " + cl.getName() + " "
+				+ "' '" + argument + "' for " + cl.getName() + ' '
 				+ derivative.getDisplayName() + " in " + context.getSourceURI());
 		}
 		else
 		{
 			Logging.addParseMessage(Logging.LST_ERROR, "Illegal Token '" + typeStr
-				+ "' '" + argument + "' for " + cl.getName() + " "
+				+ "' '" + argument + "' for " + cl.getName() + ' '
 				+ derivative.getDisplayName() + " in " + context.getSourceURI());
 		}
 		return false;
@@ -302,7 +302,7 @@ public class TokenSupport
 		{
 			return null;
 		}
-		return result.toArray(new String[]{});
+		return result.toArray(new String[result.size()]);
 	}
 
 	public Collection<DeferredToken<? extends Loadable>> getDeferredTokens()

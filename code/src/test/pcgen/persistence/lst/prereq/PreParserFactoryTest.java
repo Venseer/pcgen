@@ -1,5 +1,4 @@
 /*
- * PreParserFactoryTest.java
  *
  * Copyright 2003 (C) Chris Ward <frugal@purplewombat.co.uk>
  *
@@ -16,11 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
- *
- *
  */
 package pcgen.persistence.lst.prereq;
 
@@ -33,9 +27,7 @@ import pcgen.AbstractCharacterTestCase;
 import pcgen.LocaleDependentTestCase;
 import pcgen.core.prereq.Prerequisite;
 
-/**
- *
- */
+
 @SuppressWarnings("nls")
 public class PreParserFactoryTest extends AbstractCharacterTestCase
 {
@@ -52,7 +44,7 @@ public class PreParserFactoryTest extends AbstractCharacterTestCase
 		return new TestSuite(PreParserFactoryTest.class);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.AbstractCharacterTestCase#setUp()
 	 */
 	@Override

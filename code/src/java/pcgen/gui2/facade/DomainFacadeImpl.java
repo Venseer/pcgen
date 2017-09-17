@@ -1,5 +1,4 @@
 /**
- * DomainFacadeImpl.java
  * Copyright James Dempsey, 2010
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -36,7 +33,6 @@ import pcgen.util.SortKeyAware;
  * to a domain with the domain. This allows these prereqs to be displayed and 
  * enforced by the UI.
  *
- * <br>
  * 
  */
 public class DomainFacadeImpl extends QualifiedObject<Domain> implements
@@ -72,7 +68,7 @@ public class DomainFacadeImpl extends QualifiedObject<Domain> implements
 		super(domain, prereq);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.InfoFacade#getKeyName()
 	 */
 	@Override
@@ -81,7 +77,7 @@ public class DomainFacadeImpl extends QualifiedObject<Domain> implements
 		return getRawObject().getKeyName();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.InfoFacade#getSource()
 	 */
 	@Override
@@ -91,7 +87,7 @@ public class DomainFacadeImpl extends QualifiedObject<Domain> implements
 			Globals.getSourceDisplay(), true);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.InfoFacade#getSourceForNodeDisplay()
 	 */
     @Override
@@ -101,7 +97,7 @@ public class DomainFacadeImpl extends QualifiedObject<Domain> implements
 				SourceFormat.LONG, false);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.QualifiedObject#toString()
 	 */
 	@Override

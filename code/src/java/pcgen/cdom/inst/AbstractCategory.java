@@ -118,19 +118,10 @@ public abstract class AbstractCategory<T extends Categorized<T>> implements
 	}
 
 	@Override
-	public abstract T newInstance();
-
-	@Override
 	public boolean isMember(T item)
 	{
 		return (item != null) && this.equals(item.getCDOMCategory());
 	}
-
-	@Override
-	public abstract Class<T> getReferenceClass();
-
-	@Override
-	public abstract String getReferenceDescription();
 
 	@Override
 	public boolean resolve(ReferenceManufacturer<T> rm, String name,
@@ -156,7 +147,7 @@ public abstract class AbstractCategory<T extends Categorized<T>> implements
 
 	protected boolean report(UnconstructedValidator validator, String key)
 	{
-		return validator != null && validator.allow(getReferenceClass(), this, key);
+		return (validator != null) && validator.allow(getReferenceClass(), this, key);
 	}
 
 	@Override

@@ -16,9 +16,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- *  PcgCombatant.java
  *
- *  Created on January 16, 2002, 12:27 PM
  */
 package gmgen.plugin;
 
@@ -61,7 +59,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jdom2.Element;
 
 /**
- *@author     devon
  */
 public class PcgCombatant extends Combatant
 {
@@ -253,23 +250,23 @@ public class PcgCombatant extends Combatant
 		Element hp = new Element("HitPoints");
 		Element pcg = new Element("PCG");
 
-		pcg.setAttribute("file", pc.getFileName() + "");
+		pcg.setAttribute("file", pc.getFileName());
 		retElement.addContent(pcg);
 
-		initiative.setAttribute("bonus", init.getModifier() + "");
+		initiative.setAttribute("bonus", String.valueOf(init.getModifier()));
 
 		if (init.getCurrentInitiative() > 0)
 		{
 			initiative
-				.setAttribute("current", init.getCurrentInitiative() + "");
+				.setAttribute("current", String.valueOf(init.getCurrentInitiative()));
 		}
 
 		retElement.addContent(initiative);
 
-		hp.setAttribute("current", hitPoints.getCurrent() + "");
-		hp.setAttribute("subdual", hitPoints.getSubdual() + "");
-		hp.setAttribute("max", hitPoints.getMax() + "");
-		hp.setAttribute("state", hitPoints.getState() + "");
+		hp.setAttribute("current", String.valueOf(hitPoints.getCurrent()));
+		hp.setAttribute("subdual", String.valueOf(hitPoints.getSubdual()));
+		hp.setAttribute("max", String.valueOf(hitPoints.getMax()));
+		hp.setAttribute("state", String.valueOf(hitPoints.getState()));
 		retElement.addContent(hp);
 
 		retElement.setAttribute("name", getName());
@@ -537,13 +534,13 @@ public class PcgCombatant extends Combatant
 			{
 				Equipment eq = weaponList.get(i);
 				statBuf.append("<a href=" + '"' + "attack:");
-				statBuf.append(pcOut.getWeaponName(eq)); //|WEAPON.%weap.NAME|
+				statBuf.append(PlayerCharacterOutput.getWeaponName(eq)); //|WEAPON.%weap.NAME|
 				statBuf.append("\\");
 				statBuf.append(pcOut.getWeaponToHit(i)); //|WEAPON.%weap.TOTALHIT|
 				statBuf.append("\\");
 				statBuf.append(pcOut.getWeaponRange(eq)); //|WEAPON.%weap.RANGE|
 				statBuf.append("\\");
-				statBuf.append(pcOut.getWeaponType(eq)); //|WEAPON.%weap.TYPE|
+				statBuf.append(PlayerCharacterOutput.getWeaponType(eq)); //|WEAPON.%weap.TYPE|
 				statBuf.append("\\");
 				statBuf.append(pcOut.getWeaponDamage(i)); //|WEAPON.%weap.DAMAGE|
 				statBuf.append("\\");
@@ -551,20 +548,20 @@ public class PcgCombatant extends Combatant
 				statBuf.append("\\");
 				statBuf.append(pcOut.getWeaponCritMult(i)); //|WEAPON.%weap.MULT|
 				statBuf.append("\\");
-				statBuf.append(pcOut.getWeaponHand(eq)); //|WEAPON.%weap.HAND|
+				statBuf.append(PlayerCharacterOutput.getWeaponHand(eq)); //|WEAPON.%weap.HAND|
 				statBuf.append("\\");
-				statBuf.append(pcOut.getWeaponSize(eq)); //|WEAPON.%weap.SIZE|
+				statBuf.append(PlayerCharacterOutput.getWeaponSize(eq)); //|WEAPON.%weap.SIZE|
 				statBuf.append("\\");
 				statBuf.append(pcOut.getWeaponSpecialProperties(eq)); //|WEAPON.%weap.SPROP|
 				statBuf.append('"' + " class=" + '"' + "dialog" + '"' + "> ");
 
-				statBuf.append(pcOut.getWeaponName(eq)); //|WEAPON.%weap.NAME|
+				statBuf.append(PlayerCharacterOutput.getWeaponName(eq)); //|WEAPON.%weap.NAME|
 				statBuf.append(" ");
 				statBuf.append(pcOut.getWeaponToHit(i)); //|WEAPON.%weap.TOTALHIT|
 				statBuf.append(" ");
 				statBuf.append(pcOut.getWeaponRange(eq)); //|WEAPON.%weap.RANGE|
 				statBuf.append("/");
-				statBuf.append(pcOut.getWeaponType(eq)); //|WEAPON.%weap.TYPE|
+				statBuf.append(PlayerCharacterOutput.getWeaponType(eq)); //|WEAPON.%weap.TYPE|
 				statBuf.append(" (");
 				statBuf.append(pcOut.getWeaponDamage(i)); //|WEAPON.%weap.DAMAGE|
 				statBuf.append(" ");
@@ -572,9 +569,9 @@ public class PcgCombatant extends Combatant
 				statBuf.append("/x");
 				statBuf.append(pcOut.getWeaponCritMult(i)); //|WEAPON.%weap.MULT|
 				statBuf.append(" ");
-				statBuf.append(pcOut.getWeaponHand(eq)); //|WEAPON.%weap.HAND|
+				statBuf.append(PlayerCharacterOutput.getWeaponHand(eq)); //|WEAPON.%weap.HAND|
 				statBuf.append(" ");
-				statBuf.append(pcOut.getWeaponSize(eq)); //|WEAPON.%weap.SIZE|
+				statBuf.append(PlayerCharacterOutput.getWeaponSize(eq)); //|WEAPON.%weap.SIZE|
 				statBuf.append(" ");
 				statBuf.append(pcOut.getWeaponSpecialProperties(eq)); //|WEAPON.%weap.SPROP|
 				statBuf.append(") </a> or ");
@@ -815,14 +812,11 @@ public class PcgCombatant extends Combatant
 
 				firstLine = false;
 
-				int modSkill;
-
 				CDOMSingleRef<PCStat> keyStat = skill.get(ObjectKey.KEY_STAT);
 				if (keyStat != null)
 				{
-					modSkill =
-							SkillModifier.modifier(skill, pc).intValue()
-								- pc.getStatModFor(keyStat.get());
+					int modSkill = SkillModifier.modifier(skill, pc).intValue()
+							- pc.getStatModFor(keyStat.get());
 					Logging.debugPrint("modSkill: " + modSkill);
 				}
 
@@ -876,7 +870,7 @@ public class PcgCombatant extends Combatant
 
 					firstLine = false;
 
-					statBuf.append(pcOut.getDomainName(dom)); //|DOMAIN|
+					statBuf.append(PlayerCharacterOutput.getDomainName(dom)); //|DOMAIN|
 					statBuf.append(" (");
 					statBuf.append(DescriptionFormatting.piWrapDesc(dom, pc.getDescription(dom), true)); //|DOMAIN.POWER|
 					statBuf.append(")");
@@ -1049,9 +1043,8 @@ public class PcgCombatant extends Combatant
 
 		protected void statBlockLineSpellBook(PlayerCharacter aPC, StringBuilder statBuf, Collection<PObject> classList, String spellBookName)
 		{
-			Set<PObject> classes = new HashSet<>();
-			classes.addAll(classList);
-			
+			Set<PObject> classes = new HashSet<>(classList);
+
 			for ( PObject pObj : classes )
 			{
 				if (pObj != null)
@@ -1067,7 +1060,7 @@ public class PcgCombatant extends Combatant
 					{
 						List<CharacterSpell> spellList = aPC.getCharacterSpells(pObj, null, spellBookName, level);
 
-						if (spellList.size() >= 1)
+						if (!spellList.isEmpty())
 						{
 							spellBuff.append("<font class='type'>Level " + level + ":</font> ");
 

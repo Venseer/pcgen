@@ -1,5 +1,4 @@
 /*
- * FacadeEvent.java
  * Copyright 2012 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -26,7 +25,7 @@ import java.util.EventObject;
  */
 public class FacadeEvent extends EventObject
 {
-	private FacadeEvent cause;
+	private final FacadeEvent cause;
 	
 	public FacadeEvent(Object source, FacadeEvent cause)
 	{

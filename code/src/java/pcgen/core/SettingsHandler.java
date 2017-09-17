@@ -1,5 +1,4 @@
 /*
- * SettingsHandler.java
  * Copyright 2001 (C) Jonas Karlsson
  *
  * This library is free software; you can redistribute it and/or
@@ -15,11 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on July 10, 2002, 2:15 PM
- *
- * Current Ver: $Revision$
- *
  */
 package pcgen.core;
 
@@ -27,6 +21,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
+import java.awt.SystemColor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -56,14 +51,12 @@ import pcgen.system.LanguageBundle;
 import pcgen.util.Logging;
 
 /**
- * This class contains all settings-related code moved from Globals.java
  *
  * Should be cleaned up more.
  * 
  * <b>NB: This class is being gradually replaced with use of 
  * {@link pcgen.system.PropertyContext} and its children.</b>   
  *
- * @author jujutsunerd
  **/
 public final class SettingsHandler
 {
@@ -195,6 +188,10 @@ public final class SettingsHandler
 	private static boolean showTipOfTheDay = true;
 	private static boolean isGMGen = false;
 	private static boolean showSingleBoxPerBundle = false;
+
+	private SettingsHandler()
+	{
+	}
 
 
 	public static String getSelectedGenerators(String string)
@@ -859,9 +856,9 @@ public final class SettingsHandler
 		if (!CoreUtility.doublesEqual(dw.doubleValue(), 0.0) && !CoreUtility.doublesEqual(dh.doubleValue(), 0.0))
 		{
 			final int width = Integer.parseInt(dw.toString().substring(0,
-						Math.min(dw.toString().length(), dw.toString().lastIndexOf(".")))); //$NON-NLS-1$
+						Math.min(dw.toString().length(), dw.toString().lastIndexOf('.')))); //$NON-NLS-1$
 			final int height = Integer.parseInt(dh.toString().substring(0,
-						Math.min(dh.toString().length(), dh.toString().lastIndexOf(".")))); //$NON-NLS-1$
+						Math.min(dh.toString().length(), dh.toString().lastIndexOf('.')))); //$NON-NLS-1$
 			d = new Dimension(width, height);
 		}
 
@@ -963,7 +960,7 @@ public final class SettingsHandler
 		setPostExportCommandStandard(getPCGenOption("postExportCommandStandard", "")); //$NON-NLS-1$ //$NON-NLS-2$
 		setPostExportCommandPDF(getPCGenOption("postExportCommandPDF", "")); //$NON-NLS-1$ //$NON-NLS-2$
 		setPrereqFailColor(getPCGenOption("prereqFailColor", Color.red.getRGB())); //$NON-NLS-1$
-		setPrereqQualifyColor(getPCGenOption("prereqQualifyColor", Color.black.getRGB())); //$NON-NLS-1$
+		setPrereqQualifyColor(getPCGenOption("prereqQualifyColor", SystemColor.text.getRGB())); //$NON-NLS-1$
 		setPreviewTabShown(getPCGenOption("previewTabShown", true)); //$NON-NLS-1$
 		setROG(getPCGenOption("isROG", false)); //$NON-NLS-1$
 		setSaveCustomInLst(getPCGenOption("saveCustomInLst", false)); //$NON-NLS-1$
@@ -1617,7 +1614,7 @@ public final class SettingsHandler
 	{
 		if (!selectedEqSetTemplate.isEmpty())
 		{
-			final int i = selectedEqSetTemplate.lastIndexOf("\\"); //$NON-NLS-1$
+			final int i = selectedEqSetTemplate.lastIndexOf('\\'); //$NON-NLS-1$
 
 			return selectedEqSetTemplate.substring(i + 1);
 		}
@@ -1689,7 +1686,7 @@ public final class SettingsHandler
 	{
 		if (!selectedSpellSheet.isEmpty())
 		{
-			final int i = selectedSpellSheet.lastIndexOf("\\"); //$NON-NLS-1$
+			final int i = selectedSpellSheet.lastIndexOf('\\'); //$NON-NLS-1$
 
 			return selectedSpellSheet.substring(i + 1);
 		}

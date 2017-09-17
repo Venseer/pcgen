@@ -1,5 +1,4 @@
 /*
- * TreeTableNode.java
  * Copyright 2008 (C) Connor Petty <mistercpp2000@gmail.com>
  * 
  * This library is free software; you can redistribute it and/or
@@ -23,9 +22,7 @@ import java.util.Enumeration;
 import javax.swing.tree.TreeNode;
 import pcgen.gui2.util.table.Row;
 
-/**
- *
- */
+
 public interface TreeTableNode extends TreeNode, Row
 {
 	@Override

@@ -1,6 +1,5 @@
 /*
  * Copyright 2012-14 (C) Tom Parker <thpr@users.sourceforge.net>
- * Derived from Skill.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  * 
  * This library is free software; you can redistribute it and/or modify it under
@@ -41,6 +40,10 @@ import pcgen.util.Delta;
 
 public final class SkillCostDisplay
 {
+	private SkillCostDisplay()
+	{
+	}
+
 	/**
 	 * Builds up a string describing what makes up the misc modifier for a skill
 	 * for a character. This can either be in long form '+2[skill TUMBLE gteq

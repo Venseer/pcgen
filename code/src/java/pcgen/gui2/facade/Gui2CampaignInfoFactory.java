@@ -1,5 +1,4 @@
 /*
- * Gui2CampaignInfoFactory.java
  * Copyright James Dempsey, 2011
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -49,7 +46,6 @@ import pcgen.system.LanguageBundle;
  * The Class {@code Gui2CampaignInfoFactory} is responsible for producing
  * HTML formatted information on campaigns for the new user interface.
  *
- * <br>
  * 
  */
 public class Gui2CampaignInfoFactory implements CampaignInfoFactory
@@ -78,7 +74,7 @@ public class Gui2CampaignInfoFactory implements CampaignInfoFactory
 		return oldList;
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CampaignInfoFactory#getHTMLInfo(pcgen.core.facade.CampaignFacade)
 	 */
 	@Override

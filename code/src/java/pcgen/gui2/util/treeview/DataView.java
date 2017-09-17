@@ -1,5 +1,4 @@
 /*
- * DataView.java
  * Copyright 2008 (C) Connor Petty <mistercpp2000@gmail.com>
  * 
  * This library is free software; you can redistribute it and/or
@@ -21,9 +20,7 @@ package pcgen.gui2.util.treeview;
 
 import java.util.List;
 
-/**
- *
- */
+
 public interface DataView<E>
 {
 

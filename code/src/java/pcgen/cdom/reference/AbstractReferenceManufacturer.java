@@ -30,6 +30,7 @@ import java.util.TreeMap;
 import javax.swing.event.EventListenerList;
 
 import pcgen.base.lang.CaseInsensitiveString;
+import pcgen.base.util.BasicIndirect;
 import pcgen.base.util.FixedStringList;
 import pcgen.base.util.FormatManager;
 import pcgen.base.util.HashMapToInstanceList;
@@ -157,7 +158,7 @@ public abstract class AbstractReferenceManufacturer<T extends Loadable>
 	 * The EventListenerList which contains the listeners to this
 	 * AbstractReferenceManufacturer.
 	 */
-	private final transient EventListenerList listenerList = new EventListenerList();
+	private final EventListenerList listenerList = new EventListenerList();
 
 	/**
 	 * Constructs a new AbstractReferenceManufacturer for the given Class.
@@ -1325,7 +1326,8 @@ public abstract class AbstractReferenceManufacturer<T extends Loadable>
 	@Override
 	public Indirect<T> convertIndirect(String key)
 	{
-		return factory.getReference(key);
+		return isResolved ? new BasicIndirect<T>(this, getActiveObject(key))
+			: getReference(key);
 	}
 
 	@Override
@@ -1351,5 +1353,11 @@ public abstract class AbstractReferenceManufacturer<T extends Loadable>
 	public FormatManager<?> getComponentManager()
 	{
 		return null;
+	}
+
+	@Override
+	public boolean isDirect()
+	{
+		return false;
 	}
 }

@@ -1,5 +1,4 @@
 /**
- * AbilityUtilitiesTest.java
  * Copyright 2007 (C) Andrew Wilson <nuance@sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -32,9 +31,7 @@ import pcgen.cdom.enumeration.Type;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.TestHelper;
 
-/**
- *
- */
+
 public class AbilityUtilitiesTest extends AbstractCharacterTestCase
 {
 

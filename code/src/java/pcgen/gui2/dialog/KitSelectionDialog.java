@@ -1,5 +1,4 @@
 /*
- * KitSelectionDialog.java
  * Copyright James Dempsey, 2012
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.dialog;
 
@@ -42,16 +39,15 @@ import pcgen.system.LanguageBundle;
  * the user to add kits to a character. Kits are prepared groups of equipment and 
  * other rules items.  
  *
- * <br>
  * 
  */
 @SuppressWarnings("serial")
 public class KitSelectionDialog extends JDialog
 		implements ActionListener
 {
-	private KitPanel kitPanel;
-	private JPanel buttonPanel;
-	private JButton closeButton;
+	private final KitPanel kitPanel;
+	private final JPanel buttonPanel;
+	private final JButton closeButton;
 
 	/**
 	 * Create a new instance of KitSelectionDialog

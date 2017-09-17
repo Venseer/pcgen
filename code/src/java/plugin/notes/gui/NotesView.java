@@ -110,13 +110,12 @@ import gmgen.gui.FlippingSplitPane;
 import gmgen.gui.ImageFileChooserPreview;
 import gmgen.util.LogReceiver;
 import gmgen.util.LogUtilities;
-import gmgen.util.MiscUtilities;
+import org.apache.commons.io.FileUtils;
 import plugin.notes.NotesPlugin;
 
 /**
  *  This class is the main view for the Notes Plugin. Mostof the work is done
  *  here and in the NotesTreeNode Class.
- *
  */
 public class NotesView extends JPanel
 {
@@ -124,7 +123,7 @@ public class NotesView extends JPanel
 	/**
 	 * Extension with a point
 	 */
-	private static final String EXTENSION = "."+NotesPlugin.EXTENSION_NOTES; //$NON-NLS-1$
+	private static final String EXTENSION = '.' +NotesPlugin.EXTENSION_NOTES; //$NON-NLS-1$
 
 	private static final String OPTION_NAME_LASTFILE = NotesPlugin.LOG_NAME + ".LastFile"; //$NON-NLS-1$
 
@@ -246,6 +245,12 @@ public class NotesView extends JPanel
 		return null;
 	}
 
+	private static FileFilter getFileType()
+	{
+		return new FileNameExtensionFilter(LanguageBundle.getString("in_plugin_notes_file"), NotesPlugin.EXTENSION_NOTES);
+
+	}
+
 	/**
 	 *  {@literal handle File->Open.} Will open any .gmn files, and import them into your
 	 *  notes structure
@@ -258,8 +263,8 @@ public class NotesView extends JPanel
 		File defaultFile = new File(sFile);
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(defaultFile);
-		chooser.addChoosableFileFilter(NotesPlugin.getFileType());
-		chooser.setFileFilter(NotesPlugin.getFileType());
+		chooser.addChoosableFileFilter(getFileType());
+		chooser.setFileFilter(getFileType());
 		chooser.setMultiSelectionEnabled(true);
 		Component component = GMGenSystem.inst;
 		Cursor originalCursor = component.getCursor();
@@ -412,7 +417,7 @@ public class NotesView extends JPanel
 				SettingsHandler.getGMGenOption(OPTION_NAME_LASTFILE, "");
 		new File(sFile);
 		
-		FileFilter ff = NotesPlugin.getFileType();
+		FileFilter ff = getFileType();
 		fLoad.addChoosableFileFilter(ff);
 		fLoad.setFileFilter(ff);
 
@@ -1009,7 +1014,7 @@ public class NotesView extends JPanel
 						if (!content)
 						{
 							elem.getParentElement();
-							ExtendedHTMLEditorKit.removeTag(editor, elem, true);
+							ExtendedHTMLEditorKit.removeTag(editor, elem);
 							editor.setCaretPosition(sOffset - 1);
 							return;
 						}
@@ -1215,7 +1220,7 @@ public class NotesView extends JPanel
 		newButton.setEnabled(false);
 		newButton.addActionListener(new java.awt.event.ActionListener()
 		{
-            @Override
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				newButtonActionPerformed();
@@ -1336,7 +1341,7 @@ public class NotesView extends JPanel
 
 		formatBar.add(underlineButton);
 
-		colorButton.setForeground(new java.awt.Color(0, 0, 0));
+		colorButton.setForeground(java.awt.SystemColor.text);
 		colorButton.setIcon(Icons.createImageIcon("menu-mode-RGB-alt.png"));
 		colorButton.setToolTipText("Color");
 		colorButton.setBorder(new EtchedBorder());
@@ -1591,7 +1596,7 @@ public class NotesView extends JPanel
 
 				if (!image.exists())
 				{
-					MiscUtilities.copy(newImage, image);
+					FileUtils.copyFile(newImage, image);
 				}
 			}
 		}
@@ -1636,7 +1641,7 @@ public class NotesView extends JPanel
 				ExtendedHTMLEditorKit.getListItemParent(htmlDoc
 					.getCharacterElement(editor.getCaretPosition()));
 		h.getParentElement();
-		ExtendedHTMLEditorKit.removeTag(editor, h, true);
+		ExtendedHTMLEditorKit.removeTag(editor, h);
 	}
 
 	//GEN-LAST:event_saveButtonActionPerformed
@@ -1987,7 +1992,7 @@ public class NotesView extends JPanel
 
 						if (!isImageFile(destFile) || !destFile.exists())
 						{
-							MiscUtilities.copy(newFile, destFile);
+							FileUtils.copyFile(newFile, destFile);
 						}
 
 						editor.setCaretPosition(editor.viewToModel(dtde
@@ -2094,7 +2099,7 @@ public class NotesView extends JPanel
 		 * @param owner the owner of the message being logged.
 		 * @param message the message to log.
 		 */
-        @Override
+		@Override
 		public void logMessage(String owner, String message)
 		{
 			if (log == null)
@@ -2111,17 +2116,6 @@ public class NotesView extends JPanel
 			node.appendText("<br>"+ Constants.LINE_SEPARATOR+"<b>"
 				+ dateFmt.format(Calendar.getInstance().getTime()) + "</b> "
 				+ message);
-		}
-
-		/**
-		 * Logs a message not associated with a specific owner.
-		 *
-		 * @param message the message to log.
-		 */
-        @Override
-		public void logMessage(String message)
-		{
-			logMessage("Misc", message);
 		}
 
 		private NotesTreeNode getChildNode(String name, NotesTreeNode parentNode)

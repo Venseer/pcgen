@@ -1,5 +1,4 @@
 /*
- * SourceEntryTest.java
  * Copyright 2008 (C) James Dempsey
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 
 package pcgen.core;
@@ -30,8 +27,6 @@ import pcgen.cdom.enumeration.StringKey;
 
 /**
  * <code>SourceEntryTest</code> verifies the function of the SourceEntry class.
- *
- *
  */
 public class SourceEntryTest extends TestCase
 {
@@ -39,7 +34,7 @@ public class SourceEntryTest extends TestCase
 	Source source;
 	Campaign campaign;
 	
-	/* (non-Javadoc)
+	/**
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	@Override

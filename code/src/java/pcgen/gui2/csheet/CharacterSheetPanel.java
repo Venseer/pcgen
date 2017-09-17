@@ -1,5 +1,4 @@
 /*
- * CharacterSheetPanel.java
  * Copyright 2008 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -53,9 +52,7 @@ import org.lobobrowser.html.test.SimpleUserAgentContext;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-/**
- *
- */
+
 public class CharacterSheetPanel extends HtmlPanel implements CharacterSelectionListener
 {
 	private enum CssColor

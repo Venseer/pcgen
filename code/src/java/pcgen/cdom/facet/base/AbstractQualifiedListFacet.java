@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import pcgen.base.util.WrappedMapSet;
 import pcgen.cdom.base.QualifiedActor;
 import pcgen.cdom.base.QualifyingObject;
 import pcgen.cdom.enumeration.CharID;
@@ -71,7 +70,6 @@ import pcgen.cdom.facet.event.DataFacetChangeEvent;
  * null is a valid source but a valid item to be added to the list of objects
  * stored by AbstractQualifiedListFacet.
  * 
- * @author Thomas Parker (thpr [at] yahoo.com)
  */
 public abstract class AbstractQualifiedListFacet<T extends QualifyingObject>
 		extends AbstractDataFacet<CharID, T>
@@ -106,7 +104,7 @@ public abstract class AbstractQualifiedListFacet<T extends QualifyingObject>
 		boolean fireNew = (set == null);
 		if (fireNew)
 		{
-			set = new WrappedMapSet<>(IdentityHashMap.class);
+			set = Collections.newSetFromMap(new IdentityHashMap<>());
 			map.put(obj, set);
 		}
 		set.add(source);
@@ -362,7 +360,7 @@ public abstract class AbstractQualifiedListFacet<T extends QualifyingObject>
 		Set<Object> set = map.get(obj);
 		if (set == null)
 		{
-			set = new WrappedMapSet<>(IdentityHashMap.class);
+			set = Collections.newSetFromMap(new IdentityHashMap<>());
 			map.put(obj, set);
 		}
 		return set;
@@ -694,7 +692,7 @@ public abstract class AbstractQualifiedListFacet<T extends QualifyingObject>
 	 */
 	public Collection<T> getQualifiedSet(CharID id, Object source)
 	{
-		Set<T> set = new WrappedMapSet<>(IdentityHashMap.class);
+		Set<T> set = Collections.newSetFromMap(new IdentityHashMap<>());
 		Map<T, Set<Object>> componentMap = getCachedMap(id);
 		if (componentMap != null)
 		{

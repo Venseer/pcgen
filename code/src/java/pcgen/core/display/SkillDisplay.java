@@ -1,6 +1,5 @@
 /*
  * Copyright 2014 (C) Tom Parker <thpr@users.sourceforge.net>
- * Derived from PObject.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -20,7 +19,6 @@
 package pcgen.core.display;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;

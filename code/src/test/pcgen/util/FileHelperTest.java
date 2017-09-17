@@ -1,5 +1,4 @@
 /**
- * FileHelperTest.java
  * Copyright 2003 (C) John Watson <john@sleazyweasel.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package pcgen.util;
 
@@ -31,7 +29,7 @@ import junit.framework.TestCase;
 public class FileHelperTest extends TestCase
 {
 
-	final static String BACK_ONE = ".." + File.separator;
+	static final String BACK_ONE = ".." + File.separator;
 			
 	/**
 	 * Constructs a new <code>FileHelperTest</code>.

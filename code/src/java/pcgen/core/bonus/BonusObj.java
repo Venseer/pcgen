@@ -1,5 +1,4 @@
 /*
- * BonusObj.java
  * Copyright 2002 (C) Greg Bingleman <byngl@hotmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,9 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
  */
 package pcgen.core.bonus;
 
@@ -322,7 +318,7 @@ public abstract class BonusObj extends ConcretePrereqObject implements Serializa
 				sb.append("|ERROR");
 			}
 	
-			sb.append('|').append(bonusFormula.toString());
+			sb.append('|').append(bonusFormula);
 
 			if (!bonusType.isEmpty())
 			{
@@ -441,8 +437,8 @@ public abstract class BonusObj extends ConcretePrereqObject implements Serializa
 						.append(aString.substring(y + 1)).toString();
 		}
 
-		if (aString.indexOf("(") >= 0 || aString.indexOf(")") >= 0 ||
-				aString.indexOf("%") >= 0)
+		if (aString.indexOf('(') >= 0 || aString.indexOf(')') >= 0 ||
+				aString.indexOf('%') >= 0)
 		{
 			return;
 		}
@@ -605,15 +601,8 @@ public abstract class BonusObj extends ConcretePrereqObject implements Serializa
 				&& bonusFormula.equals(other.bonusFormula)
 				&& bonusName.equals(other.bonusName)
 				&& bonusType.equals(other.bonusType)
-				&& theStackingFlag.equals(other.theStackingFlag)
+				&& theStackingFlag == other.theStackingFlag
 				&& bonusInfo.equals(other.bonusInfo);
-	}
-
-	@Override
-	public int hashCode()
-	{
-		// TODO Auto-generated method stub
-		return super.hashCode();
 	}
 
 	/*

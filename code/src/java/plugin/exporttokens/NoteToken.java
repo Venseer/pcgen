@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
  */
 package plugin.exporttokens;
 
@@ -132,7 +129,9 @@ public class NoteToken extends Token
 			{
 				String internal = beforeValue + afterValue;
 				if ("".equals(internal))
+				{
 					internal = "$1";
+				}
 				sb.append(beforeValue);
 				sb.append(ni.getValue().replaceAll("(\n)", internal));
 				sb.append(afterValue);

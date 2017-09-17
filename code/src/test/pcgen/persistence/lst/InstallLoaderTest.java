@@ -1,5 +1,4 @@
 /*
- * InstallLoaderTest.java
  * Copyright 2007 (C) James Dempsey <jdempsey@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.persistence.lst;
 
@@ -70,7 +67,7 @@ public final class InstallLoaderTest extends TestCase
 	/**
 	 * The sample install data for testing.
 	 */
-	private final static String[] INSTALL_DATA =
+	private static final String[] INSTALL_DATA =
 			new String[]{"CAMPAIGN:" + CAMPAIGN_NAME, "MINVER:" + MINVER,
 				"MINDEVVER: " + MINDEVVER, "DEST:" + DEST,
 				"COPYRIGHT:" + COPYRIGHT_1, "COPYRIGHT:" + COPYRIGHT_2,
@@ -80,17 +77,17 @@ public final class InstallLoaderTest extends TestCase
 				"PUBNAMELONG:" + PUBNAMELONG, "PUBNAMESHORT:" + PUBNAMESHORT,
 				"PUBNAMEWEB:" + SOURCEWEB};
 
-	/* (non-Javadoc)
+	/**
 	 * @see junit.framework.TestCase#setUp()
 	 */
-    @Override
+	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
 		TestHelper.loadPlugins();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see junit.framework.TestCase#tearDown()
 	 */
     @Override

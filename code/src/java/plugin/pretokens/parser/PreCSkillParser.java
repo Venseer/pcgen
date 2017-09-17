@@ -1,5 +1,4 @@
 /*
- * PreCSkillParser.java
  *
  * Copyright 2005 (C) Thomas Clegg <TN_Clegg@lycos.com>
  *
@@ -16,7 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 package plugin.pretokens.parser;
 
@@ -27,7 +25,6 @@ import pcgen.persistence.lst.prereq.PrerequisiteParserInterface;
 
 /**
  * A prerequisite parser class that handles the parsing of pre CSkill tokens.
- *
  */
 public class PreCSkillParser extends AbstractPrerequisiteListParser implements
 		PrerequisiteParserInterface

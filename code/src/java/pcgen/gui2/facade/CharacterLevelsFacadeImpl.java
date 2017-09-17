@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -63,7 +61,6 @@ import pcgen.util.enumeration.Tab;
  * the CharacterLevelsFacade interface for the new user interface. It allows 
  * the user interface to work with the class levels of a character.
  *
- * <br>
  * 
  */
 public class CharacterLevelsFacadeImpl extends
@@ -73,14 +70,14 @@ public class CharacterLevelsFacadeImpl extends
 	private PlayerCharacter theCharacter;
 	private CharacterDisplay charDisplay;
 
-	private UIDelegate delegate;
+	private final UIDelegate delegate;
 
 	private List<ClassFacade> classLevels;
 	private List<CharacterLevelFacade> charLevels;
 	private final TodoManager todoManager;
 	private CharID charID;
 	private final DataSetFacade dataSetFacade;
-	private CharacterFacadeImpl characterFacadeImpl;
+	private final CharacterFacadeImpl characterFacadeImpl;
 	
 	/**
 	 * Create a new CharacterLevelsFacadeImpl instance for a character.
@@ -217,7 +214,7 @@ public class CharacterLevelsFacadeImpl extends
 		updateSkillsTodo();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getClassTaken(int)
 	 */
 	@Override
@@ -253,7 +250,7 @@ public class CharacterLevelsFacadeImpl extends
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getHPGained(int)
 	 */
 	@Override
@@ -272,7 +269,7 @@ public class CharacterLevelsFacadeImpl extends
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getHPRolled(int)
 	 */
 	@Override
@@ -287,7 +284,7 @@ public class CharacterLevelsFacadeImpl extends
 		return charDisplay.getHP(classLevel);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#setHPRolled(int, int)
 	 */
 	@Override
@@ -322,7 +319,7 @@ public class CharacterLevelsFacadeImpl extends
 		return levelImpl.getCharacterLevel()-1;
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getGainedSkillPoints(int)
 	 */
 	@Override
@@ -371,7 +368,7 @@ public class CharacterLevelsFacadeImpl extends
 		return Float.NaN;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getRankCost(int, pcgen.cdom.enumeration.SkillCost)
 	 */
 	@Override
@@ -380,7 +377,7 @@ public class CharacterLevelsFacadeImpl extends
 		return cost.getCost();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getSkillCost(int, pcgen.core.facade.SkillFacade)
 	 */
 	@Override
@@ -419,7 +416,7 @@ public class CharacterLevelsFacadeImpl extends
 		}		
 		return false;
 	}
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getSkillModifier(int, pcgen.core.facade.SkillFacade)
 	 */
 	@Override
@@ -432,7 +429,7 @@ public class CharacterLevelsFacadeImpl extends
 		return 0;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getSkillRanks(int, pcgen.core.facade.SkillFacade)
 	 */
 	@Override
@@ -446,7 +443,7 @@ public class CharacterLevelsFacadeImpl extends
 		return 0;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getSkillTotal(int, pcgen.core.facade.SkillFacade)
 	 */
 	@Override
@@ -478,7 +475,7 @@ public class CharacterLevelsFacadeImpl extends
 		return sb;
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getSpentSkillPoints(int)
 	 */
 	@Override
@@ -493,7 +490,7 @@ public class CharacterLevelsFacadeImpl extends
 			- classLevel.getSkillPointsRemaining();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#getRemainingSkillPoints(int)
 	 */
 	@Override
@@ -507,7 +504,7 @@ public class CharacterLevelsFacadeImpl extends
 		return classLevel.getSkillPointsRemaining();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#investSkillPoints(int, pcgen.core.facade.SkillFacade, int)
 	 */
 	@Override
@@ -836,7 +833,7 @@ public class CharacterLevelsFacadeImpl extends
 
 
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#setGainedSkillPoints(int, int)
 	 */
 	@Override
@@ -886,7 +883,7 @@ public class CharacterLevelsFacadeImpl extends
 	
 	// ============== Listener Management code =========================
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#addClasListener(pcgen.core.facade.CharacterLevelsFacade.ClassListener)
 	 */
 	@Override
@@ -895,7 +892,7 @@ public class CharacterLevelsFacadeImpl extends
 		listenerList.add(ClassListener.class, listener);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#addHitPointListener(pcgen.core.facade.CharacterLevelsFacade.HitPointListener)
 	 */
 	@Override
@@ -904,7 +901,7 @@ public class CharacterLevelsFacadeImpl extends
 		listenerList.add(HitPointListener.class, listener);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#addSkillBonusListener(pcgen.core.facade.CharacterLevelsFacade.SkillBonusListener)
 	 */
 	@Override
@@ -913,7 +910,7 @@ public class CharacterLevelsFacadeImpl extends
 		listenerList.add(SkillBonusListener.class, listener);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#addSkillPointListener(pcgen.core.facade.CharacterLevelsFacade.SkillPointListener)
 	 */
 	@Override
@@ -922,7 +919,7 @@ public class CharacterLevelsFacadeImpl extends
 		listenerList.add(SkillPointListener.class, listener);
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#removeClassListener(pcgen.core.facade.CharacterLevelsFacade.ClassListener)
 	 */
 	@Override
@@ -931,7 +928,7 @@ public class CharacterLevelsFacadeImpl extends
 		listenerList.remove(ClassListener.class, listener);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#removeHitPointListener(pcgen.core.facade.CharacterLevelsFacade.HitPointListener)
 	 */
 	@Override
@@ -940,7 +937,7 @@ public class CharacterLevelsFacadeImpl extends
 		listenerList.remove(HitPointListener.class, listener);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#removeSkillBonusListener(pcgen.core.facade.CharacterLevelsFacade.SkillBonusListener)
 	 */
 	@Override
@@ -949,7 +946,7 @@ public class CharacterLevelsFacadeImpl extends
 		listenerList.remove(SkillBonusListener.class, listener);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.core.facade.CharacterLevelsFacade#removeSkillPointListener(pcgen.core.facade.CharacterLevelsFacade.SkillPointListener)
 	 */
 	@Override

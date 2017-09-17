@@ -15,8 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package plugin.lsttokens.choose;
 
@@ -90,7 +88,7 @@ public class AbilitySelectionToken extends AbstractTokenWithSeparator<CDOMObject
 				{
 					title = title.substring(1, title.length() - 1);
 				}
-				if (title == null || title.isEmpty())
+				if ((title == null) || title.isEmpty())
 				{
 					return new ParseResult.Fail(getParentToken() + Constants.COLON
 						+ getTokenName() + " had TITLE= but no title: " + value, context);

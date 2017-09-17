@@ -1,5 +1,4 @@
 /*
- * RandomChooser.java
  * Copyright 2006 (C) Aaron Divinsky <boomer70@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -29,7 +28,6 @@ import pcgen.facade.util.ListFacade;
 /**
  * An implementation of the Chooser Interface that does not display a GUI but
  * simply selects a random choice from the available list of options.
- *
  */
 public final class RandomChooser implements ChooserInterface, ChoiceHandler
 {

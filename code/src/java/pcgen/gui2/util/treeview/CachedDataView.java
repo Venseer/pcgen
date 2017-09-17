@@ -1,5 +1,4 @@
 /*
- * CachedDataView.java
  * Copyright 2016 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -24,9 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/**
- *
- */
+
 public abstract class CachedDataView<E> implements DataView<E>
 {
 

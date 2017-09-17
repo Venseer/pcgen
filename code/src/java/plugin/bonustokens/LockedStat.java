@@ -1,5 +1,4 @@
 /*
- * LockedStat.java
  * Copyright 2013 (C) James Dempsey
  *
  * This library is free software; you can redistribute it and/or
@@ -15,9 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
  */
 package plugin.bonustokens;
 
@@ -32,7 +28,6 @@ import pcgen.rules.context.LoadContext;
  * This is the class that implements the LockedStat bonuses.
  * BONUS:LOCKEDSTAT|x|y
  * 
- * <br>
  * 
  */
 public final class LockedStat extends BonusObj

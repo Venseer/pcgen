@@ -16,9 +16,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- *  PreferencesDialog.java
  *
- *  Created on August 29, 2002, 2:17 PM
  */
 package gmgen.gui;
 
@@ -49,7 +47,7 @@ public class PreferencesDialog extends AbstractPreferencesDialog
 
     private FlippingSplitPane jSplitPane1;
     private javax.swing.JTree prefsTree;
-    private PreferencesRootTreeNode root;
+    private final PreferencesRootTreeNode root;
     private JPanel prefsPane;
     private CardLayout cardLayout;
 

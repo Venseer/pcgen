@@ -1,5 +1,4 @@
 /*
- * PreAgeSetWriter.java
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,11 +13,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
- *
- *
  */
 package plugin.pretokens.writer;
 
@@ -36,7 +30,7 @@ public class PreAgeSetWriter extends AbstractPrerequisiteWriter implements
 		PrerequisiteWriterInterface
 {
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#kindHandled()
 	 */
     @Override
@@ -45,7 +39,7 @@ public class PreAgeSetWriter extends AbstractPrerequisiteWriter implements
 		return "AGESET";  //$NON-NLS-1$
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#operatorsHandled()
 	 */
     @Override
@@ -57,7 +51,7 @@ public class PreAgeSetWriter extends AbstractPrerequisiteWriter implements
 				PrerequisiteOperator.NEQ};
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#write(java.io.Writer, pcgen.core.prereq.Prerequisite)
 	 */
     @Override
@@ -98,7 +92,7 @@ public class PreAgeSetWriter extends AbstractPrerequisiteWriter implements
 			writer.write('!');
 		}
 
-		writer.write("PRE" + kindHandled().toUpperCase() + ":"
+		writer.write("PRE" + kindHandled().toUpperCase() + ':'
 				+ (prereq.isOverrideQualify() ? "Q:" : ""));
 		writer.write(po.equals(PrerequisiteOperator.GTEQ) ? prereq.getOperand()
 				: "1");

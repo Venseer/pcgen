@@ -1,5 +1,4 @@
 /*
- * PrerequisiteMultWriter.java
  *
  * Copyright 2004 (C) Frugal <frugal@purplewombat.co.uk>
  *
@@ -36,7 +35,7 @@ public class PrerequisiteMultWriter extends AbstractPrerequisiteWriter
 {
 	private boolean allSkillTot = false;
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#kindHandled()
 	 */
     @Override
@@ -45,7 +44,7 @@ public class PrerequisiteMultWriter extends AbstractPrerequisiteWriter
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#operatorsHandled()
 	 */
     @Override

@@ -1,5 +1,4 @@
 /*
- * FacadeFactory.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -52,9 +51,7 @@ import pcgen.util.Logging;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-/**
- *
- */
+
 public class FacadeFactory
 {
 
@@ -68,6 +65,12 @@ public class FacadeFactory
 	private static Map<String, CampaignFacade> campaignMap;
 	private static Map<GameModeFacade, DefaultListFacade<CampaignFacade>> campaignListMap = null;
 	private static final CampaignInfoFactory campInfoFactory = new Gui2CampaignInfoFactory();
+
+
+
+	private FacadeFactory()
+	{
+	}
 
 	static void initialize()
 	{
@@ -227,7 +230,7 @@ public class FacadeFactory
 				else
 				{
 					error = true;
-					Logging.log(Logging.WARNING, "'" + campaign + "'" +
+					Logging.log(Logging.WARNING, '\'' + campaign + '\'' +
 							" campaign not found, custom quick source '" + name +
 							"' might not work correctly.");
 				}

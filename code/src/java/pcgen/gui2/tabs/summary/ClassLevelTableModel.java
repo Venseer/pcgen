@@ -1,5 +1,4 @@
 /*
- * ClassLevelTableModel.java
  * Copyright 2010 (C) Connor Petty <cpmeister@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -180,7 +179,7 @@ public class ClassLevelTableModel extends AbstractTableModel
 				String classKey = c.getKeyName();
 				if (finalLevelMap.get(classKey) == rowIndex)
 				{
-					return c.toString() + " (" + character.getClassLevel(c) + ")";
+					return c + " (" + character.getClassLevel(c) + ")";
 				}
 				return c.toString();
 			default:

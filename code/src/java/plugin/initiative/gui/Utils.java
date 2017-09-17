@@ -33,11 +33,13 @@ import javax.swing.text.NumberFormatter;
  * <p>
  * A utility class for building some GUI elements
  * </p>
- *
- *
  */
 public class Utils
 {
+
+	private Utils()
+	{
+	}
 
 	/**
 	 * <p>Builds a formatted text field with specified min and max</p>

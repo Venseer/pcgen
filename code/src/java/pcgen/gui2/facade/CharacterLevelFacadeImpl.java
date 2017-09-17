@@ -1,5 +1,4 @@
 /**
- * CharacterLevelFacadeImpl.java
  * Copyright James Dempsey, 2010
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -28,14 +25,13 @@ import pcgen.facade.core.ClassFacade;
  * the CharacterLevelFacade interface for the new user interface. It provides  
  * a container for information about a particular level of the character. 
  *
- * <br>
  * 
  */
 public class CharacterLevelFacadeImpl implements CharacterLevelFacade
 {
 
-	private int characterLevel;
-	private ClassFacade classFacade;
+	private final int characterLevel;
+	private final ClassFacade classFacade;
 	
 	public CharacterLevelFacadeImpl(ClassFacade classFacade, int level)
 	{

@@ -17,8 +17,6 @@
  */
 package plugin.lsttokens.choose;
 
-import org.junit.Test;
-
 import pcgen.cdom.base.CDOMObject;
 import pcgen.core.PCAlignment;
 import pcgen.core.Race;
@@ -85,12 +83,6 @@ public class AlignmentTokenTest extends
 	protected QualifierToken<PCAlignment> getPCQualifier()
 	{
 		return null;
-	}
-
-	@Override
-	protected boolean requiresLiteral()
-	{
-		return false;
 	}
 
 	@Override

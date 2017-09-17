@@ -1,5 +1,4 @@
 /*
- * EquipmentListFacadeImpl.java
  * Copyright 2011 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -29,9 +28,7 @@ import pcgen.facade.core.EquipmentFacade;
 import pcgen.facade.core.EquipmentListFacade;
 import pcgen.facade.util.AbstractListFacade;
 
-/**
- *
- */
+
 public class EquipmentListFacadeImpl extends AbstractListFacade<EquipmentFacade>
 		implements EquipmentListFacade
 {

@@ -1,5 +1,4 @@
 /*
- * SpellSupportFacade.java
  * Copyright 2011 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -22,9 +21,7 @@ package pcgen.facade.core;
 import pcgen.facade.util.DefaultReferenceFacade;
 import pcgen.facade.util.ListFacade;
 
-/**
- *
- */
+
 public interface SpellSupportFacade
 {
 

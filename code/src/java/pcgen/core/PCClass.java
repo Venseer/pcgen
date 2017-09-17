@@ -1,5 +1,4 @@
 /*
- * PCClass.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,10 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on April 21, 2001, 2:15 PM
- *
- * $Id$
  */
 package pcgen.core;
 
@@ -88,10 +83,8 @@ import pcgen.util.enumeration.AttackType;
 
 /**
  * {@code PCClass}.
- *
- * @author Bryan McRoberts &lt;merton_monk@users.sourceforge.net&gt;
  */
-public class PCClass extends PObject implements ClassFacade
+public class PCClass extends PObject implements ClassFacade, Cloneable
 {
 
 	public static final CDOMReference<DomainList> ALLOWED_DOMAINS;
@@ -613,7 +606,7 @@ public class PCClass extends PObject implements ClassFacade
 		for (Map.Entry<AttackType, Integer> me : getMapFor(MapKey.ATTACK_CYCLE)
 				.entrySet())
 		{
-			if (at.equals(me.getKey()))
+			if (at == me.getKey())
 			{
 				return me.getValue();
 			}

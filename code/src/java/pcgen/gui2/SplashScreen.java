@@ -1,5 +1,4 @@
 /*
- * SplashScreen.java
  * Copyright 2009 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -24,6 +23,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridLayout;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -61,6 +63,11 @@ public class SplashScreen extends JWindow implements PCGenTaskListener
 		Component splashLabel = new JLabel(Icons.SplashPcgen_Ennie.getImageIcon());
 		pane.add(splashLabel, BorderLayout.NORTH);
 		loadingLabel.setBorder(BorderFactory.createEmptyBorder(10, 7, 10, 10));
+		
+		Font curFont = pane.getFont();
+		FontMetrics ftMetrics = pane.getFontMetrics(curFont);
+		int ftHeight = ftMetrics.getHeight();
+		loadingLabel.setPreferredSize(new Dimension(splashLabel.getWidth(), ftHeight));
 		pane.add(loadingLabel, BorderLayout.CENTER);
 
 		loadProgress.setStringPainted(true);

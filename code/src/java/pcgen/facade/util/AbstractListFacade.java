@@ -1,5 +1,4 @@
 /*
- * AbstractListFacade.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -27,9 +26,7 @@ import javax.swing.event.EventListenerList;
 import pcgen.facade.util.event.ListEvent;
 import pcgen.facade.util.event.ListListener;
 
-/**
- *
- */
+
 public abstract class AbstractListFacade<E> implements ListFacade<E>
 {
 

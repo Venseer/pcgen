@@ -1,5 +1,4 @@
 /*
- * PCGenFrame.java
  * Copyright 2008 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -125,8 +124,6 @@ import org.lobobrowser.html.test.SimpleUserAgentContext;
 /**
  * The main window for PCGen. In addition this class is responsible for providing 
  * global UI functions such as message dialogs. 
- *
- * <br>
  */
 public final class PCGenFrame extends JFrame implements UIDelegate
 {
@@ -2099,7 +2096,7 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 	 */
 	private class FilenameListener implements ReferenceListener<File>
 	{
-		/* (non-Javadoc)
+		/**
 		 * @see pcgen.core.facade.event.ReferenceListener#referenceChanged(pcgen.core.facade.event.ReferenceEvent)
 		 */
 

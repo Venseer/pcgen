@@ -31,9 +31,6 @@ import org.nfunk.jep.ParseException;
 import org.nfunk.jep.function.List;
 import org.nfunk.jep.function.PostfixMathCommand;
 
-/**
- * {@code RollingMethods}.
- */
 public final class RollingMethods
 {
 
@@ -219,12 +216,11 @@ public final class RollingMethods
         return IntStream.generate(() -> roll(sides - reroll) + reroll)
             .limit(times)
             .sorted()
-            .limit(numToKeep)
+            .skip(times-numToKeep)
             .sum();
     }
 
     /**
-     * @author RossLodge
      * 
      * <p>This class forms the basis for the dJEP extensions to the JEP library.
      * It evaluates a {@code ROLL} token, which is an operator that comes

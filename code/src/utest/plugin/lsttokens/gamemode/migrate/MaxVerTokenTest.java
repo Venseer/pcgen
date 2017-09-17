@@ -1,5 +1,4 @@
 /*
- * MaxVerTokenTest.java
  * Copyright 2013 (C) James Dempsey <jdempsey@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,18 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package plugin.lsttokens.gamemode.migrate;
 
-import static org.junit.Assert.*;
+import pcgen.core.system.MigrationRule;
+import pcgen.core.system.MigrationRule.ObjectType;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import pcgen.core.system.MigrationRule;
-import pcgen.core.system.MigrationRule.ObjectType;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * MaxVerTokenTest checks the function of the MaxVerToken class.
@@ -38,9 +38,6 @@ public class MaxVerTokenTest
 	private MaxVerToken token;
 	private String gameModeName;
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Before
 	public void setUp() throws Exception
 	{
@@ -62,7 +59,8 @@ public class MaxVerTokenTest
 	@Test
 	public void testParseValidVerNumbers()
 	{
-		String[] goodVersions = new String[] {"5.17.12", "6.0.0", "6.0.1 RC2", "6.0.1-RC2", "6.01.02", "6.01.02-dev"};
+		String[] goodVersions =
+				{"5.17.12", "6.0.0", "6.0.1 RC2", "6.0.1-RC2", "6.01.02", "6.01.02-dev"};
 		for (String verString : goodVersions)
 		{
 			assertTrue("Valid version " + verString
@@ -81,7 +79,8 @@ public class MaxVerTokenTest
 	@Test
 	public void testParseInvalidVerFormat()
 	{
-		String[] badVersions = new String[] {"text", "a.b.c", "6.1", "6_0_1", "6.0.1d", "3.rc2", "6.0.1RC2"};
+		String[] badVersions =
+				{"text", "a.b.c", "6.1", "6_0_1", "6.0.1d", "3.rc2", "6.0.1RC2"};
 		for (String verString : badVersions)
 		{
 			assertFalse("Invalid version " + verString

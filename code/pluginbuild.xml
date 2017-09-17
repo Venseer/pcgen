@@ -2,7 +2,6 @@
 pluginbuild.xml - a build file for the PCGEN plugins
 Note: This is used by the gradle build.
 
-$Id$
 
 STANDARD TARGETS
 ================
@@ -6915,15 +6914,26 @@ jar-all-plugins - Generate the plugin jar files
 		</jar>
 	</target>
 
-	<target name="jar-modifier-plugins" depends="jar-modifier-bool-plugins, jar-modifier-number-plugins, jar-modifier-orderedpair-plugins, jar-modifier-set-plugins, jar-modifier-string-plugins" description="Build (Link) Lst Modifier Token plugin jar files">
+	<target name="jar-modifier-plugins" depends="jar-modifier-bool-plugins, jar-modifier-cdom-plugins, jar-modifier-number-plugins, jar-modifier-orderedpair-plugins, jar-modifier-set-plugins, jar-modifier-string-plugins" description="Build (Link) Lst Modifier Token plugin jar files">
 	</target>
 
-	<target name="jar-modifier-bool-plugins" depends="makeplugindirs" description="Build (Link) Number Modifier Token plugin jar files">
+	<target name="jar-modifier-bool-plugins" depends="makeplugindirs" description="Build (Link) Boolean Modifier Token plugin jar files">
 		<!-- Boolean Modifier tokens-->
 		<jar jarfile="${lstplugins.dir}/BoolModifier-SET.jar" manifest="${src.java.dir}/plugin/lsttokens/manifest.mf">
 			<fileset dir="${build.classes.dir}">
 				<patternset>
 					<include name="plugin/modifier/bool/SetModifierFactory.class" />
+				</patternset>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="jar-modifier-cdom-plugins" depends="makeplugindirs" description="Build (Link) CDOMObject Modifier Token plugin jar files">
+		<!-- CDOMObject Modifier tokens-->
+		<jar jarfile="${lstplugins.dir}/CDOMModifier-SET.jar" manifest="${src.java.dir}/plugin/lsttokens/manifest.mf">
+			<fileset dir="${build.classes.dir}">
+				<patternset>
+					<include name="plugin/modifier/cdom/SetModifierFactory.class" />
 				</patternset>
 			</fileset>
 		</jar>
@@ -7398,6 +7408,20 @@ jar-all-plugins - Generate the plugin jar files
 	
 	<target name="jar-function-plugins" depends="makeplugindirs" description="Build (Link) Custom Function jar files">
 		<!-- PCGen custom functions -->
+		<jar jarfile="${lstplugins.dir}/Function-GET.jar" manifest="${src.java.dir}/plugin/lsttokens/manifest.mf">
+			<fileset dir="${build.classes.dir}">
+				<patternset>
+					<include name="plugin/function/GetFunction.class" />
+				</patternset>
+			</fileset>
+		</jar>
+		<jar jarfile="${lstplugins.dir}/Function-GETFACT.jar" manifest="${src.java.dir}/plugin/lsttokens/manifest.mf">
+			<fileset dir="${build.classes.dir}">
+				<patternset>
+					<include name="plugin/function/GetFactFunction.class" />
+				</patternset>
+			</fileset>
+		</jar>
 		<jar jarfile="${lstplugins.dir}/Function-INPUT.jar" manifest="${src.java.dir}/plugin/lsttokens/manifest.mf">
 			<fileset dir="${build.classes.dir}">
 				<patternset>

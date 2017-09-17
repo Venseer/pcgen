@@ -1,5 +1,4 @@
 /*
- * InfoTabbedPane.java
  * Copyright 2009 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -61,7 +60,6 @@ import pcgen.util.enumeration.Tab;
 /**
  * This class is the tabbed pane that contains all of the CharacterInfoTabs and
  * manages the models for those tabs.
- *
  */
 @SuppressWarnings("serial")
 public final class InfoTabbedPane extends JTabbedPane
@@ -476,7 +474,7 @@ public final class InfoTabbedPane extends JTabbedPane
 	private class TabActionListener implements PropertyChangeListener
 	{
 
-		private Component component;
+		private final Component component;
 
 		public TabActionListener(Component component)
 		{

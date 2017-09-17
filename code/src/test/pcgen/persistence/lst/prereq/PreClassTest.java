@@ -1,5 +1,4 @@
 /*
- * PreClassTest.java
  *
  * Copyright 2004 (C) Chris Ward <frugal@purplewombat.co.uk>
  *
@@ -20,7 +19,6 @@
  *
  * 
  * 
- *
  */
 package pcgen.persistence.lst.prereq;
 
@@ -34,9 +32,7 @@ import pcgen.core.prereq.Prerequisite;
 import pcgen.persistence.PersistenceLayerException;
 import plugin.pretokens.parser.PreClassParser;
 
-/**
- *
- */
+
 @SuppressWarnings("nls")
 public class PreClassTest extends EnUsLocaleDependentTestCase
 {

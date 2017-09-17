@@ -1,5 +1,4 @@
 /*
- * Globals.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,11 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on April 21, 2001, 2:15 PM
- *
- * Current Ver: $Revision$
- *
  */
 package pcgen.core;
 
@@ -36,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 
@@ -69,9 +64,6 @@ import pcgen.util.enumeration.VisionType;
 /**
  * This is like the top level model container. However,
  * it is build from static methods rather than instantiated.
- *
- * @author Bryan McRoberts &lt;merton_monk@users.sourceforge.net&gt;
- * @author boomer70 &lt;boomer70@yahoo.com&gt;
  */
 public final class Globals
 {
@@ -648,7 +640,7 @@ public final class Globals
 			typeList = aEq.typeList();
 		}
 
-		final List<String> resizeTypeList = SettingsHandler.getGame().getResizableTypeList();
+		final List<String> resizeTypeList = SettingsHandler.getGame().getResizableTypeList().stream().map(String::toUpperCase).collect(Collectors.toList());
 		return typeList.stream().map(String::toUpperCase).anyMatch(resizeTypeList::contains);
 	}
 
@@ -819,8 +811,8 @@ public final class Globals
 			final String s = aList.get(idx);
 			if (s.contains("%"))
 			{
-				final String beforeString = s.substring(0, s.indexOf("%"));
-				final String afterString = s.substring(s.indexOf("%") + 1);
+				final String beforeString = s.substring(0, s.indexOf('%'));
+				final String afterString = s.substring(s.indexOf('%') + 1);
 				cmdArray[idx] = beforeString + fileName + afterString;
 			}
 			else

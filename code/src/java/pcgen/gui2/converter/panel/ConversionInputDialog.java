@@ -1,5 +1,4 @@
 /*
- * ConversionChoiceDialog.java
  * Copyright 2009 (C) James Dempsey
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.converter.panel;
 
@@ -50,7 +47,7 @@ public class ConversionInputDialog extends JDialog implements
 	ActionListener
 {
 	
-	private String introText;
+	private final String introText;
 
 	private String result;
 
@@ -132,7 +129,7 @@ public class ConversionInputDialog extends JDialog implements
 		
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override

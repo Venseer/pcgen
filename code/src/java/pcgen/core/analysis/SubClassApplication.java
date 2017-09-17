@@ -1,6 +1,5 @@
 /*
  * Copyright 2009 (C) Tom Parker <thpr@users.sourceforge.net>
- * Derived from PCClass.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  * 
  * This library is free software; you can redistribute it and/or modify it under
@@ -40,8 +39,12 @@ import pcgen.util.Logging;
 import pcgen.util.chooser.ChooserFactory;
 import pcgen.util.enumeration.ProhibitedSpellType;
 
-public class SubClassApplication
+public final class SubClassApplication
 {
+
+	private SubClassApplication()
+	{
+	}
 
 	public static void checkForSubClass(PlayerCharacter aPC, PCClass cl)
 	{

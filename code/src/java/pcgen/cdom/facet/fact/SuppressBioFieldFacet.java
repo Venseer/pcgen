@@ -1,5 +1,4 @@
 /*
- * SuppressBioFieldFacet.java
  * Copyright James Dempsey, 2012
  *
  * This library is free software; you can redistribute it and/or
@@ -15,10 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on 02/01/2012 3:15:12 PM
- *
- * $Id$
  */
 package pcgen.cdom.facet.fact;
 
@@ -34,9 +29,7 @@ import pcgen.cdom.facet.base.AbstractStorageFacet;
  * The Class {@code SuppressBioFieldFacet} tracks the biography fields that
  * should be hidden from output.
  * 
- * <br>
  * 
- * @author James Dempsey &lt;jdempsey@users.sourceforge.net&gt;
  */
 
 public class SuppressBioFieldFacet extends AbstractStorageFacet<CharID>

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
  */
 package plugin.exporttokens;
 
@@ -79,7 +76,7 @@ public class TextToken extends Token
 				// Make sure that any "." in the token itself stay together
 				while (action.charAt(action.length() - 1) != '}')
 				{
-					action += "." + aTok.nextToken();
+					action += '.' + aTok.nextToken();
 				}
 			}
 		}
@@ -89,7 +86,7 @@ public class TextToken extends Token
 		}
 		while (aTok.hasMoreElements())
 		{
-			varName.append(".").append(aTok.nextToken());
+			varName.append('.').append(aTok.nextToken());
 		}
 
 		StringWriter writer = new StringWriter();
@@ -196,7 +193,7 @@ public class TextToken extends Token
 		{
 			if (i > 0)
 			{
-				res.append(".");
+				res.append('.');
 			}
 			if (!sentence[i].trim().isEmpty())
 			{

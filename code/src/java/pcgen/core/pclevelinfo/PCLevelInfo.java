@@ -1,5 +1,4 @@
 /*
- * PCLevelInfo.java
  * Copyright 2001 (C) Greg Bingleman <byngl@hotmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.core.pclevelinfo;
 
@@ -37,7 +34,6 @@ import pcgen.core.bonus.BonusUtilities;
  * {@code PCLevelInfo}.
  *
  * Represents the data kept about a level that a PC has added.
- *
  */
 public final class PCLevelInfo implements Cloneable
 {
@@ -55,7 +51,6 @@ public final class PCLevelInfo implements Cloneable
 	 */
 	public PCLevelInfo(final String argClassKeyName)
 	{
-		super();
 		classKeyName = argClassKeyName;
 	}
 
@@ -364,8 +359,8 @@ public final class PCLevelInfo implements Cloneable
 				&& classKeyName.equals(other.classKeyName)
 				&& ObjectUtil.compareWithNull(statsPreModified,
 					other.statsPreModified)
-				&& ObjectUtil.compareWithNull(statsPreModified,
-					other.statsPreModified);
+				&& ObjectUtil.compareWithNull(statsPostModified,
+					other.statsPostModified);
 		}
 		return false;
 	}

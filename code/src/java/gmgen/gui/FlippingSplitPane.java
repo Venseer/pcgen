@@ -1,5 +1,4 @@
 /*
- * FlippingSplitPane.java
  *
  * Copyright 2002, 2003 (C) B. K. Oxley (binkley) <binkley@alumni.rice.edu>
  *
@@ -18,7 +17,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA.
  *
- * Created on August 18th, 2002.
  */
 package gmgen.gui; // hm.binkley.gui;
 
@@ -70,7 +68,6 @@ import pcgen.system.LanguageBundle;
  * the divider unmovable, and the popup menu only has an "Unlocked" item.
  * Locking is also recursive for {@code FlippingSplitPane} components.
  *
- * @author &lt;a href="mailto:binkley@alumni.rice.edu"&gt;B. K. Oxley (binkley)&lt;/a&gt;
  */
 public class FlippingSplitPane extends JSplitPane
 {
@@ -547,7 +544,7 @@ public class FlippingSplitPane extends JSplitPane
 	private class ContinuousLayoutActionListener
 			implements ActionListener
 	{
-		private boolean aContinuousLayout;
+		private final boolean aContinuousLayout;
 
 		ContinuousLayoutActionListener(final boolean continuousLayout)
 		{
@@ -617,7 +614,7 @@ public class FlippingSplitPane extends JSplitPane
 	private class LockActionListener
 			implements ActionListener
 	{
-		private boolean aLocked;
+		private final boolean aLocked;
 
 		LockActionListener(final boolean locked)
 		{
@@ -712,7 +709,7 @@ public class FlippingSplitPane extends JSplitPane
 	private class PopupListener
 			extends MouseAdapter
 	{
-        @Override
+		@Override
 		public void mousePressed(final MouseEvent e)
 		{
 			if (e.isPopupTrigger())
@@ -742,7 +739,7 @@ public class FlippingSplitPane extends JSplitPane
 			}
 
 			// A handy shortcut
-			else if (Utilities.isShiftLeftMouseButton(e))
+			else if (pcgen.gui2.tools.Utilities.isShiftLeftMouseButton(e))
 			{
 				if (!isLocked())
 				{

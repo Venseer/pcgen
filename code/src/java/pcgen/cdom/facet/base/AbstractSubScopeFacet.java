@@ -27,7 +27,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
-import pcgen.base.util.WrappedMapSet;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.facet.event.SubScopeFacetChangeEvent;
 import pcgen.cdom.facet.event.SubScopeFacetChangeListener;
@@ -66,23 +65,15 @@ public class AbstractSubScopeFacet<S1, S2, T> extends
 			throw new IllegalArgumentException("Object cannot be null");
 		}
 		Map<S1, Map<S2, Map<T, Set<Object>>>> map = getConstructingInfo(id);
-		Map<S2, Map<T, Set<Object>>> scope1Map = map.get(scope1);
-		if (scope1Map == null)
-		{
-			scope1Map = new IdentityHashMap<>();
-			map.put(scope1, scope1Map);
-		}
-		Map<T, Set<Object>> scope2Map = scope1Map.get(scope2);
-		if (scope2Map == null)
-		{
-			scope2Map = new IdentityHashMap<>();
-			scope1Map.put(scope2, scope2Map);
-		}
+		Map<S2, Map<T, Set<Object>>> scope1Map =
+				map.computeIfAbsent(scope1, k -> new IdentityHashMap<>());
+		Map<T, Set<Object>> scope2Map =
+				scope1Map.computeIfAbsent(scope2, k -> new IdentityHashMap<>());
 		Set<Object> sources = scope2Map.get(obj);
 		boolean isNew = (sources == null);
 		if (isNew)
 		{
-			sources = new WrappedMapSet<>(IdentityHashMap.class);
+			sources = Collections.newSetFromMap(new IdentityHashMap<>());
 			scope2Map.put(obj, sources);
 		}
 		sources.add(source);

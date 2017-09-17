@@ -3,31 +3,38 @@
  * called from the main build.gradle file.
  *
  * Usage: gradle allReports
- * 
- * Author: James Dempsey 
  */
+
+buildScan {
+	licenseAgreementUrl = 'https://gradle.com/terms-of-service';
+	licenseAgree = 'yes'
+}
 
 checkstyle {
 	configFile = new File('code/standards/checkstyle.xml')
 	ignoreFailures = true
 	showViolations = false
+	toolVersion = '8.1'
 	sourceSets = []
 }
 
 pmd {
-    // turn off the default rules
-    ruleSets = []
+	// turn off the default rules
+	ruleSets = []
 	ruleSetFiles = files('code/standards/pmdruleset.xml')
-	
-	ignoreFailures = true
+	consoleOutput = true
 	sourceSets = []
-	toolVersion = "5.5.1"
+	toolVersion = "5.8.1"
 }
 
 findbugs {
 	ignoreFailures = true
 //	effort = 'max'
 	sourceSets = []
+}
+
+task findbugs(type: FindBugs) {
+   pluginClasspath = project.configurations.findbugsPlugins
 }
 
 tasks.withType(FindBugs) {
@@ -42,4 +49,15 @@ tasks.withType(FindBugs) {
 						'DoInsideDoPrivileged', 'CyclomaticComplexity']
 	}
 }
-task allReports { dependsOn = ['checkstyleMain', 'pmdMain', 'findbugsMain'] }
+
+gradleLint.rules = [
+	'dependency-parentheses',
+	'unused-exclude-by-dep',
+	'unused-exclude-by-conf',
+	'rename-nebula-stash',
+	'overridden-dependency-version',
+	'archaic-wrapper',
+	'all-nebula-renames',
+]
+
+task allReports { dependsOn = ['checkstyleMain', 'pmdMain', 'findbugsMain', 'lintGradle'] }

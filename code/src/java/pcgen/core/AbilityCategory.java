@@ -1,5 +1,4 @@
 /*
- * AbilityCategory.java
  * Copyright (c) 2010 Tom Parker <thpr@users.sourceforge.net>
  * Copyright 2006 (C) Aaron Divinsky <boomer70@yahoo.com>
  *
@@ -17,7 +16,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Current Ver: $Revision$
  */
 package pcgen.core;
 
@@ -32,7 +30,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import pcgen.base.formula.Formula;
-import pcgen.base.util.WrappedMapSet;
 import pcgen.cdom.base.Category;
 import pcgen.cdom.base.ChooseInformation;
 import pcgen.cdom.base.FormulaFactory;
@@ -50,10 +47,10 @@ import pcgen.cdom.reference.CategorizedCreator;
 import pcgen.cdom.reference.ManufacturableFactory;
 import pcgen.cdom.reference.ReferenceManufacturer;
 import pcgen.cdom.reference.UnconstructedValidator;
-import pcgen.facade.core.AbilityCategoryFacade;
 import pcgen.core.utils.LastGroupSeparator.GroupingMismatchException;
-import pcgen.util.Logging;
+import pcgen.facade.core.AbilityCategoryFacade;
 import pcgen.system.LanguageBundle;
+import pcgen.util.Logging;
 import pcgen.util.enumeration.View;
 import pcgen.util.enumeration.Visibility;
 
@@ -67,7 +64,6 @@ import pcgen.util.enumeration.Visibility;
  * the AbilityCategory was &quot;FEAT&quot; and set the ability type to
  * &quot;Fighter&quot;. 
  * 
- * @author boomer70 &lt;boomer70@yahoo.com&gt;
  * 
  */
 public class AbilityCategory implements Category<Ability>, Loadable,
@@ -141,7 +137,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		}
 		displayLocation = srcCat.displayLocation;
 		isAllAbilityTypes = srcCat.isAllAbilityTypes;
-		types = srcCat.types == null ? null : new HashSet<>(srcCat.types);
+		types = (srcCat.types == null) ? null : new HashSet<>(srcCat.types);
 		poolFormula = srcCat.poolFormula;
 		visibility = srcCat.visibility;
 		isEditable = srcCat.isEditable;
@@ -399,7 +395,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 			 * word. - thpr Apr 5 '14
 			 */
 			return (pc == null)
-					|| pc.getTotalAbilityPool(this).floatValue() != 0.0
+					|| (pc.getTotalAbilityPool(this).floatValue() != 0.0)
 					|| pc.hasAbilityInPool(this);
 					//|| pc.hasAbilityVisibleTo(this, v);
 		}
@@ -534,7 +530,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	{
 		final int PRIME = 31;
 		int result = 1;
-		result = PRIME * result + ((keyName == null) ? 0 : keyName.hashCode());
+		result = (PRIME * result) + ((keyName == null) ? 0 : keyName.hashCode());
 		return result;
 	}
 
@@ -545,19 +541,29 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 	public boolean equals(Object obj)
 	{
 		if (this == obj)
+		{
 			return true;
+		}
 		if (obj == null)
+		{
 			return false;
+		}
 		if (getClass() != obj.getClass())
+		{
 			return false;
+		}
 		final AbilityCategory other = (AbilityCategory) obj;
 		if (keyName == null)
 		{
 			if (other.keyName != null)
+			{
 				return false;
+			}
 		}
 		else if (!keyName.equals(other.keyName))
+		{
 			return false;
+		}
 		return true;
 	}
 
@@ -711,7 +717,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 			{
 				// Really not constructed...
 				// Wasn't constructed!
-				if (name.charAt(0) != '*' && !report(validator, name))
+				if ((name.charAt(0) != '*') && !report(validator, name))
 				{
 					Logging.errorPrint("Unconstructed Reference: "
 							+ getReferenceDescription() + " " + name);
@@ -766,7 +772,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 
 	private boolean report(UnconstructedValidator validator, String key)
 	{
-		return validator != null
+		return (validator != null)
 				&& validator.allow(getReferenceClass(), this, key);
 	}
 
@@ -780,7 +786,7 @@ public class AbilityCategory implements Category<Ability>, Loadable,
 		}
 		Collection<Ability> allObjects = parentCrm.getAllObjects();
 		// Don't add things twice or we'll get dupe messages :)
-		Set<Ability> added = new WrappedMapSet<>(IdentityHashMap.class);
+		Set<Ability> added = Collections.newSetFromMap(new IdentityHashMap<>());
 		/*
 		 * Pull in all the base objects... note this skips containsDirectly
 		 * because items haven't been resolved

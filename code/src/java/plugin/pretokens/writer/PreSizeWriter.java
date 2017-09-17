@@ -1,5 +1,4 @@
 /*
- * PrerequisiteSizeWriter.java
  *
  * Copyright 2004 (C) Frugal <frugal@purplewombat.co.uk>
  *
@@ -16,11 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
- *
- *
  */
 package plugin.pretokens.writer;
 
@@ -35,7 +29,7 @@ import java.io.Writer;
 public class PreSizeWriter implements PrerequisiteWriterInterface
 {
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#kindHandled()
 	 */
     @Override
@@ -44,7 +38,7 @@ public class PreSizeWriter implements PrerequisiteWriterInterface
 		return "size";
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#operatorsHandled()
 	 */
     @Override
@@ -53,7 +47,7 @@ public class PreSizeWriter implements PrerequisiteWriterInterface
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.output.prereq.PrerequisiteWriterInterface#write(java.io.Writer, pcgen.core.prereq.Prerequisite)
 	 */
     @Override

@@ -1,5 +1,4 @@
 /*
- * ReferenceListener.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -22,9 +21,7 @@ package pcgen.facade.util.event;
 
 import java.util.EventListener;
 
-/**
- * 
- */
+
 @FunctionalInterface
 public interface ReferenceListener<E> extends EventListener
 {

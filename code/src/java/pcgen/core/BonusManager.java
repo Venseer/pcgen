@@ -1,7 +1,6 @@
 /*
  * BonusManager
  * Copyright 2009 (c) Tom Parker <thpr@users.sourceforge.net>
- * derived from PlayerCharacter.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -35,7 +34,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 import pcgen.base.formula.Formula;
-import pcgen.base.util.WrappedMapSet;
 import pcgen.cdom.base.BonusContainer;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.Constants;
@@ -288,7 +286,7 @@ public class BonusManager
 
 			if (typedBonusNameInfo.startsWith(prefix))
 			{
-				final int typeIndex = typedBonusNameInfo.indexOf(":");
+				final int typeIndex = typedBonusNameInfo.indexOf(':');
 				if (typeIndex > 0)
 				{
 					return (fullyQualifedBonusType.substring(typeIndex + 1)); // use aKey to get
@@ -312,8 +310,8 @@ public class BonusManager
 		cachedActiveBonusSumsMap = new ConcurrentHashMap<>();
 		Map<String, String> nonStackMap = new ConcurrentHashMap<>();
 		Map<String, String> stackMap = new ConcurrentHashMap<>();
-		Set<BonusObj> processedBonuses = new WrappedMapSet<>(
-                IdentityHashMap.class);
+		Set<BonusObj> processedBonuses =
+				Collections.newSetFromMap(new IdentityHashMap<>());
 
 		//Logging.log(Logging.INFO, "=== Start bonus processing.");
 		
@@ -389,8 +387,8 @@ public class BonusManager
 
 			try
 			{
-				processBonus(bonus, new WrappedMapSet<>(
-                        IdentityHashMap.class), processedBonuses, nonStackMap, stackMap);
+				processBonus(bonus, Collections.newSetFromMap(new IdentityHashMap<>()),
+					processedBonuses, nonStackMap, stackMap);
 			}
 			catch (Exception e)
 			{

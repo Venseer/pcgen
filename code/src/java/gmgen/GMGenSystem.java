@@ -1,5 +1,4 @@
 /*
- *  GMGenSystem.java - main class for GMGen
  *  Copyright (C) 2003 Devon Jones, Emily Smirle
  *
  *  This library is free software; you can redistribute it and/or
@@ -25,7 +24,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.Method;
 import java.util.EventObject;
 
 import javax.swing.JFrame;
@@ -43,6 +41,7 @@ import pcgen.gui2.PCGenActionMap;
 import pcgen.gui2.tools.CommonMenuText;
 import pcgen.gui2.tools.Icons;
 import pcgen.gui2.tools.Utility;
+import pcgen.gui2.util.SwingWorker;
 import pcgen.pluginmgr.PCGenMessage;
 import pcgen.pluginmgr.PCGenMessageHandler;
 import pcgen.pluginmgr.PluginManager;
@@ -51,7 +50,6 @@ import pcgen.pluginmgr.messages.RequestFileOpenedMessageForCurrentlyOpenedPCsMes
 import pcgen.system.LanguageBundle;
 import pcgen.system.PCGenPropBundle;
 import pcgen.util.Logging;
-import pcgen.util.SwingWorker;
 
 import gmgen.gui.PreferencesDialog;
 import gmgen.gui.PreferencesRootTreeNode;
@@ -66,6 +64,7 @@ import gmgen.pluginmgr.messages.GMGenBeingClosedMessage;
 import gmgen.pluginmgr.messages.RequestAddPreferencesPanelMessage;
 import gmgen.pluginmgr.messages.RequestAddTabToGMGenMessage;
 import gmgen.util.LogUtilities;
+import gmgen.util.OSXAdapter;
 import org.apache.commons.lang3.SystemUtils;
 
 
@@ -146,11 +145,11 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
     private JSeparator toolsSeparator1;
 
     // Tree for the preferences dialog
-    private PreferencesRootTreeNode rootNode = new PreferencesRootTreeNode();
+    private final PreferencesRootTreeNode rootNode = new PreferencesRootTreeNode();
 
     private final PCGenMessageHandler messageHandler;
 
-	private PluginManager pluginManager;
+	private final PluginManager pluginManager;
 
     /**
      * Constructor
@@ -169,7 +168,7 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
         Utility.configurePlatformUI();
 
         if (SystemUtils.IS_OS_MAC_OSX) {
-            macOSXRegistration();
+            OSXAdapter.initialize(this);
         }
         Utility.setApplicationTitle(APPLICATION_NAME);
 
@@ -228,31 +227,29 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
         editMenu.removeAll();
 
         /*
-         * Preferences on the Macintosh is in the application menu. See
-         * macOSXRegistration()
+         * Preferences on the Macintosh is in the application menu.
          */
-        if (!SystemUtils.IS_OS_MAC_OSX) {
-            editMenu.add(editSeparator1);
-            CommonMenuText.name(preferencesEditItem, PCGenActionMap.MNU_TOOLS_PREFERENCES);
-            editMenu.add(preferencesEditItem);
-            preferencesEditItem.setEnabled(true);
-            ActionListener[] listenerArray = preferencesEditItem
-                    .getActionListeners();
+        editMenu.add(editSeparator1);
+        CommonMenuText.name(preferencesEditItem, PCGenActionMap.MNU_TOOLS_PREFERENCES);
+        editMenu.add(preferencesEditItem);
+        preferencesEditItem.setEnabled(true);
+        ActionListener[] listenerArray = preferencesEditItem
+                .getActionListeners();
 
 
-            for (final ActionListener aListenerArray : listenerArray)
-            {
-                preferencesEditItem.removeActionListener(aListenerArray);
-            }
-            preferencesEditItem
-                    .addActionListener(this::mPreferencesActionPerformed);
+        for (final ActionListener aListenerArray : listenerArray)
+        {
+            preferencesEditItem.removeActionListener(aListenerArray);
         }
+        preferencesEditItem
+                .addActionListener(this::mPreferencesActionPerformed);
     }
 
     /**
      * Exits GMGen, the Mac way.
      */
-    public void exitFormMac() {
+    public void exitFormMac()
+    {
         this.setVisible(false);
     }
 
@@ -269,7 +266,7 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
             RequestAddTabToGMGenMessage tmessage = (RequestAddTabToGMGenMessage) message;
             Logging.debugPrint("Creating Tab "
                     + GMGenSystemView.getTabPane().getTabCount());
-            theView.insertPane(tmessage.getName(), tmessage.getPane(),
+            GMGenSystemView.insertPane(tmessage.getName(), tmessage.getPane(),
                     GMGenSystemView.getTabPane().getTabCount());
         } else if (message instanceof RequestAddPreferencesPanelMessage) {
         	RequestAddPreferencesPanelMessage pmessage = (RequestAddPreferencesPanelMessage) message;
@@ -304,55 +301,6 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
     public void mPreferencesActionPerformedMac() {
         PreferencesDialog dialog = new PreferencesDialog(this, true, rootNode);
         dialog.setVisible(true);
-    }
-
-    /**
-     * Generic registration with the Mac OS X application menu. Checks the
-     * platform, then attempts to register with the Apple EAWT.
-     * 
-     * This method calls OSXAdapter.registerMacOSXApplication() and
-     * OSXAdapter.enablePrefs(). See OSXAdapter.java for the signatures of these
-     * methods.
-     */
-    private void macOSXRegistration() {
-        try {
-            Class<?> osxAdapter = Class.forName("gmgen.util.OSXAdapter");
-            Class<?>[] defArgs = { GMGenSystem.class };
-            Method registerMethod = osxAdapter.getDeclaredMethod(
-                    "registerMacOSXApplication", defArgs);
-
-            if (registerMethod != null) {
-                Object[] args = { this };
-                registerMethod.invoke(osxAdapter, args);
-            }
-
-            // This is slightly gross. to reflectively access methods with
-            // boolean args,
-            // use "boolean.class", then pass a Boolean object in as the arg,
-            // which apparently
-            // gets converted for you by the reflection system.
-            defArgs[0] = boolean.class;
-
-            Method prefsEnableMethod = osxAdapter.getDeclaredMethod(
-                    "enablePrefs", defArgs);
-
-            if (prefsEnableMethod != null) {
-                Object[] args = { Boolean.TRUE };
-                prefsEnableMethod.invoke(osxAdapter, args);
-            }
-        } catch (NoClassDefFoundError | ClassNotFoundException e) {
-            // This will be thrown first if the OSXAdapter is loaded on a system
-            // without the EAWT
-            // because OSXAdapter extends ApplicationAdapter in its def
-        	// TODO Use Logging
-            System.err
-                    .println("This version of Mac OS X does not support the Apple EAWT.  Application Menu handling has been disabled ("
-                            + e + ")");
-        } catch (Exception e) {
-        	// TODO Use Logging
-            System.err.println("Exception while loading the OSXAdapter = ["
-                    + e.getMessage() + "]");
-        }
     }
 
     /**
@@ -422,30 +370,40 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
         SettingsHandler.setGMGenOption(SETTING_WINDOW_HEIGHT, this.getSize().height);
 
         // Maximized state of the window
-        if ((getExtendedState() & Frame.MAXIMIZED_BOTH) != 0) {
+        if ((getExtendedState() & Frame.MAXIMIZED_BOTH) != 0)
+        {
             SettingsHandler.setGMGenOption(SETTING_WINDOW_STATE, Frame.MAXIMIZED_BOTH);
-        } else if ((getExtendedState() & Frame.MAXIMIZED_HORIZ) != 0) {
+        }
+        else if ((getExtendedState() & Frame.MAXIMIZED_HORIZ) != 0)
+        {
             SettingsHandler
                     .setGMGenOption(SETTING_WINDOW_STATE, Frame.MAXIMIZED_HORIZ);
-        } else if ((getExtendedState() & Frame.MAXIMIZED_VERT) != 0) {
+        }
+        else if ((getExtendedState() & Frame.MAXIMIZED_VERT) != 0)
+        {
             SettingsHandler.setGMGenOption(SETTING_WINDOW_STATE, Frame.MAXIMIZED_VERT);
-        } else {
+        }
+        else
+        {
             SettingsHandler.setGMGenOption(SETTING_WINDOW_STATE, Frame.NORMAL);
         }
     }
 
     // Sets all the panes on the GUI in the correct order.
     private void setTabbedPanes() {
-        try {
+        try
+        {
             GMGenSystemView.getTabPane().setSelectedIndex(0);
             theView.showPane();
-        } catch (RuntimeException e) {
+        }
+        catch (RuntimeException e) {
             // TODO
         }
     }
 
     // Creates the MenuBar for the application.
-    private void createMenuBar() {
+    private void createMenuBar()
+    {
         systemMenuBar = new JMenuBar();
         createFileMenu();
         createEditMenu();
@@ -456,7 +414,8 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
     }
 
     // Enable or Disable menu items at initialization time
-    private void setDefaultEnablementOfMenuItems() {
+    private void setDefaultEnablementOfMenuItems()
+    {
         openFileItem.setEnabled(true);
         saveFileItem.setEnabled(false);
         newFileItem.setEnabled(false);
@@ -468,7 +427,8 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
     }
 
     // Create tools menu
-    private void createToolsMenu() {
+    private void createToolsMenu()
+    {
         toolsMenu = new JMenu();
         toolsSeparator1 = new JSeparator();
         versionToolsItem = new JMenuItem();
@@ -485,7 +445,8 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
     }
 
     // Create the edit menu
-    private void createEditMenu() {
+    private void createEditMenu()
+    {
         editMenu = new JMenu();
         cutEditItem = new JMenuItem();
         copyEditItem = new JMenuItem();
@@ -506,23 +467,20 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
         CommonMenuText.name(pasteEditItem, MNU_PASTE);
         editMenu.add(pasteEditItem);
 
-        // Preferences... on MAC OS X is in the application menu. See macOSXRegistration()
-        if (!SystemUtils.IS_OS_MAC_OSX) {
-            editMenu.add(editSeparator1);
+        editMenu.add(editSeparator1);
 
-            CommonMenuText.name(preferencesEditItem, PCGenActionMap.MNU_TOOLS_PREFERENCES);
-            editMenu.add(preferencesEditItem);
-            preferencesEditItem.setEnabled(true);
+        CommonMenuText.name(preferencesEditItem, PCGenActionMap.MNU_TOOLS_PREFERENCES);
+        editMenu.add(preferencesEditItem);
+        preferencesEditItem.setEnabled(true);
 
-            ActionListener[] listenerArray = preferencesEditItem
-                    .getActionListeners();
-            for (final ActionListener aListenerArray : listenerArray)
-            {
-                preferencesEditItem.removeActionListener(aListenerArray);
-            }
-
-            preferencesEditItem.addActionListener(this::mPreferencesActionPerformed);
+        ActionListener[] listenerArray = preferencesEditItem
+                .getActionListeners();
+        for (final ActionListener aListenerArray : listenerArray)
+        {
+            preferencesEditItem.removeActionListener(aListenerArray);
         }
+
+        preferencesEditItem.addActionListener(this::mPreferencesActionPerformed);
 
         systemMenuBar.add(editMenu);
     }
@@ -545,7 +503,7 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
         fileMenu.add(fileSeparator1);
         createFileSaveMenuItem();
 
-        // Exit is quit on the Macintosh is in the application menu. See macOSXRegistration()
+        // Exit is quit on the Macintosh is in the application menu.
         if (!SystemUtils.IS_OS_MAC_OSX) {
             exitForMacOSX();
         }
@@ -553,36 +511,28 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
         systemMenuBar.add(fileMenu);
     }
 
-    /**
-     * 
-     */
+
     private void createFileSaveMenuItem() {
         CommonMenuText.name(saveFileItem, MNU_SAVE);
         fileMenu.add(saveFileItem);
         saveFileItem.addActionListener(this);
     }
 
-    /**
-     * 
-     */
+
     private void createFileOpenMenuItem() {
         CommonMenuText.name(openFileItem, MNU_OPEN);
         fileMenu.add(openFileItem);
         openFileItem.addActionListener(this);
     }
 
-    /**
-     * 
-     */
+
     private void createFileNewMenuItem() {
     	CommonMenuText.name(newFileItem, MNU_NEW);
         newFileItem.addActionListener(this);
         fileMenu.add(newFileItem);
     }
 
-    /**
-     * 
-     */
+
     private void exitForMacOSX() {
         fileMenu.add(fileSeparator2);
     	CommonMenuText.name(exitFileItem, MNU_EXIT);
@@ -639,7 +589,7 @@ public final class GMGenSystem extends JFrame implements ChangeListener,
     }
 
     // Initializes the Logger component.
-    private void initLogger() {
+    private static void initLogger() {
         boolean logging = SettingsHandler.getGMGenOption(SETTING_LOGGING_ON, false);
         LogUtilities.inst().setLogging(logging);
     }

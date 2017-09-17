@@ -1,5 +1,4 @@
 /*
- * SourcesPanel.java
  * Copyright 2008 (C) James Dempsey
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.prefs;
 
@@ -53,22 +50,22 @@ import pcgen.util.Logging;
 @SuppressWarnings("serial")
 public class SourcesPanel extends PCGenPrefsPanel
 {
-	private static String in_sources =
+	private static final String in_sources =
 		LanguageBundle.getString("in_Prefs_sources"); //$NON-NLS-1$
 	
-	private JCheckBox campLoad = new JCheckBox();
-	private JCheckBox charCampLoad = new JCheckBox();
-	private JCheckBox allowOptsInSource = new JCheckBox();
-	private JCheckBox saveCustom = new JCheckBox();
-	private JCheckBox showOGL = new JCheckBox();
-	private JCheckBox showMature = new JCheckBox();
-	private JCheckBox showSponsors = new JCheckBox();
+	private final JCheckBox campLoad = new JCheckBox();
+	private final JCheckBox charCampLoad = new JCheckBox();
+	private final JCheckBox allowOptsInSource = new JCheckBox();
+	private final JCheckBox saveCustom = new JCheckBox();
+	private final JCheckBox showOGL = new JCheckBox();
+	private final JCheckBox showMature = new JCheckBox();
+	private final JCheckBox showSponsors = new JCheckBox();
 	private JComboBoxEx sourceOptions = new JComboBoxEx();
-	private JCheckBox loadURL = new JCheckBox();
-	private JCheckBox allowOverride = new JCheckBox();
-	private JCheckBox skipSourceSelect = new JCheckBox();
-	private JCheckBox useAdvancedSourceSelect = new JCheckBox();
-	private JCheckBox allowMultiLineObjectsSelect = new JCheckBox();
+	private final JCheckBox loadURL = new JCheckBox();
+	private final JCheckBox allowOverride = new JCheckBox();
+	private final JCheckBox skipSourceSelect = new JCheckBox();
+	private final JCheckBox useAdvancedSourceSelect = new JCheckBox();
+	private final JCheckBox allowMultiLineObjectsSelect = new JCheckBox();
 
 	/**
 	 * Instantiates a new monster panel.
@@ -176,7 +173,7 @@ public class SourcesPanel extends PCGenPrefsPanel
 		this.add(label);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#getTitle()
 	 */
 	@Override
@@ -185,7 +182,7 @@ public class SourcesPanel extends PCGenPrefsPanel
 		return in_sources;
 	}
 	
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.gui2.prefs.PreferencesPanel#applyPreferences()
 	 */
 	@Override
@@ -253,7 +250,7 @@ public class SourcesPanel extends PCGenPrefsPanel
 		}
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.gui2.prefs.PreferencesPanel#initPreferences()
 	 */
 	@Override

@@ -1,5 +1,4 @@
 /*
- * PatternFilterTest.java
  * Copyright 2013 (C) James Dempsey <jdempsey@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,14 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.io.filters;
 
 import pcgen.io.EntityEncoder;
 
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -33,14 +29,6 @@ import static org.junit.Assert.*;
  */
 public class PatternFilterTest
 {
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception
-	{
-	}
 
 	@Test
 	public void testHtmlFilterStringSingleLine() throws Exception

@@ -1,5 +1,4 @@
 /*
- * PurchaseInfoTab.java
  * Copyright 2011 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -107,7 +106,6 @@ import pcgen.util.enumeration.Tab;
 /**
  * A character tab providing the user with the ability to buy and sell
  * equipment.
- *
  */
 @SuppressWarnings("serial")
 public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoTab
@@ -399,7 +397,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 		models.get(CurrencyLabelHandler.class).install();
 		models.get(BuyPopupMenuHandler.class).install();
 		models.get(SellPopupMenuHandler.class).install();
-		models.get(AllowDebtAction.class).install();;
+		models.get(AllowDebtAction.class).install();
 	}
 
 	@Override
@@ -426,7 +424,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 		int row = table.rowAtPoint(e.getPoint());
 		if (!table.isRowSelected(row))
 		{
-			if ((0 <= row) && (table.getRowCount() > row))
+			if ((row >= 0) && (table.getRowCount() > row))
 			{
 				table.setRowSelectionInterval(row, row);
 			}
@@ -499,7 +497,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class AddAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public AddAction(CharacterFacade character)
 		{
@@ -545,7 +543,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class AddCustomAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public AddCustomAction(CharacterFacade character)
 		{
@@ -580,12 +578,11 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	/**
 	 * The Class {@code DeleteCustomAction} defines an action to delete a
 	 * custom equipment item.
-	 *
 	 */
 	private class DeleteCustomAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public DeleteCustomAction(CharacterFacade character)
 		{
@@ -615,7 +612,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class UseAutoResizeAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public UseAutoResizeAction(CharacterFacade character)
 		{
@@ -639,7 +636,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class RemoveAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public RemoveAction(CharacterFacade character)
 		{
@@ -681,7 +678,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class FundsAddAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public FundsAddAction(CharacterFacade character)
 		{
@@ -710,7 +707,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class FundsSubtractAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public FundsSubtractAction(CharacterFacade character)
 		{
@@ -739,7 +736,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class AllowDebtAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public AllowDebtAction(CharacterFacade character)
 		{
@@ -763,7 +760,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class EquipInfoHandler implements ListSelectionListener
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 		private String text;
 		private List<EquipmentFacade> oldList;
 
@@ -820,7 +817,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 				{
 					sb.append(character.getInfoFactory().getHTMLInfo(equip));
 				}
-				text = "<html>" + sb.toString() + "</html>"; //$NON-NLS-1$ //$NON-NLS-2$
+				text = "<html>" + sb + "</html>"; //$NON-NLS-1$ //$NON-NLS-2$
 				infoPane.setText(text);
 			}
 		}
@@ -834,7 +831,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class CurrencyLabelHandler
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public CurrencyLabelHandler(CharacterFacade character)
 		{
@@ -1170,7 +1167,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class PurchaseTransferHandler extends TransferHandler
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public PurchaseTransferHandler(CharacterFacade character)
 		{
@@ -1205,7 +1202,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 				return null;
 			}
 
-			EquipmentFacade[] equipArray = data.toArray(new EquipmentFacade[0]);
+			EquipmentFacade[] equipArray = data.toArray(new EquipmentFacade[data.size()]);
 			return new EquipmentSelection(equipArray);
 		}
 
@@ -1225,7 +1222,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class EquipmentTransferHandler extends TransferHandler
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public EquipmentTransferHandler(CharacterFacade character)
 		{
@@ -1278,7 +1275,7 @@ public class PurchaseInfoTab extends FlippingSplitPane implements CharacterInfoT
 				return null;
 			}
 
-			EquipmentFacade[] equipArray = data.toArray(new EquipmentFacade[0]);
+			EquipmentFacade[] equipArray = data.toArray(new EquipmentFacade[data.size()]);
 			return new EquipmentSelection(equipArray);
 		}
 

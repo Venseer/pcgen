@@ -1,5 +1,4 @@
 /*
- * LoggingRecorder.java
  * Copyright 2011 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -24,9 +23,7 @@ import java.io.StringWriter;
 import java.util.logging.FileHandler;
 import java.util.logging.LogRecord;
 
-/**
- *
- */
+
 public class LoggingRecorder extends FileHandler
 {
 

@@ -17,19 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  * Refactored out of PObject July 22, 2005
- *
  */
 package pcgen.core.prereq;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import pcgen.base.util.WrappedMapSet;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.CDOMReference;
 import pcgen.cdom.base.ChooseInformation;
@@ -304,7 +303,7 @@ public final class PrerequisiteUtilities
 	 * with the character via the subkey, then a count of the number of instances is returned.
 	 *
 	 * Finally,the subkey may specify a wildcard.  If it does, the list of associations
-	 * between the ability object and the PC are checked. A count is returned of teh number
+	 * between the ability object and the PC are checked. A count is returned of the number
 	 * that begin with the wildcard string.
 	 *
 	 * @param prereq The prerequisite to be checked.
@@ -480,7 +479,7 @@ public final class PrerequisiteUtilities
 		final PlayerCharacter character,
 		String categoryName)
 	{
-		final Set<Ability> abilityList = new WrappedMapSet<>(IdentityHashMap.class);
+		final Set<Ability> abilityList = Collections.newSetFromMap(new IdentityHashMap<>());
 		if (character != null)
 		{
 			AbilityCategory cat = SettingsHandler.getGame().getAbilityCategory(categoryName);

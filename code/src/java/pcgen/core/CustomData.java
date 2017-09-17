@@ -1,5 +1,4 @@
 /*
- * CustomData.java
  * Copyright 2002 (C) Greg Bingleman <byngl@hotmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -16,10 +15,8 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Created on November 23, 2002, 12:53 AM
  *
  *
- * Current Ver: $Revision$
  */
 package pcgen.core;
 
@@ -47,7 +44,6 @@ import pcgen.util.Logging;
 /**
  * {@code CustomData}
  *
- * @author Greg Bingleman &lt;byngl@hotmail.com&gt;
  */
 public final class CustomData
 {
@@ -343,7 +339,7 @@ public final class CustomData
 				for ( Integer statValue : pbStatCosts.keySet() )
 				{
 					final PointBuyCost pbc = pbStatCosts.get(statValue);
-					bw.write("STAT:" + statValue.toString() + "\t\tCOST:" + Integer.toString(pbc.getBuyCost()));
+					bw.write("STAT:" + statValue + "\t\tCOST:" + Integer.toString(pbc.getBuyCost()));
 					final int iCount = pbc.getPrerequisiteCount();
 					if (iCount != 0)
 					{

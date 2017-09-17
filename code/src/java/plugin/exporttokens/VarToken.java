@@ -15,8 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package plugin.exporttokens;
 
@@ -34,8 +32,6 @@ import java.util.StringTokenizer;
  * VAR.x
  * VAR.x.INTVAL|.MINVAL|.NOSIGN
  * </pre>
- *
- *
  */
 public class VarToken extends Token
 {
@@ -94,7 +90,7 @@ public class VarToken extends Token
 		}
 		while (aTok.hasMoreElements())
 		{
-			varName.append(".").append(aTok.nextToken());
+			varName.append('.').append(aTok.nextToken());
 		}
 
 		if (isInt)
@@ -103,12 +99,12 @@ public class VarToken extends Token
 			{
 				return Delta.toString(pc.getVariable(varName.toString(), !isMin).intValue());
 			}
-			return pc.getVariable(varName.toString(), !isMin).intValue() + "";
+			return String.valueOf(pc.getVariable(varName.toString(), !isMin).intValue());
 		}
 		if (isSign)
 		{
 			return Delta.toString((float) pc.getVariable(varName.toString(), !isMin));
 		}
-		return pc.getVariable(varName.toString(), !isMin) + "";
+		return String.valueOf(pc.getVariable(varName.toString(), !isMin));
 	}
 }

@@ -1,5 +1,4 @@
 /*
- * DefaultTreeTableNode.java
  * Copyright 2008 (C) Connor Petty <mistercpp2000@gmail.com>
  * 
  * This library is free software; you can redistribute it and/or
@@ -16,7 +15,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * Created on Feb 20, 2008, 6:55:50 PM
  */
 package pcgen.gui2.util.treetable;
 
@@ -28,7 +26,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
- * @author Connor Petty &lt;mistercpp2000@gmail.com&gt;
  */
 public class DefaultTreeTableNode extends DefaultMutableTreeNode implements TreeTableNode
 {

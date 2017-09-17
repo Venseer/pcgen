@@ -1,5 +1,4 @@
 /*
- * TemplateInfoTab.java
  * Copyright 2010 (C) Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -65,7 +64,6 @@ import pcgen.util.enumeration.Tab;
 
 /**
  * This component allows the user to manage a character's templates.
- *
  */
 public class TemplateInfoTab extends FlippingSplitPane implements CharacterInfoTab
 {
@@ -182,7 +180,7 @@ public class TemplateInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class InfoHandler implements ListSelectionListener
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 		private String text;
 
 		public InfoHandler(CharacterFacade character)
@@ -239,7 +237,7 @@ public class TemplateInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class AddAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public AddAction(CharacterFacade character)
 		{
@@ -278,7 +276,7 @@ public class TemplateInfoTab extends FlippingSplitPane implements CharacterInfoT
 	private class RemoveAction extends AbstractAction
 	{
 
-		private CharacterFacade character;
+		private final CharacterFacade character;
 
 		public RemoveAction(CharacterFacade character)
 		{
@@ -451,7 +449,7 @@ public class TemplateInfoTab extends FlippingSplitPane implements CharacterInfoT
 		private final CharacterFacade character;
 		private final boolean isAvailModel;
 		private final TemplateDataView dataView;
-		private FilteredListFacade<CharacterFacade, TemplateFacade> templates;
+		private final FilteredListFacade<CharacterFacade, TemplateFacade> templates;
 
 		public TemplateTreeViewModel(CharacterFacade character, boolean isAvailModel, TemplateDataView dataView)
 		{

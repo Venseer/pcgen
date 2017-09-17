@@ -1,5 +1,4 @@
 /*
- * TipOfTheDayHandler.java
  * Copyright James Dempsey, 2012
  *
  * This library is free software; you can redistribute it and/or
@@ -41,9 +40,6 @@ import pcgen.util.Logging;
 
 /**
  * The singleton class {@code TipOfTheDayHandler} manages the list of tips.
- *
- * <br>
-
  */
 public final class TipOfTheDayHandler
 {

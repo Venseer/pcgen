@@ -1,5 +1,4 @@
 /*
- * EquipCustomizerDialog.java
  * Copyright James Dempsey, 2013
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.dialog;
 
@@ -43,18 +40,17 @@ import pcgen.system.LanguageBundle;
  * the user to build up custom equipment items by adding equipment modifiers and
  * setting the name, cost etc.  
  *
- * <br>
  * 
  */
 @SuppressWarnings("serial")
 public class EquipCustomizerDialog extends JDialog
 		implements ActionListener
 {
-	private EquipCustomPanel equipCustomPanel;
-	private JPanel buttonPanel;
-	private JButton buyButton;
-	private JButton okButton;
-	private JButton cancelButton;
+	private final EquipCustomPanel equipCustomPanel;
+	private final JPanel buttonPanel;
+	private final JButton buyButton;
+	private final JButton okButton;
+	private final JButton cancelButton;
 	private boolean purchase;
 	private boolean cancelled;
 

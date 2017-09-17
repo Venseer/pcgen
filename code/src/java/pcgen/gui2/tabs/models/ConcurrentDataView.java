@@ -1,5 +1,4 @@
 /*
- * ConcurrentDataView.java
  * Copyright 2013 (C) Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -15,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * 
  */
 package pcgen.gui2.tabs.models;
 
@@ -33,9 +31,7 @@ import javax.swing.SwingUtilities;
 import pcgen.gui2.util.treeview.DataView;
 import pcgen.util.Logging;
 
-/**
- *
- */
+
 public abstract class ConcurrentDataView<E> implements DataView<E>
 {
 

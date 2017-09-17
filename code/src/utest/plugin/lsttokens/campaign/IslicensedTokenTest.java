@@ -17,8 +17,6 @@
  */
 package plugin.lsttokens.campaign;
 
-import org.junit.Test;
-
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.core.Campaign;
 import pcgen.rules.persistence.CDOMLoader;
@@ -56,9 +54,4 @@ public class IslicensedTokenTest extends AbstractYesNoTokenTestCase<Campaign>
 		return ObjectKey.IS_LICENSED;
 	}
 
-	@Test
-	public void dummyTest()
-	{
-		// Just to get Eclipse to recognize this as a JUnit 4.0 Test Case
-	}
 }

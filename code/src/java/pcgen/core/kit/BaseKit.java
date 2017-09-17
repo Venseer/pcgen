@@ -1,5 +1,4 @@
 /*
- * BaseKit.java
  * Copyright 2001 (C) Greg Bingleman <byngl@hotmail.com>
  * Copyright 2003 (C) Jonas Karlson <jujutsunerd@sf.net>
  *
@@ -16,8 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.core.kit;
 
@@ -140,7 +137,7 @@ public abstract class BaseKit extends ConcretePrereqObject implements Loadable
 			}
 			evalStr = evalStr.substring(5, endInd);
 			int val = aPC.getVariableValue(evalStr, "").intValue();
-			String evalVal = "" + val;
+			String evalVal = String.valueOf(val);
 			modString.append(evalVal);
 			modString.append(aValue.substring(endInd + 5));
 			ret = modString.toString();

@@ -1,6 +1,4 @@
 /*
- * ChooserUtilities.java
- *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -15,7 +13,6 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * Current Version: $Revision$
  * Copyright 2005 Andrew Wilson <nuance@sourceforge.net>
  */
 
@@ -45,8 +42,12 @@ import pcgen.core.Skill;
  * 
  */
 
-public class ChooserUtilities
+public final class ChooserUtilities
 {
+	private ChooserUtilities()
+	{
+	}
+
 	/**
 	 * Deal with CHOOSE tags. The actual items the choice will be made from are
 	 * based on the choiceString, as applied to current character. Choices

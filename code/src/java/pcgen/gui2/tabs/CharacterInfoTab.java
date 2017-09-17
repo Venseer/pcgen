@@ -1,5 +1,4 @@
 /*
- * CharacterInfoTab.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -26,7 +25,6 @@ import pcgen.facade.core.CharacterFacade;
 /**
  * This interface must be implemented by all tabs that display character
  * information: summary tab, classes tab, abilities tab, inventory tab, etc....
- * <br>
  * The goal of this class is to create a separation of UI models and the UI
  * components that use them. By doing this, knowledge of the CharacterFacade can
  * be isolated from the tab itself and stored solely within the models that use
@@ -55,7 +53,6 @@ import pcgen.facade.core.CharacterFacade;
  * Note: The states crated by the a tab's {@code createModels} are
  * guaranteed to not be modified in anyway by the tab handler. The only changes
  * that would occur to any state would be in a call to {@code storeModels}.
- *
  */
 public interface CharacterInfoTab
 {

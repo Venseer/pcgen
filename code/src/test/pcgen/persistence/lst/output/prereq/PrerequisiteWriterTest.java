@@ -1,5 +1,4 @@
 /*
- *
  * Copyright 2005 (C) Greg Bingleman <byngl@hotmail.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,13 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- * @author	Greg Bingleman <byngl@hotmail.com>
- *
- *
- *
- *
  */
 package pcgen.persistence.lst.output.prereq;
 
@@ -373,11 +365,9 @@ public class PrerequisiteWriterTest extends TestCase
 		"PREMULT:3,[PRETYPE:1,type1],[PRETYPE:1,type2,type3],[!PRETYPE:1,type4]",		"PREMULT:3,[PRETYPE:1,type1],[PRETYPE:1,type2,type3],[!PRETYPE:1,type4]",
 		"PRETYPE:1,Animal",																"PRETYPE:1,Animal",
 		"!PRETYPE:1,Animal",															"!PRETYPE:1,Animal",
-	// From PrerequisiteLanguageWriterTest.java
 		"!PRELANG:1,Dwarven,Elven",														"!PRELANG:1,Dwarven,Elven",
 		"PRELANG:2,Any",																"PRELANG:2,Any",
 		"!PRELANG:2,Any",																"!PRELANG:2,Any",
-	// From PrerequisiteSkillWriterTest.java
 		"PRESKILL:1,Ride=10",															"PRESKILL:1,Ride=10",
 		"!PRESKILL:1,Ride=10",															"!PRESKILL:1,Ride=10",
 		"PRESKILL:1,Ride=10,Listen=5",													"PRESKILL:1,Ride=10,Listen=5",

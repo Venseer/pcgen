@@ -1,5 +1,4 @@
 /*
- * SpellBuilderFacadeImpl.java
  * Copyright 2013 (C) James Dempsey <jdempsey@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,8 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
  */
 package pcgen.gui2.facade;
 
@@ -71,22 +68,22 @@ import pcgen.util.Logging;
  */
 public class SpellBuilderFacadeImpl implements SpellBuilderFacade
 {
-	private DefaultReferenceFacade<InfoFacade> pcClass;
-	private DefaultReferenceFacade<Integer> spellLevel;
-	private DefaultReferenceFacade<InfoFacade> spell;
-	private DefaultReferenceFacade<String> variant;
-	private DefaultReferenceFacade<Integer> casterLevel;
-	private DefaultReferenceFacade<String> spellType;
+	private final DefaultReferenceFacade<InfoFacade> pcClass;
+	private final DefaultReferenceFacade<Integer> spellLevel;
+	private final DefaultReferenceFacade<InfoFacade> spell;
+	private final DefaultReferenceFacade<String> variant;
+	private final DefaultReferenceFacade<Integer> casterLevel;
+	private final DefaultReferenceFacade<String> spellType;
 
-	private DefaultListFacade<InfoFacade> availClasses;
-	private DefaultListFacade<Integer> availSpellLevels;
-	private DefaultListFacade<InfoFacade> availSpells;
-	private DefaultListFacade<String> availVariants;
-	private DefaultListFacade<Integer> availCasterlevels;
-	private DefaultListFacade<String> availSpellTypes;
+	private final DefaultListFacade<InfoFacade> availClasses;
+	private final DefaultListFacade<Integer> availSpellLevels;
+	private final DefaultListFacade<InfoFacade> availSpells;
+	private final DefaultListFacade<String> availVariants;
+	private final DefaultListFacade<Integer> availCasterlevels;
+	private final DefaultListFacade<String> availSpellTypes;
 
-	private DefaultListFacade<AbilityFacade> availMetamagicFeats;
-	private DefaultListFacade<AbilityFacade> selMetamagicFeats;
+	private final DefaultListFacade<AbilityFacade> availMetamagicFeats;
+	private final DefaultListFacade<AbilityFacade> selMetamagicFeats;
 
 	private List<String> classList;
 	private List<String> levelList;
@@ -95,14 +92,14 @@ public class SpellBuilderFacadeImpl implements SpellBuilderFacade
 	private int minSpellLevel = 0;
 	private int maxSpellLevel = 9;
 	private String reqSpellType = "";
-	private List<String> subTypeList = new ArrayList<>();
+	private final List<String> subTypeList = new ArrayList<>();
 
-	private PlayerCharacter character;
+	private final PlayerCharacter character;
 	private Type requiredType;
 	private List<AvailableSpell> classSpells;
 	private CDOMList<Spell> spellList;
-	private MasterAvailableSpellFacet masterAvailableSpellFacet;
-	private DataSetID datasetID;
+	private final MasterAvailableSpellFacet masterAvailableSpellFacet;
+	private final DataSetID datasetID;
 
 	/**
 	 * Create a new instance SpellBuilderFacadeImpl to manage a particular 
@@ -667,7 +664,6 @@ public class SpellBuilderFacadeImpl implements SpellBuilderFacade
 
 		// Handle variants
 		List<String> variants = new ArrayList<>();
-		;
 		if (newSpell != null)
 		{
 			variants = newSpell.getSafeListFor(ListKey.VARIANTS);

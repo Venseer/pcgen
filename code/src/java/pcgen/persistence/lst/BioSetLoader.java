@@ -1,5 +1,4 @@
 /*
- * bioSetLoader.java
  * Copyright 2002 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -39,9 +38,7 @@ import pcgen.persistence.lst.prereq.PreParserFactory;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.Logging;
 
-/**
- *
- */
+
 public final class BioSetLoader extends LstLineFileLoader
 {
 	private static String regionName = Constants.NONE;

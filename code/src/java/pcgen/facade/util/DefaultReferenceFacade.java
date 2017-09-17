@@ -1,5 +1,4 @@
 /*
- * DefaultReferenceFacade.java
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or
@@ -26,13 +25,11 @@ import org.apache.commons.lang3.ObjectUtils;
 import pcgen.facade.util.event.ReferenceEvent;
 import pcgen.facade.util.event.ReferenceListener;
 
-/**
- *
- */
+
 public class DefaultReferenceFacade<E> implements WriteableReferenceFacade<E>
 {
 
-	private EventListenerList listenerList = new EventListenerList();
+	private final EventListenerList listenerList = new EventListenerList();
 	protected E object;
 
 	public DefaultReferenceFacade()

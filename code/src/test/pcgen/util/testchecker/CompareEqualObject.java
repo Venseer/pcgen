@@ -1,5 +1,4 @@
 /**
- * CompareEqualObject.java
  * Copyright 2005 (c) Andrew Wilson <nuance@sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
 
 package pcgen.util.testchecker;
@@ -94,7 +92,9 @@ public class CompareEqualObject extends TestChecker
 		for (int i = 0; i < Array.getLength(obj1); i++)
 		{
 			if (!areEqual(Array.get(obj1, i), Array.get(obj2, i)))
+			{
 				return false;
+			}
 		}
 		return true;
 	}

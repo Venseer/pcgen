@@ -1,5 +1,4 @@
 /**
- * pcgen.core.term.EvaluatorFactoryPCVar.java
  * Copyright 2008 Andrew Wilson
  * <nuance@users.sourceforge.net>.
  *
@@ -18,8 +17,6 @@
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
  * Created 03 August 2008
- *
- * Current Ver: $Revision:$
  */
 
 package pcgen.core.term;
@@ -1084,7 +1081,7 @@ public enum TermEvaluatorBuilderPCVar implements TermEvaluatorBuilder
 
 			String classString;
 
-			if (2 == expressionString.length())
+			if (expressionString.length() == 2)
 			{
 				if (!src.startsWith("CLASS:")) {
 					StringBuilder sB = new StringBuilder();
@@ -1134,7 +1131,7 @@ public enum TermEvaluatorBuilderPCVar implements TermEvaluatorBuilder
 						"MERGELOC".equals(fullTypes[0])  ? Constants.MERGE_LOCATION :
 						Constants.MERGE_ALL;
 
-			int first = (Constants.MERGE_ALL == merge) ? 0 : 1;
+			int first = (merge == Constants.MERGE_ALL) ? 0 : 1;
 
 			String[] types;
 			if (fullTypes.length > first) {
@@ -1187,7 +1184,7 @@ public enum TermEvaluatorBuilderPCVar implements TermEvaluatorBuilder
 						"MERGELOC".equals(fullTypes[0])  ? Constants.MERGE_LOCATION :
 						Constants.MERGE_ALL;
 
-			int first = (Constants.MERGE_ALL == merge) ? 0 : 1;
+			int first = (merge == Constants.MERGE_ALL) ? 0 : 1;
 
 			String[] types;
 			if (fullTypes.length > first) {

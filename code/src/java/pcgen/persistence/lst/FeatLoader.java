@@ -1,5 +1,4 @@
 /*
- * FeatLoader.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -30,9 +29,7 @@ import pcgen.persistence.SystemLoader;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.Logging;
 
-/**
- *
- */
+
 public final class FeatLoader extends AbilityLoader
 {
 	private boolean defaultFeatsLoaded = false;

@@ -177,8 +177,8 @@
 			<trait>${pcstring('PERSONALITY2')}</trait>
 		</personality>
 		<portrait>
-			<portrait>${pcstring('PORTRAIT')}</portrait>
-			<portrait_thumb>${pcstring('PORTRAIT.THUMB')}</portrait_thumb>
+			<portrait>${pcstring('PORTRAIT')?url_path('utf-8')}</portrait>
+			<portrait_thumb>${pcstring('PORTRAIT.THUMB')?url_path('utf-8')}</portrait_thumb>
 		</portrait>
 		<phobias>${pcstring('PHOBIAS')}</phobias>
 		<#if (pcstring("ABILITYALL.ANY.0.TYPE=RaceName.HASASPECT.RaceName") = "Y")>
@@ -759,9 +759,11 @@
 			<critical>${pcstring('WEAPONH.CRIT')}/x${pcstring('WEAPONH.MULT')}</critical>
 			<!-- Should be changed to a variable due to improved crit -->
 			<reach>${pcstring('REACH')}</reach>
-			<@loop from=0 to=pcvar('countdistinct("ABILITIES","CATEGORY=Special Ability","TYPE=UnarmedDisplay")-1') ; NaturalAttack , NaturalAttack_has_next>
-			<special_property>${pcstring('ABILITYALL.Special Ability.${NaturalAttack}.TYPE=UnarmedDisplay.ASPECT.UnarmedNotes')}</special_property>
+			<special_property>
+			<@loop from=0 to=pcvar('countdistinct("ABILITIES","CATEGORY=Special Ability","TYPE=UnarmedDisplay")-1') ; ability , ability_has_next>
+			${pcstring('ABILITYALL.Special Ability.${ability}.TYPE=UnarmedDisplay.ASPECT.UnarmedNotes')}
 			</@loop>
+			</special_property>
 		</martialarts>
 		<#else>
 		<unarmed>
@@ -783,9 +785,11 @@
 			<critical>${pcstring('WEAPONH.CRIT')}/x${pcstring('WEAPONH.MULT')}</critical>
 			<!-- Should be changed to a variable due to improved crit -->
 			<reach>${pcstring('REACH')}</reach>
-			<@loop from=0 to=pcvar('countdistinct("ABILITIES","CATEGORY=Special Ability","TYPE=UnarmedDisplay")-1') ; NaturalAttack , NaturalAttack_has_next>
-			<special_property>${pcstring('ABILITYALL.Special Ability.${NaturalAttack}.TYPE=UnarmedDisplay.ASPECT.UnarmedNotes')}</special_property>
+			<special_property>
+			<@loop from=0 to=pcvar('countdistinct("ABILITIES","CATEGORY=Special Ability","TYPE=UnarmedDisplay")-1') ; ability , ability_has_next>
+			${pcstring('ABILITYALL.Special Ability.${ability}.TYPE=UnarmedDisplay.ASPECT.UnarmedNotes')}
 			</@loop>
+			</special_property>
 						<!-- Commenting this out (will need a test as well)
 			3.0 uses "Subdual", 3.5 uses "nonlethal".  We'll need a separate node for both.	-->
 			<#if (gamemodename = "3e")>
@@ -1733,6 +1737,26 @@
 	<animal_tricks>
 	<@abilityBlock category="Special Ability" nature="ALL" hidden=false typeName="AnimalTrick" nodeName="animal_trick" />
 	</animal_tricks>
+
+		<!--
+	  ====================================
+	  ====================================
+			Racial Trait
+	  ====================================
+	  ====================================-->
+	<racial_traits>
+	<@abilityBlock category="Racial Trait" nature="ALL" hidden=false typeName="Racial Trait" nodeName="racial_trait" />
+	</racial_traits>
+
+		<!--
+	  ====================================
+	  ====================================
+			Class Feature
+	  ====================================
+	  ====================================-->
+	<class_features>
+	<@abilityBlock category="Class Feature" nature="ALL" hidden=false typeName="Class Feature" nodeName="class_feature" />
+	</class_features>
 
 	<!--
 	  ====================================

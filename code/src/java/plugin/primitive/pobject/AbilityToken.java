@@ -104,8 +104,8 @@ public class AbilityToken<T> implements PrimitiveToken<T>
 	@Override
 	public String getLSTformat(boolean useAny)
 	{
-		return "ABILITY=" + category.getLSTformat() + "["
-			+ ref.getLSTformat(useAny) + "]";
+		return "ABILITY=" + category.getLSTformat() + '['
+			+ ref.getLSTformat(useAny) + ']';
 	}
 
 	private <R> List<R> getList(PlayerCharacter pc, Ability a)
@@ -155,7 +155,7 @@ public class AbilityToken<T> implements PrimitiveToken<T>
 	@Override
 	public int hashCode()
 	{
-		return ref == null ? -57 : ref.hashCode();
+		return (ref == null) ? -57 : ref.hashCode();
 	}
 
 	@Override

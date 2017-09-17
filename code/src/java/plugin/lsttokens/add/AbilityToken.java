@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- *
- *
  */
 package plugin.lsttokens.add;
 
@@ -80,7 +77,6 @@ import pcgen.util.enumeration.Visibility;
  * ability key name (whitespace is ignored).</li>
  * </ul>
  * (Sun, 20 May 2007) $
- *
  */
 public class AbilityToken extends AbstractNonEmptyToken<CDOMObject> implements
 		CDOMSecondaryToken<CDOMObject>, PersistentChoiceActor<CNAbilitySelection>
@@ -143,7 +139,7 @@ public class AbilityToken extends AbstractNonEmptyToken<CDOMObject> implements
 				return new ParseResult.Fail("Count in " + getTokenName()
 						+ " was not valid: " + count.toString(), context);
 			}
-			if (count.isStatic() && count.resolveStatic().doubleValue() <= 0)
+			if (count.isStatic() && (count.resolveStatic().doubleValue() <= 0))
 			{
 				return new ParseResult.Fail("Count in " + getFullName()
 						+ " must be > 0", context);
@@ -310,7 +306,7 @@ public class AbilityToken extends AbstractNonEmptyToken<CDOMObject> implements
 				.getObjectContext().getListChanges(obj, ListKey.ADD);
 		Collection<PersistentTransitionChoice<?>> addedItems = grantChanges
 				.getAdded();
-		if (addedItems == null || addedItems.isEmpty())
+		if ((addedItems == null) || addedItems.isEmpty())
 		{
 			// Zero indicates no Token
 			return null;
@@ -330,7 +326,7 @@ public class AbilityToken extends AbstractNonEmptyToken<CDOMObject> implements
 							+ " Count");
 					return null;
 				}
-				if (f.isStatic() && f.resolveStatic().doubleValue() <= 0)
+				if (f.isStatic() && (f.resolveStatic().doubleValue() <= 0))
 				{
 					context.addWriteMessage("Count in " + getFullName()
 							+ " must be > 0");

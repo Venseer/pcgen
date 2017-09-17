@@ -126,14 +126,6 @@ public class EncounterPlugin extends MouseAdapter
 	private PCGenMessageHandler messageHandler;
 
 	/**
-	 * Creates an instance of this class creating a new {@code InitHolderList}.
-	 */
-	public EncounterPlugin()
-	{
-		super();
-	}
-
-	/**
 	 * Starts the plugin, registering itself with the {@code TabAddMessage}.
 	 */
 	@Override
@@ -299,16 +291,12 @@ public class EncounterPlugin extends MouseAdapter
 	/**
 	 * Handles the <b>Add Creature</b> button.
 	 */
-	public void handleAddCreature()
+	private void handleAddCreature()
 	{
 		if (!theView.getLibraryCreatures().isSelectionEmpty())
 		{
-			Object[] values = theView.getLibraryCreatures().getSelectedValues();
-
-			for (int i = 0; i < values.length; i++)
-			{
-				theModel.addElement(values[i]);
-			}
+			List<Object> values = theView.getLibraryCreatures().getSelectedValuesList();
+			values.forEach(theModel::addElement);
 
 			updateUI();
 		}
@@ -563,7 +551,9 @@ public class EncounterPlugin extends MouseAdapter
 		for (Object obj : theModel.toArray())
 		{
 			if (!theRaces.contains(obj))
+			{
 				theModel.removeElement(obj);
+			}
 		}
 
 		theView.getEnvironment().setSelectedIndex(sel);
@@ -742,7 +732,7 @@ public class EncounterPlugin extends MouseAdapter
 			{
 				if (i > 1)
 				{
-					result.add(Constants.EQUIP_LOCATION_SECONDARY + " " + i);
+					result.add(Constants.EQUIP_LOCATION_SECONDARY + ' ' + i);
 				}
 				else
 				{
@@ -856,7 +846,7 @@ public class EncounterPlugin extends MouseAdapter
 		if (crs == null)
 		{
 			Logging.errorPrint("Tables do not match the given parameters ("
-				+ totalEL + ", " + size + ")");
+				+ totalEL + ", " + size + ')');
 
 			return;
 		}

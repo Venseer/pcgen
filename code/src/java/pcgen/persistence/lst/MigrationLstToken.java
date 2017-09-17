@@ -1,5 +1,4 @@
 /*
- * MigrationLstToken.java
  * Copyright 2013 (C) James Dempsey <jdempsey@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -26,7 +25,6 @@ import pcgen.core.system.MigrationRule;
  * The Interface {@code MigrationLstToken} defines a token
  * as being callable by the MigrationLoader.
  *
- * <br>
  * 
  */
 public interface MigrationLstToken extends LstToken

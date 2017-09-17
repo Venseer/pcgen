@@ -1,5 +1,4 @@
 /*
- * VariableReport.java
  * Copyright James Dempsey, 2013
  *
  * This library is free software; you can redistribute it and/or
@@ -57,7 +56,6 @@ import freemarker.template.TemplateException;
  * The Class {@code VariableReport} produces a report on variable
  * definitions within the PCGen LST data.
  *
- * <br>
  * 
  */
 
@@ -446,7 +444,7 @@ public class VariableReport
 			builder.append(definingFile);
 			builder.append(", use=");
 			builder.append(use);
-			builder.append("]");
+			builder.append(']');
 			return builder.toString();
 		}
 

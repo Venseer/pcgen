@@ -1,6 +1,5 @@
 /*
  * Copyright 2008 (C) Tom Parker <thpr@users.sourceforge.net>
- * Derived from Skill.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  * 
  * This library is free software; you can redistribute it and/or modify it under
@@ -43,8 +42,12 @@ import pcgen.core.utils.CoreUtility;
 import pcgen.util.Logging;
 import pcgen.util.enumeration.View;
 
-public class SkillRankControl
+public final class SkillRankControl
 {
+
+	private SkillRankControl()
+	{
+	}
 
 	/**
 	 * Returns the total ranks of a skill rank + bonus ranks (racial, class, etc

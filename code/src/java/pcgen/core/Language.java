@@ -1,5 +1,4 @@
 /*
- * Language.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -15,11 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- * Created on November 18, 2001, 9:15 PM
- *
- * Current Ver: $Revision$
- *
  */
 package pcgen.core;
 
@@ -38,11 +32,9 @@ import pcgen.facade.core.LanguageFacade;
 
 /**
  * {@code Language}.
- *
- * @author Bryan McRoberts &lt;merton_monk@users.sourceforge.net&gt;
  */
 public final class Language extends PObject implements Comparable<Object>,
-		LanguageFacade, Ungranted
+		LanguageFacade, Ungranted, Cloneable
 {
 	public static final CDOMReference<LanguageList> STARTING_LIST;
 

@@ -1,5 +1,4 @@
 /*
- * AbilityToken.java
  * Copyright 2006 (C) James Dempsey
  *
  * This library is free software; you can redistribute it and/or
@@ -314,8 +313,7 @@ public class AbilityToken extends Token
 		List<String> negate, String abilityType, View view,
 		String aspect, MapToList<Ability, CNAbility> listOfAbilities)
 	{
-		List<Ability> aList = new ArrayList<>();
-		aList.addAll(listOfAbilities.getKeySet());
+		List<Ability> aList = new ArrayList<>(listOfAbilities.getKeySet());
 
 		// Sort the ability list passed in
 		Globals.sortPObjectListByName(aList);
@@ -366,8 +364,7 @@ public class AbilityToken extends Token
 	static MapToList<Ability, CNAbility> buildAbilityList(String key, View view,
 		MapToList<Ability, CNAbility> listOfAbilities)
 	{
-		List<Ability> aList = new ArrayList<>();
-		aList.addAll(listOfAbilities.getKeySet());
+		List<Ability> aList = new ArrayList<>(listOfAbilities.getKeySet());
 
 		// Sort the ability list passed in
 		Globals.sortPObjectListByName(aList);

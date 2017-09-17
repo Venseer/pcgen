@@ -1,5 +1,4 @@
 /*
- * SkillToken.java
  * Copyright 2004 (C) James Dempsey <jdempsey@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -373,12 +372,12 @@ public class SkillToken extends Token
 						retValue.append(SettingsHandler.getGame()
 							.getSkillRankDisplayText(
 								SkillRankControl.getTotalRank(pc, aSkill).intValue()
-									+ SkillModifier.modifier(aSkill, pc).intValue()));
+									+ SkillModifier.modifier(aSkill, pc)));
 					}
 					else
 					{
 						retValue.append(Integer.toString(SkillRankControl.getTotalRank(pc, aSkill).intValue()
-							+ SkillModifier.modifier(aSkill, pc).intValue()));
+							+ SkillModifier.modifier(aSkill, pc)));
 					}
 					break;
 
@@ -391,12 +390,12 @@ public class SkillToken extends Token
 					}
 					else
 					{
-						retValue.append(SkillRankControl.getTotalRank(pc, aSkill).toString());
+						retValue.append(SkillRankControl.getTotalRank(pc, aSkill));
 					}
 					break;
 
 				case SKILL_MOD:
-					retValue.append(SkillModifier.modifier(aSkill, pc).toString());
+					retValue.append(SkillModifier.modifier(aSkill, pc));
 					break;
 
 				case SKILL_ABILITY:
@@ -409,7 +408,6 @@ public class SkillToken extends Token
 
 				case SKILL_MISC:
 					retValue.append(Integer.toString(SkillModifier.modifier(aSkill, pc)
-						.intValue()
 						- SkillModifier.getStatMod(aSkill, pc)));
 					break;
 
@@ -440,18 +438,18 @@ public class SkillToken extends Token
 						else
 						{
 							SkillCost newCost = pc.getSkillCostForClass(aSkill, pcc);
-							if (SkillCost.CLASS.equals(newCost)
-								|| SkillCost.EXCLUSIVE.equals(cost))
+							if (SkillCost.CLASS == newCost
+								|| SkillCost.EXCLUSIVE == cost)
 							{
 								cost = newCost;
 							}
 						}
-						if (SkillCost.CLASS.equals(cost))
+						if (SkillCost.CLASS == cost)
 						{
 							break;
 						}
 					}
-					retValue.append(cost.toString());
+					retValue.append(cost);
 					break;
 
 				case SKILL_EXCLUSIVE_TOTAL:
@@ -459,13 +457,14 @@ public class SkillToken extends Token
 						.append(Integer
 							.toString(((aSkill.getSafe(ObjectKey.EXCLUSIVE) || !aSkill.getSafe(ObjectKey.USE_UNTRAINED)) && (SkillRankControl.getTotalRank(pc, aSkill)
 								.intValue() == 0)) ? 0
-								: (SkillRankControl.getTotalRank(pc, aSkill).intValue() + SkillModifier.modifier(aSkill, pc).intValue())));
+								: (SkillRankControl.getTotalRank(pc, aSkill).intValue() + SkillModifier
+									.modifier(aSkill, pc))));
 					break;
 
 				case SKILL_TRAINED_TOTAL:
 					retValue.append(Integer
-						.toString((!aSkill.getSafe(ObjectKey.USE_UNTRAINED) && (SkillRankControl.getTotalRank(pc, aSkill).intValue() == 0)) ? 0 : (SkillRankControl.getTotalRank(pc, aSkill).intValue() + SkillModifier.modifier(aSkill, pc)
-							.intValue())));
+						.toString((!aSkill.getSafe(ObjectKey.USE_UNTRAINED) && (SkillRankControl.getTotalRank(pc, aSkill).intValue() == 0)) ? 0 : (SkillRankControl.getTotalRank(pc, aSkill).intValue() + SkillModifier
+								.modifier(aSkill, pc))));
 					break;
 
 				case SKILL_EXPLANATION:
@@ -589,9 +588,8 @@ public class SkillToken extends Token
 	 * {@code SkillDetails} holds the parsed details of a skill
 	 * token. Note that apart from updating the properties array contents,
 	 * instances of this class are immutable.
-	 *
 	 */
-	public final static class SkillDetails
+	public static final class SkillDetails
 	{
 		/** The id of the skill - normally an index or a skill name. */
 		private final String skillId;

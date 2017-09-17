@@ -1,5 +1,4 @@
 /*
- * AllJUnitTests.java
  * Copyright 2001 (C) B. K. Oxley (binkley) <binkley@alumni.rice.edu>
  *
  * This library is free software; you can redistribute it and/or
@@ -23,7 +22,6 @@ import junit.textui.TestRunner;
 /**
  * TestSuite that is composed of the individual test classes.  Pick up
  * all the individual PCGen test suites into this one.
- *
  */
 public final class AllJUnitTests
 {

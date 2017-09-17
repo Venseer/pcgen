@@ -1,5 +1,4 @@
 /*
- * EntityEncoder.java
  * Copyright 2002 (C) Thomas Behr <ravenlock@gmx.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -86,11 +85,9 @@ public final class EntityEncoder
 		final StringBuilder buffer = new StringBuilder();
 		final StringTokenizer tokens = new StringTokenizer(s, "&;", true);
 
-		String cToken;
-
 		while (tokens.hasMoreTokens())
 		{
-			cToken = tokens.nextToken();
+			String cToken = tokens.nextToken();
 
 			if ("&".equals(cToken))
 			{

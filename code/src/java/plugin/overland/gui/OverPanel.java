@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
  */
  package plugin.overland.gui;
 
@@ -54,9 +53,7 @@ import plugin.overland.model.TravelMethodFactory;
 import plugin.overland.model.TravelMethodListener;
 import plugin.overland.model.TravelSpeedEvent;
 
-/**
- *
- */
+
 public class OverPanel extends javax.swing.JPanel
 {
 	// ### Constants ###
@@ -155,7 +152,9 @@ public class OverPanel extends javax.swing.JPanel
 	private void butToDistActionPerformed()
 	{
 		if (selectedTM == null)
+		{
 			return;
+		}
 		lastEdited = TravelMethodTextField.TIME;
 		Object o = txtTime.getValue();
 		if (o != null && o instanceof Number)
@@ -171,7 +170,9 @@ public class OverPanel extends javax.swing.JPanel
 	private void butImperialToTimeActionPerformed()
 	{
 		if (selectedTM == null)
+		{
 			return;
+		}
 		lastEdited = TravelMethodTextField.IMPERIAL_DISTANCE;
 		Object o = txtDist.getValue();
 		if (o != null && o instanceof Number)
@@ -185,7 +186,9 @@ public class OverPanel extends javax.swing.JPanel
 	private void butMetricToTimeActionPerformed()
 	{
 		if (selectedTM == null)
+		{
 			return;
+		}
 		lastEdited = TravelMethodTextField.METRIC_DISTANCE;
 		Object o = txtDistMetric.getValue();
 		if (o != null && o instanceof Number)
@@ -932,7 +935,9 @@ public class OverPanel extends javax.swing.JPanel
 			public void itemStateChanged(ItemEvent e)
 			{
 				if (e.getStateChange() == ItemEvent.DESELECTED)
+				{
 					return;
+				}
 				changedTM();
 			}
 		});
@@ -968,11 +973,15 @@ public class OverPanel extends javax.swing.JPanel
 	{
 		// remove previous listener
 		if (selectedTM != null)
+		{
 			selectedTM.removeTravelMethodListener(listener);
+		}
 		selectedTM = (TravelMethod) aModel.getSelectedItem();
 		// XXX correct?
 		if (selectedTM == null)
+		{
 			return;
+		}
 
 		method.setModel(selectedTM.getMethodsModel());
 		method.setSelectedIndex(0);
@@ -1023,6 +1032,7 @@ public class OverPanel extends javax.swing.JPanel
 			butToDist.setEnabled(imperialSpeedString != null && metricSpeedString != null);
 			// Updates other text fields based on the last edited one
 			if (lastEdited != null)
+			{
 				switch (lastEdited)
 				{
 					case IMPERIAL_DISTANCE:
@@ -1035,6 +1045,7 @@ public class OverPanel extends javax.swing.JPanel
 						butToDistActionPerformed();
 						break;
 				}
+			}
 		}
 
 		@Override
@@ -1076,7 +1087,6 @@ public class OverPanel extends javax.swing.JPanel
 
 	/** This method updates the Bottom portions of the UI based on changes in the total cost
 	 *  and number of days.  It sets the value into the total box
-	 *
 	 */
 	private void updateBottomUI()
 	{
@@ -1097,7 +1107,6 @@ public class OverPanel extends javax.swing.JPanel
 
 	/** This method updates the middle portions of the UI based on changes in the daily costs
 	 *  It sets the value into the daily total boxes
-	 *
 	 */
 	private void updateMidUI()
 	{
@@ -1118,7 +1127,6 @@ public class OverPanel extends javax.swing.JPanel
 
 	/** This method updates the top portions of the UI based on changes in number of people or animals
 	 *  or changes in quality of RB.  It sets the values into the daily and weekly cost boxes
-	 *
 	 */
 	private void updateTopUI()
 	{

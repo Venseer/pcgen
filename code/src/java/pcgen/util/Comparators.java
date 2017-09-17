@@ -1,5 +1,4 @@
 /*
- * Comparators.java
  * Copyright 2008 (C) Connor Petty <mistercpp2000@gmail.com>
  * 
  * This library is free software; you can redistribute it and/or
@@ -15,7 +14,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * 
  */
 package pcgen.util;
 
@@ -29,9 +27,7 @@ import pcgen.cdom.enumeration.StringKey;
 import pcgen.facade.core.InfoFacade;
 import pcgen.gui2.util.treetable.TreeTableNode;
 
-/**
- *
- */
+
 @SuppressWarnings("unchecked")
 public final class Comparators
 {
@@ -142,7 +138,6 @@ public final class Comparators
 	 * A {@code Comparator} to compare objects as
 	 * {@code String}s.  This is particularly useful for applications
 	 * such as maintaining a sorted {@code JComboBoxEx} and the like.
-	 *
 	 */
 	private static final class ToStringComparator implements Comparator<Object>,
 			Serializable
@@ -163,7 +158,6 @@ public final class Comparators
 	 * {@code String}s ignoring case.  This is particularly useful
 	 * for applications such as maintaining a sorted
 	 * {@code JComboBoxEx} and the like.
-	 *
 	 */
 	private static final class ToStringIgnoreCaseComparator implements
 			Comparator<Object>, Serializable

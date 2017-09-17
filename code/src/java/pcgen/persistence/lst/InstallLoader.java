@@ -1,5 +1,4 @@
 /*
- * InstallLoader.java
  * Copyright 2007 (C) James Dempsey <jdempsey@users.sourceforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -50,7 +49,7 @@ public class InstallLoader extends LstLineFileLoader
 		super.loadLstString(context, fileName, lstData);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.LstLineFileLoader#parseLine(java.lang.String, java.net.URI)
 	 */
 	@Override

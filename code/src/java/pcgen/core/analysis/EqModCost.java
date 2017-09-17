@@ -1,6 +1,5 @@
 /*
  * Copyright 2008 (C) Tom Parker <thpr@users.sourceforge.net>
- * Derived from EquipmentModifier.java
  * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
  * 
  * This library is free software; you can redistribute it and/or modify it under
@@ -38,9 +37,13 @@ import pcgen.core.prereq.Prerequisite;
 import pcgen.core.spell.Spell;
 import pcgen.util.Delta;
 
-public class EqModCost
+public final class EqModCost
 {
 	private static final String s_CHARGES = "CHARGES";
+
+	private EqModCost()
+	{
+	}
 
 	public static BigDecimal addItemCosts(EquipmentModifier eqMod,
 			final PlayerCharacter aPC, final String bonusType, final int qty,

@@ -1,5 +1,4 @@
 /*
- * AbstractCollectionMap.java
  * Copyright 2008 (C) Connor Petty <mistercpp2000@gmail.com>
  * 
  * This library is free software; you can redistribute it and/or
@@ -25,14 +24,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
-/**
- *
- */
+
 public abstract class AbstractCollectionMap<K, V, C extends Collection<V>>
 	extends AbstractMap<K, C> implements CollectionMap<K, V, C>
 {
 
-    private volatile Collection<V> values = null;
+    private Collection<V> values = null;
 
     @Override
     public boolean add(K key, V value)
@@ -44,7 +41,7 @@ public abstract class AbstractCollectionMap<K, V, C extends Collection<V>>
     public boolean addAll(K key, Collection<? extends V> values)
     {
 	C collection = get(key);
-	return collection != null && collection.addAll(values);
+	return (collection != null) && collection.addAll(values);
     }
 
     @Override
@@ -64,7 +61,7 @@ public abstract class AbstractCollectionMap<K, V, C extends Collection<V>>
     public boolean containsValue(Object key, Object value)
     {
 	C collection = get(key);
-	return collection != null && collection.contains(value);
+	return (collection != null) && collection.contains(value);
     }
 
     @Override
@@ -77,14 +74,14 @@ public abstract class AbstractCollectionMap<K, V, C extends Collection<V>>
     public boolean removeAll(Object key, Collection<?> c)
     {
 	C collection = get(key);
-	return collection != null && collection.removeAll(c);
+	return (collection != null) && collection.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Object key, Collection<?> c)
     {
 	C collection = get(key);
-	return collection != null && collection.retainAll(c);
+	return (collection != null) && collection.retainAll(c);
     }
     
     @Override
@@ -92,7 +89,9 @@ public abstract class AbstractCollectionMap<K, V, C extends Collection<V>>
     {
 	C collection = get(key);
 	if(collection != null)
-	    return collection.size();
+	{
+		return collection.size();
+	}
 	return 0;
     }
     
@@ -116,13 +115,13 @@ public abstract class AbstractCollectionMap<K, V, C extends Collection<V>>
                         @Override
 			public boolean hasNext()
 			{
-			    return ci.hasNext() || vi != null && vi.hasNext();
+			    return ci.hasNext() || ((vi != null) && vi.hasNext());
 			}
 
                         @Override
 			public V next()
 			{
-			    if (vi == null || !vi.hasNext())
+			    if ((vi == null) || !vi.hasNext())
 			    {
 				vi = ci.next().iterator();
 			    }

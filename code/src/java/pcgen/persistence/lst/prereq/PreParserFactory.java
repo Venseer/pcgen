@@ -1,5 +1,4 @@
 /*
- * PreParserFactory.java
  *
  * Copyright 2003 (C) Chris Ward <frugal@purplewombat.co.uk>
  *
@@ -32,9 +31,7 @@ import pcgen.persistence.PersistenceLayerException;
 import pcgen.system.PluginLoader;
 import pcgen.util.Logging;
 
-/**
- *
- */
+
 public final class PreParserFactory implements PluginLoader
 {
 	private static PreParserFactory instance = null;
@@ -195,7 +192,7 @@ public final class PreParserFactory implements PluginLoader
 	public static boolean isPreReqString(String token)
 	{
 		return (token.startsWith("PRE") || token.startsWith("!PRE"))
-			&& (token.indexOf(":") > 0);
+			&& (token.indexOf(':') > 0);
 	}
 	
 	public static void clear()

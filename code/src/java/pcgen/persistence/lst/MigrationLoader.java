@@ -1,5 +1,4 @@
 /*
- * MigrationLoader.java
  * Copyright 2013 (C) James Dempsey <jdempsey@users.equipforge.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -46,7 +45,7 @@ public class MigrationLoader extends LstLineFileLoader
 	private String invalidKeyPattern = ".*[,|\\||\\\\|:|;|%|\\*|=|\\[|\\]].*";
 	private String invalidSourceKeyPattern = ".*[\\||\\\\|;|%|\\*|=|\\[|\\]].*";
 
-	/* (non-Javadoc)
+	/**
 	 * @see pcgen.persistence.lst.LstLineFileLoader#parseLine(pcgen.rules.context.LoadContext, java.lang.String, java.net.URI)
 	 */
 	@Override

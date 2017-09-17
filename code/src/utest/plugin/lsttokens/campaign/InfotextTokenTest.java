@@ -54,15 +54,9 @@ public class InfotextTokenTest extends AbstractCDOMTokenTestCase<Campaign>
 		return token;
 	}
 
-	public ListKey<?> getListKey()
+	public static ListKey<?> getListKey()
 	{
 		return ListKey.INFO_TEXT;
-	}
-
-	@Test
-	public void dummyTest()
-	{
-		// Just to get Eclipse to recognize this as a JUnit 4.0 Test Case
 	}
 
 	@Test
