@@ -21,7 +21,6 @@ import org.junit.Test;
 
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.Type;
-import pcgen.core.Ability;
 import pcgen.core.AbilityCategory;
 import pcgen.core.PCClass;
 import pcgen.core.kit.KitSpells;
@@ -136,10 +135,8 @@ public class SpellsTokenTest extends AbstractKitTokenTestCase<KitSpells>
 		secondaryContext.getReferenceContext().constructCDOMObject(Spell.class, "Fireball");
 		primaryContext.getReferenceContext().constructCDOMObject(PCClass.class, "Wizard");
 		secondaryContext.getReferenceContext().constructCDOMObject(PCClass.class, "Wizard");
-		Ability ab = primaryContext.getReferenceContext().constructCDOMObject(Ability.class, "EnhancedFeat");
-		primaryContext.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, ab);
-		ab = secondaryContext.getReferenceContext().constructCDOMObject(Ability.class, "EnhancedFeat");
-		secondaryContext.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, ab);
+		constructCategorized(primaryContext, AbilityCategory.FEAT, "EnhancedFeat");
+		constructCategorized(secondaryContext, AbilityCategory.FEAT, "EnhancedFeat");
 		runRoundRobin("SPELLBOOK=Personal|CLASS=Wizard|Fireball[EnhancedFeat]=2");
 	}
 

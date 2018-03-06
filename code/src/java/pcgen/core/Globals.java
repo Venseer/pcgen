@@ -35,15 +35,15 @@ import java.util.stream.Collectors;
 import javax.swing.JFrame;
 
 import pcgen.cdom.base.CDOMObject;
-import pcgen.cdom.base.Constants;
 import pcgen.cdom.content.BaseDice;
 import pcgen.cdom.content.CNAbilityFactory;
+import pcgen.cdom.enumeration.FactKey;
+import pcgen.cdom.enumeration.FactSetKey;
 import pcgen.cdom.enumeration.IntegerKey;
-import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.RaceType;
 import pcgen.cdom.enumeration.SourceFormat;
 import pcgen.cdom.enumeration.StringKey;
-import pcgen.cdom.enumeration.Type;
+import pcgen.cdom.util.SortKeyComparator;
 import pcgen.core.character.EquipSlot;
 import pcgen.core.chooser.CDOMChooserFacadeImpl;
 import pcgen.core.utils.CoreUtility;
@@ -69,8 +69,6 @@ public final class Globals
 {
 	/** These are changed during normal operation */
 	private static final List<PlayerCharacter> pcList = new ArrayList<>();
-	/** Race, a s_EMPTYRACE */
-	public static Race s_EMPTYRACE;
 
 	/** NOTE: The defaultPath is duplicated in LstSystemLoader. */
 	private static final String defaultPcgPath = getUserFilesPath() + File.separator + "characters"; //$NON-NLS-1$
@@ -429,17 +427,20 @@ public final class Globals
 	 */
 	public static String getPaperInfo(final int idx, final int infoType)
 	{
-		if ((idx < 0)
-				|| (idx >= SettingsHandler.getGame().getModeContext().getReferenceContext()
-						.getConstructedObjectCount(PaperInfo.class)))
+		if ((idx < 0) || (idx >= getPaperCount()))
 		{
 			return null;
 		}
 
-		final PaperInfo pi = SettingsHandler.getGame().getModeContext().getReferenceContext()
-				.getItemInOrder(PaperInfo.class, idx);
+		return getSortedPaperInfo().get(idx).getPaperInfo(infoType);
+	}
 
-		return pi.getPaperInfo(infoType);
+	private static List<PaperInfo> getSortedPaperInfo()
+	{
+		List<PaperInfo> items = new ArrayList<>(SettingsHandler.getGame().getModeContext()
+			.getReferenceContext().getConstructedCDOMObjects(PaperInfo.class));
+		items.sort(SortKeyComparator.getInstance());
+		return items;
 	}
 
 	/**
@@ -697,9 +698,8 @@ public final class Globals
 			Logging.log(logLevel, "Races=" + getContext().getReferenceContext().getConstructedCDOMObjects(Race.class).size());
 			Logging.log(logLevel, "Classes=" + getContext().getReferenceContext().getConstructedCDOMObjects(PCClass.class).size());
 			Logging.log(logLevel, "Skills=" + getContext().getReferenceContext().getConstructedCDOMObjects(Skill.class).size());
-			Logging.log(logLevel, "Feats="
-					+ getContext().getReferenceContext().getManufacturer(Ability.class,
-					AbilityCategory.FEAT).getConstructedObjectCount());
+			Logging.log(logLevel, "Feats=" + getContext().getReferenceContext()
+				.getManufacturerId(AbilityCategory.FEAT).getConstructedObjectCount());
 			Logging.log(logLevel, "Equipment=" + getContext().getReferenceContext().getConstructedCDOMObjects(Equipment.class).size());
 			Logging.log(logLevel, "ArmorProfs=" + getContext().getReferenceContext().getConstructedCDOMObjects(ArmorProf.class).size());
 			Logging.log(logLevel, "ShieldProfs=" + getContext().getReferenceContext().getConstructedCDOMObjects(ShieldProf.class).size());
@@ -762,13 +762,14 @@ public final class Globals
 
 		// Clear Maps (not strictly necessary, but done for consistency)
 		VisionType.clearConstants();
+		FactKey.clearConstants();
+		FactSetKey.clearConstants();
 
 		// Perform other special cleanup
 		Equipment.clearEquipmentTypes();
 		SettingsHandler.getGame().clearLoadContext();
 
 		RaceType.clearConstants();
-		createEmptyRace();
 		CNAbilityFactory.reset();
 	}
 
@@ -841,11 +842,10 @@ public final class Globals
 	 */
 	public static boolean selectPaper(final String paperName)
 	{
-		for (int i = 0; i < SettingsHandler.getGame().getModeContext().getReferenceContext()
-				.getConstructedObjectCount(PaperInfo.class); ++i)
+		List<PaperInfo> paperInfoObjects = getSortedPaperInfo();
+		for (int i = 0; i < paperInfoObjects.size(); i++)
 		{
-			final PaperInfo pi = SettingsHandler.getGame().getModeContext().getReferenceContext()
-					.getItemInOrder(PaperInfo.class, i);
+			final PaperInfo pi = paperInfoObjects.get(i);
 
 			if (pi.getName().equals(paperName))
 			{
@@ -1275,18 +1275,6 @@ public final class Globals
 		}
 
 		return num;
-	}
-
-	public static void createEmptyRace()
-	{
-		if (s_EMPTYRACE == null)
-		{
-			s_EMPTYRACE = new Race();
-			s_EMPTYRACE.setName(Constants.NONESELECTED);
-			s_EMPTYRACE.addToListFor(ListKey.TYPE, Type.HUMANOID);
-		}
-
-		getContext().getReferenceContext().importObject(s_EMPTYRACE);
 	}
 
 	private static String expandRelativePath(String path)

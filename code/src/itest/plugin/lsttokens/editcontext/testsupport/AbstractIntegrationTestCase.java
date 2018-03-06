@@ -22,6 +22,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
+
+import junit.framework.TestCase;
 import pcgen.cdom.base.ConcretePrereqObject;
 import pcgen.cdom.base.Loadable;
 import pcgen.core.AbilityCategory;
@@ -37,11 +41,8 @@ import pcgen.rules.context.LoadContext;
 import pcgen.rules.persistence.CDOMLoader;
 import pcgen.rules.persistence.TokenLibrary;
 import pcgen.rules.persistence.token.CDOMPrimaryToken;
-
-import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import plugin.lsttokens.testsupport.TokenRegistration;
+import util.TestURI;
 
 public abstract class AbstractIntegrationTestCase<T extends ConcretePrereqObject & Loadable> extends
 		TestCase
@@ -65,8 +66,7 @@ public abstract class AbstractIntegrationTestCase<T extends ConcretePrereqObject
 	public static final void classSetUp() throws URISyntaxException
 	{
 		OutputDB.reset();
-		testCampaign = new CampaignSourceEntry(new Campaign(), new URI(
-				"file:/Test%20Case"));
+		testCampaign = new CampaignSourceEntry(new Campaign(), TestURI.getURI());
 		modCampaign = new CampaignSourceEntry(new Campaign(), new URI(
 				"file:/Test%20Case%20Modifier"));
 		classSetUpFired = true;
@@ -86,10 +86,14 @@ public abstract class AbstractIntegrationTestCase<T extends ConcretePrereqObject
 		secondaryContext = new EditorLoadContext();
 		primaryContext.getReferenceContext().importObject(AbilityCategory.FEAT);
 		secondaryContext.getReferenceContext().importObject(AbilityCategory.FEAT);
-		primaryProf = primaryContext.getReferenceContext().constructCDOMObject(getCDOMClass(),
-				"TestObj");
-		secondaryProf = secondaryContext.getReferenceContext().constructCDOMObject(
-				getCDOMClass(), "TestObj");
+		primaryProf = construct(primaryContext, "TestObj");
+		secondaryProf = construct(secondaryContext, "TestObj");
+	}
+
+	protected T construct(LoadContext context, String name)
+	{
+		return context.getReferenceContext().constructCDOMObject(getCDOMClass(),
+				name);
 	}
 
 	public abstract Class<? extends T> getCDOMClass();
@@ -234,5 +238,4 @@ public abstract class AbstractIntegrationTestCase<T extends ConcretePrereqObject
 		assertEquals("Unexpected messages in unparse/reparse", 0,
 			secondaryContext.getWriteMessageCount());
 	}
-
 }

@@ -34,6 +34,7 @@ import pcgen.core.PCClass;
 import pcgen.core.PCTemplate;
 import pcgen.core.Race;
 import pcgen.persistence.PersistenceLayerException;
+import plugin.lsttokens.testsupport.BuildUtilities;
 
 public abstract class AbstractAddListTokenTest<T extends CDOMObject>
 		extends AbstractTokenModelTest
@@ -41,8 +42,7 @@ public abstract class AbstractAddListTokenTest<T extends CDOMObject>
 	@Test
 	public void testFromAbility() throws PersistenceLayerException
 	{
-		Ability source = create(Ability.class, "Source");
-		context.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, source);
+		Ability source = BuildUtilities.buildFeat(context, "Source");
 		T granted = createGrantedObject();
 		processToken(source);
 		assertEquals(0, getCount());

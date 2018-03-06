@@ -17,6 +17,8 @@
  */
 package plugin.lsttokens;
 
+import java.net.URISyntaxException;
+
 import org.junit.Test;
 
 import pcgen.cdom.base.CDOMObject;
@@ -29,6 +31,7 @@ import pcgen.persistence.PersistenceLayerException;
 import pcgen.rules.persistence.CDOMLoader;
 import pcgen.rules.persistence.token.CDOMPrimaryToken;
 import plugin.lsttokens.testsupport.AbstractGlobalTokenTestCase;
+import plugin.lsttokens.testsupport.BuildUtilities;
 import plugin.lsttokens.testsupport.CDOMTokenLoader;
 import plugin.lsttokens.testsupport.ConsolidationRule;
 
@@ -37,6 +40,19 @@ public class QualifyTokenTest extends AbstractGlobalTokenTestCase
 
 	static CDOMPrimaryToken<CDOMObject> token = new QualifyToken();
 	static CDOMTokenLoader<PCTemplate> loader = new CDOMTokenLoader<>();
+
+	@Override
+	public void setUp() throws PersistenceLayerException, URISyntaxException
+	{
+		super.setUp();
+		//Dummy builds to ensure initialization
+		Ability a = AbilityCategory.FEAT.newInstance();
+		a.setName("Dummy");
+		primaryContext.getReferenceContext().importObject(a);
+		a = AbilityCategory.FEAT.newInstance();
+		a.setName("Dummy");
+		secondaryContext.getReferenceContext().importObject(a);
+	}
 
 	@Override
 	public CDOMLoader<PCTemplate> getLoader()
@@ -163,11 +179,8 @@ public class QualifyTokenTest extends AbstractGlobalTokenTestCase
 				AbilityCategory.class, "NEWCAT");
 		AbilityCategory sac = secondaryContext.getReferenceContext().constructCDOMObject(
 				AbilityCategory.class, "NEWCAT");
-		Ability ab = primaryContext.getReferenceContext().constructCDOMObject(Ability.class, "Abil3");
-		primaryContext.getReferenceContext().reassociateCategory(pac, ab);
-		ab = secondaryContext.getReferenceContext().constructCDOMObject(Ability.class,
-				"Abil3");
-		secondaryContext.getReferenceContext().reassociateCategory(sac, ab);
+		BuildUtilities.buildAbility(primaryContext, pac, "Abil3");
+		BuildUtilities.buildAbility(secondaryContext, sac, "Abil3");
 		runRoundRobin("ABILITY=NEWCAT|Abil3");
 	}
 
@@ -191,11 +204,8 @@ public class QualifyTokenTest extends AbstractGlobalTokenTestCase
 				AbilityCategory.class, "NEWCAT");
 		AbilityCategory sac = secondaryContext.getReferenceContext().constructCDOMObject(
 				AbilityCategory.class, "NEWCAT");
-		Ability ab = primaryContext.getReferenceContext().constructCDOMObject(Ability.class, "Abil3");
-		primaryContext.getReferenceContext().reassociateCategory(pac, ab);
-		ab = secondaryContext.getReferenceContext().constructCDOMObject(Ability.class,
-				"Abil3");
-		secondaryContext.getReferenceContext().reassociateCategory(sac, ab);
+		BuildUtilities.buildAbility(primaryContext, pac, "Abil3");
+		BuildUtilities.buildAbility(secondaryContext, sac, "Abil3");
 		primaryContext.getReferenceContext().constructCDOMObject(Spell.class,
 				"Lightning Bolt");
 		secondaryContext.getReferenceContext().constructCDOMObject(Spell.class,
@@ -207,12 +217,8 @@ public class QualifyTokenTest extends AbstractGlobalTokenTestCase
 	public void testRoundRobinFeatSpell()
 			throws PersistenceLayerException
 	{
-		Ability a = primaryContext.getReferenceContext().constructCDOMObject(
-				Ability.class, "My Feat");
-		primaryContext.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, a);
-		a = secondaryContext.getReferenceContext().constructCDOMObject(Ability.class,
-				"My Feat");
-		secondaryContext.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, a);
+		BuildUtilities.buildAbility(primaryContext, AbilityCategory.FEAT, "My Feat");
+		BuildUtilities.buildAbility(secondaryContext, AbilityCategory.FEAT, "My Feat");
 		primaryContext.getReferenceContext().constructCDOMObject(Spell.class,
 				"Lightning Bolt");
 		secondaryContext.getReferenceContext().constructCDOMObject(Spell.class,

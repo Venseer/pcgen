@@ -21,12 +21,13 @@ package plugin.lsttokens.testsupport;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import junit.framework.TestCase;
+import pcgen.cdom.base.Categorized;
+import pcgen.cdom.base.Category;
 import pcgen.cdom.base.Loadable;
 import pcgen.core.AbilityCategory;
 import pcgen.core.Campaign;
@@ -43,6 +44,7 @@ import pcgen.rules.persistence.TokenLibrary;
 import pcgen.rules.persistence.token.CDOMPrimaryToken;
 import pcgen.rules.persistence.token.ParseResult;
 import pcgen.util.Logging;
+import util.TestURI;
 
 public abstract class AbstractKitTokenTestCase<T extends Loadable> extends TestCase
 {
@@ -58,8 +60,7 @@ public abstract class AbstractKitTokenTestCase<T extends Loadable> extends TestC
 	@BeforeClass
 	public static void classSetUp() throws URISyntaxException
 	{
-		testCampaign = new CampaignSourceEntry(new Campaign(), new URI(
-				"file:/Test%20Case"));
+		testCampaign = new CampaignSourceEntry(new Campaign(), TestURI.getURI());
 		classSetUpFired = true;
 	}
 
@@ -179,7 +180,7 @@ public abstract class AbstractKitTokenTestCase<T extends Loadable> extends TestC
 		}
 		else
 		{
-			pr.addMessagesToLog();
+			pr.addMessagesToLog(TestURI.getURI());
 			primaryContext.rollback();
 			Logging.rewindParseMessages();
 			Logging.replayParsedMessages();
@@ -236,5 +237,14 @@ public abstract class AbstractKitTokenTestCase<T extends Loadable> extends TestC
 	{
 		assertTrue(primaryContext.getReferenceContext().validate(null));
 		assertTrue(primaryContext.getReferenceContext().resolveReferences(null));
+	}
+
+	protected <C extends Categorized<C>> C constructCategorized(LoadContext context,
+		Category<C> cat, String name)
+	{
+		C obj = cat.newInstance();
+		obj.setName(name);
+		context.getReferenceContext().importObject(obj);
+		return obj;
 	}
 }

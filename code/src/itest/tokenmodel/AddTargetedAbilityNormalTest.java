@@ -31,8 +31,9 @@ import pcgen.persistence.PersistenceLayerException;
 import pcgen.rules.persistence.token.CDOMToken;
 import pcgen.rules.persistence.token.ParseResult;
 import plugin.lsttokens.add.AbilityToken;
-
+import plugin.lsttokens.testsupport.BuildUtilities;
 import tokenmodel.testsupport.AbstractAddListTokenTest;
+import util.TestURI;
 
 public class AddTargetedAbilityNormalTest extends AbstractAddListTokenTest<Ability>
 {
@@ -48,7 +49,7 @@ public class AddTargetedAbilityNormalTest extends AbstractAddListTokenTest<Abili
 				ADD_ABILITY_TOKEN.parseToken(context, source, "FEAT|NORMAL|Granted (English)");
 		if (result != ParseResult.SUCCESS)
 		{
-			result.printMessages();
+			result.printMessages(TestURI.getURI());
 			fail("Test Setup Failed");
 		}
 		finishLoad();
@@ -86,9 +87,8 @@ public class AddTargetedAbilityNormalTest extends AbstractAddListTokenTest<Abili
 				getTargetFacet().getPoolAbilities(id, AbilityCategory.FEAT, Nature.NORMAL);
 		for (CNAbility a : abilities)
 		{
-			boolean abilityExpected =
-					a.getAbility().equals(context.getReferenceContext().silentlyGetConstructedCDOMObject(
-						Ability.class, AbilityCategory.FEAT, "Granted"));
+			boolean abilityExpected = a.getAbility().equals(context.getReferenceContext()
+				.getManufacturerId(AbilityCategory.FEAT).getActiveObject("Granted"));
 			if (abilityExpected)
 			{
 				if (pc.getDetailedAssociationCount(a) == 1)
@@ -122,26 +122,25 @@ public class AddTargetedAbilityNormalTest extends AbstractAddListTokenTest<Abili
 	protected Ability createGrantedObject()
 	{
 		context.getReferenceContext().constructCDOMObject(Language.class, "English");
-		Ability a = super.createGrantedObject();
+		Ability a = BuildUtilities.buildFeat(context, "Granted");
 		ParseResult result = AUTO_LANG_TOKEN.parseToken(context, a, "%LIST");
 		if (result != ParseResult.SUCCESS)
 		{
-			result.printMessages();
+			result.printMessages(TestURI.getURI());
 			fail("Test Setup Failed");
 		}
 		result = ABILITY_MULT_TOKEN.parseToken(context, a, "YES");
 		if (result != ParseResult.SUCCESS)
 		{
-			result.printMessages();
+			result.printMessages(TestURI.getURI());
 			fail("Test Setup Failed");
 		}
 		result = CHOOSE_LANG_TOKEN.parseToken(context, a, "ALL");
 		if (result != ParseResult.SUCCESS)
 		{
-			result.printMessages();
+			result.printMessages(TestURI.getURI());
 			fail("Test Setup Failed");
 		}
-		context.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, a);
 		return a;
 	}
 

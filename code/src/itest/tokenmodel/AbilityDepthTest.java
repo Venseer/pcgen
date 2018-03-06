@@ -41,6 +41,7 @@ import junit.framework.TestSuite;
 import tokenmodel.testsupport.AbstractTokenModelTest;
 import tokenmodel.testsupport.AssocCheck;
 import tokenmodel.testsupport.NoAssociations;
+import util.TestURI;
 
 public class AbilityDepthTest extends AbstractTokenModelTest
 {
@@ -82,8 +83,9 @@ public class AbilityDepthTest extends AbstractTokenModelTest
 
 	private Ability createAbility(String key)
 	{
-		Ability a = context.getReferenceContext().constructCDOMObject(Ability.class, key);
-		context.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, a);
+		Ability a = AbilityCategory.FEAT.newInstance();
+		a.setName(key);
+		context.getReferenceContext().importObject(a);
 		return a;
 	}
 
@@ -120,7 +122,7 @@ public class AbilityDepthTest extends AbstractTokenModelTest
 					firstPrefix + mid.getKeyName());
 		if (!result.passed())
 		{
-			result.printMessages();
+			result.printMessages(TestURI.getURI());
 			fail();
 		}
 		result =
@@ -128,7 +130,7 @@ public class AbilityDepthTest extends AbstractTokenModelTest
 					secondPrefix + target.getKeyName());
 		if (!result.passed())
 		{
-			result.printMessages();
+			result.printMessages(TestURI.getURI());
 			fail();
 		}
 

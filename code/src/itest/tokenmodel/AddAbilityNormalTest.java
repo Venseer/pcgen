@@ -35,12 +35,14 @@ import pcgen.rules.persistence.token.ParseResult;
 import plugin.lsttokens.ability.StackToken;
 import plugin.lsttokens.add.AbilityToken;
 import plugin.lsttokens.choose.NoChoiceToken;
+import plugin.lsttokens.testsupport.BuildUtilities;
 import plugin.lsttokens.testsupport.TokenRegistration;
 
 import org.junit.Test;
 import tokenmodel.testsupport.AbstractAddListTokenTest;
 import tokenmodel.testsupport.AssocCheck;
 import tokenmodel.testsupport.NoAssociations;
+import util.TestURI;
 
 public class AddAbilityNormalTest extends AbstractAddListTokenTest<Ability>
 {
@@ -63,7 +65,7 @@ public class AddAbilityNormalTest extends AbstractAddListTokenTest<Ability>
 		ParseResult result = runToken(source);
 		if (result != ParseResult.SUCCESS)
 		{
-			result.printMessages();
+			result.printMessages(TestURI.getURI());
 			fail("Test Setup Failed");
 		}
 		finishLoad();
@@ -111,9 +113,8 @@ public class AddAbilityNormalTest extends AbstractAddListTokenTest<Ability>
 		}
 		for (CNAbility a : abilities)
 		{
-			boolean abilityExpected =
-					a.getAbility().equals(context.getReferenceContext().silentlyGetConstructedCDOMObject(
-						Ability.class, AbilityCategory.FEAT, "Granted"));
+			boolean abilityExpected = a.getAbility().equals(context.getReferenceContext()
+				.getManufacturerId(AbilityCategory.FEAT).getActiveObject("Granted"));
 			if (abilityExpected)
 			{
 				boolean c = assocCheck.check(a);
@@ -131,9 +132,7 @@ public class AddAbilityNormalTest extends AbstractAddListTokenTest<Ability>
 	@Override
 	protected Ability createGrantedObject()
 	{
-		Ability a = super.createGrantedObject();
-		context.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, a);
-		return a;
+		return BuildUtilities.buildFeat(context, "Granted");
 	}
 
 	//TODO CODE-2016/CODE-1921 (needs to be consistent with other methods of ADD:)

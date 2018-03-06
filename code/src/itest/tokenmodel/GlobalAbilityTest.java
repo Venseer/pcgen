@@ -31,6 +31,7 @@ import pcgen.rules.persistence.token.ParseResult;
 import plugin.lsttokens.AbilityLst;
 
 import tokenmodel.testsupport.AbstractGrantedListTokenTest;
+import util.TestURI;
 
 public class GlobalAbilityTest extends AbstractGrantedListTokenTest<Ability>
 {
@@ -43,7 +44,7 @@ public class GlobalAbilityTest extends AbstractGrantedListTokenTest<Ability>
 		ParseResult result = token.parseToken(context, source, "FEAT|VIRTUAL|Granted");
 		if (result != ParseResult.SUCCESS)
 		{
-			result.printMessages();
+			result.printMessages(TestURI.getURI());
 			fail("Test Setup Failed");
 		}
 		finishLoad();
@@ -83,10 +84,9 @@ public class GlobalAbilityTest extends AbstractGrantedListTokenTest<Ability>
 			CNAbility cas = cnas.getCNAbility();
 			boolean featExpected =
 					cas.getAbilityCategory() == AbilityCategory.FEAT;
-			boolean abilityExpected =
-					cas.getAbility().equals(
-						context.getReferenceContext().silentlyGetConstructedCDOMObject(
-							Ability.class, AbilityCategory.FEAT, "Granted"));
+			boolean abilityExpected = cas.getAbility()
+				.equals(context.getReferenceContext()
+					.getManufacturerId(AbilityCategory.FEAT).getActiveObject("Granted"));
 			boolean natureExpected = cas.getNature() == Nature.VIRTUAL;
 			boolean selectionExpected = cnas.getSelection() == null;
 			if (featExpected && abilityExpected && natureExpected
@@ -101,8 +101,9 @@ public class GlobalAbilityTest extends AbstractGrantedListTokenTest<Ability>
 	@Override
 	protected Ability createGrantedObject()
 	{
-		Ability a = super.createGrantedObject();
-		context.getReferenceContext().reassociateCategory(AbilityCategory.FEAT, a);
+		Ability a = AbilityCategory.FEAT.newInstance();
+		a.setName("Granted");
+		context.getReferenceContext().importObject(a);
 		return a;
 	}
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 (C) Tom Parker <thpr@users.sourceforge.net>
+ * Copyright 2018 (C) Tom Parker <thpr@users.sourceforge.net>
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,14 +15,37 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package pcgen.cdom.reference;
+package pcgen.core.analysis;
 
-import pcgen.cdom.base.Categorized;
-import pcgen.cdom.base.Category;
+import pcgen.core.Globals;
+import pcgen.core.Race;
 
-public interface CategorizedCreator<T extends Categorized<T>>
-		extends SelectionCreator<T>
+/**
+ * Utility Class related to Race.
+ *
+ */
+public final class RaceUtilities
 {
+	private RaceUtilities()
+	{
+	}
 
-	Category<T> getCategory();
+	/**
+	 * Get the unselected Race
+	 * 
+	 * @return the unselected Race
+	 */
+	public static Race getUnselectedRace()
+	{
+		for (Race race : Globals.getContext().getReferenceContext()
+			.getConstructedCDOMObjects(Race.class))
+		{
+			if (race.isUnselected())
+			{
+				return race;
+			}
+		}
+	
+		return null;
+	}
 }
