@@ -17,8 +17,6 @@
  */
 package plugin.lsttokens.campaign;
 
-import java.net.URISyntaxException;
-
 import org.junit.Test;
 
 import pcgen.core.Ability;
@@ -30,6 +28,7 @@ import pcgen.rules.context.LoadContext;
 import pcgen.rules.persistence.CDOMLoader;
 import pcgen.rules.persistence.token.CDOMPrimaryToken;
 import plugin.lsttokens.testsupport.AbstractCDOMTokenTestCase;
+import plugin.lsttokens.testsupport.BuildUtilities;
 import plugin.lsttokens.testsupport.CDOMTokenLoader;
 import plugin.lsttokens.testsupport.ConsolidationRule;
 
@@ -38,19 +37,6 @@ public class ForwardrefTokenTest extends AbstractCDOMTokenTestCase<Campaign>
 
 	static CDOMPrimaryToken<Campaign> token = new ForwardRefToken();
 	static CDOMTokenLoader<Campaign> loader = new CDOMTokenLoader<>();
-
-	@Override
-	public void setUp() throws PersistenceLayerException, URISyntaxException
-	{
-		super.setUp();
-		//Dummy items to ensure Category is initialized
-		Ability a = AbilityCategory.FEAT.newInstance();
-		a.setName("Dummy");
-		primaryContext.getReferenceContext().importObject(a);
-		Ability b = AbilityCategory.FEAT.newInstance();
-		b.setName("Dummy");
-		secondaryContext.getReferenceContext().importObject(b);
-	}
 
 	@Override
 	public CDOMLoader<Campaign> getLoader()
@@ -209,8 +195,8 @@ public class ForwardrefTokenTest extends AbstractCDOMTokenTestCase<Campaign>
 	{
 		primaryContext.getReferenceContext().constructCDOMObject(Spell.class, "Lightning Bolt");
 		secondaryContext.getReferenceContext().constructCDOMObject(Spell.class, "Lightning Bolt");
-		constructAbility(primaryContext, AbilityCategory.FEAT, "My Feat");
-		constructAbility(secondaryContext, AbilityCategory.FEAT, "My Feat");
+		constructAbility(primaryContext, BuildUtilities.getFeatCat(), "My Feat");
+		constructAbility(secondaryContext, BuildUtilities.getFeatCat(), "My Feat");
 		runRoundRobin("ABILITY=FEAT|My Feat", "SPELL|Lightning Bolt");
 	}
 
@@ -240,4 +226,13 @@ public class ForwardrefTokenTest extends AbstractCDOMTokenTestCase<Campaign>
 		context.getReferenceContext().importObject(a);
 	}
 
+	@Override
+	protected void additionalSetup(LoadContext context)
+	{
+		super.additionalSetup(context);
+		//Dummy items to ensure Category is initialized
+		Ability a = BuildUtilities.getFeatCat().newInstance();
+		a.setName("Dummy");
+		context.getReferenceContext().importObject(a);
+	}
 }

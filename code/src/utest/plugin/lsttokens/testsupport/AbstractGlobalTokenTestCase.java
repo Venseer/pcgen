@@ -18,6 +18,7 @@
 package plugin.lsttokens.testsupport;
 
 
+import java.lang.ref.WeakReference;
 import java.net.URISyntaxException;
 import java.util.Locale;
 
@@ -28,7 +29,6 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.ConcretePrereqObject;
-import pcgen.core.AbilityCategory;
 import pcgen.core.Campaign;
 import pcgen.core.bonus.BonusObj;
 import pcgen.persistence.PersistenceLayerException;
@@ -78,8 +78,8 @@ public abstract class AbstractGlobalTokenTestCase extends TestCase
 				"TestObj");
 		secondaryProf = secondaryContext.getReferenceContext().constructCDOMObject(
 				getCDOMClass(), "TestObj");
-		primaryContext.getReferenceContext().importObject(AbilityCategory.FEAT);
-		secondaryContext.getReferenceContext().importObject(AbilityCategory.FEAT);
+		additionalSetup(primaryContext);
+		additionalSetup(secondaryContext);
 	}
 
 	public abstract <T extends CDOMObject> Class<T> getCDOMClass();
@@ -304,6 +304,50 @@ public abstract class AbstractGlobalTokenTestCase extends TestCase
 	{
 		assertTrue(primaryContext.getReferenceContext().validate(null));
 		assertTrue(primaryContext.getReferenceContext().resolveReferences(null));
+	}
+
+	@Test
+	public void testCleanup() throws PersistenceLayerException
+	{
+		String s = new String(getLegalValue());
+		WeakReference<String> wr = new WeakReference<>(s);
+		assertTrue(parse(s));
+		s = null;
+		System.gc();
+		if (wr.get() != null)
+		{
+			fail("retained");
+		}
+	}
+
+	@Test
+	public void testAvoidContext() throws PersistenceLayerException
+	{
+		RuntimeLoadContext context = new RuntimeLoadContext(
+			RuntimeReferenceContext.createRuntimeReferenceContext(),
+			new ConsolidatedListCommitStrategy());
+		additionalSetup(context);
+		WeakReference<LoadContext> wr = new WeakReference<>(context);
+		CDOMObject item = context.getReferenceContext()
+			.constructCDOMObject(getCDOMClass(), "TestObj");
+		ParseResult pr = getToken().parseToken(context, item, getLegalValue());
+		if (!pr.passed())
+		{
+			fail();
+		}
+		context.commit();
+		assertTrue(pr.passed());
+		context = null;
+		System.gc();
+		if (wr.get() != null)
+		{
+			fail("retained");
+		}
+	}
+
+	protected void additionalSetup(LoadContext context)
+	{
+		context.getReferenceContext().importObject(BuildUtilities.getFeatCat());
 	}
 
 }

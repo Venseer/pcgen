@@ -17,8 +17,6 @@
  */
 package plugin.lsttokens;
 
-import java.net.URISyntaxException;
-
 import org.junit.Test;
 
 import pcgen.cdom.base.CDOMObject;
@@ -28,6 +26,7 @@ import pcgen.core.EquipmentModifier;
 import pcgen.core.PCTemplate;
 import pcgen.core.spell.Spell;
 import pcgen.persistence.PersistenceLayerException;
+import pcgen.rules.context.LoadContext;
 import pcgen.rules.persistence.CDOMLoader;
 import pcgen.rules.persistence.token.CDOMPrimaryToken;
 import plugin.lsttokens.testsupport.AbstractGlobalTokenTestCase;
@@ -40,19 +39,6 @@ public class QualifyTokenTest extends AbstractGlobalTokenTestCase
 
 	static CDOMPrimaryToken<CDOMObject> token = new QualifyToken();
 	static CDOMTokenLoader<PCTemplate> loader = new CDOMTokenLoader<>();
-
-	@Override
-	public void setUp() throws PersistenceLayerException, URISyntaxException
-	{
-		super.setUp();
-		//Dummy builds to ensure initialization
-		Ability a = AbilityCategory.FEAT.newInstance();
-		a.setName("Dummy");
-		primaryContext.getReferenceContext().importObject(a);
-		a = AbilityCategory.FEAT.newInstance();
-		a.setName("Dummy");
-		secondaryContext.getReferenceContext().importObject(a);
-	}
 
 	@Override
 	public CDOMLoader<PCTemplate> getLoader()
@@ -217,8 +203,8 @@ public class QualifyTokenTest extends AbstractGlobalTokenTestCase
 	public void testRoundRobinFeatSpell()
 			throws PersistenceLayerException
 	{
-		BuildUtilities.buildAbility(primaryContext, AbilityCategory.FEAT, "My Feat");
-		BuildUtilities.buildAbility(secondaryContext, AbilityCategory.FEAT, "My Feat");
+		BuildUtilities.buildAbility(primaryContext, BuildUtilities.getFeatCat(), "My Feat");
+		BuildUtilities.buildAbility(secondaryContext, BuildUtilities.getFeatCat(), "My Feat");
 		primaryContext.getReferenceContext().constructCDOMObject(Spell.class,
 				"Lightning Bolt");
 		secondaryContext.getReferenceContext().constructCDOMObject(Spell.class,
@@ -243,4 +229,15 @@ public class QualifyTokenTest extends AbstractGlobalTokenTestCase
 	{
 		return ConsolidationRule.SEPARATE;
 	}
+
+	@Override
+	protected void additionalSetup(LoadContext context)
+	{
+		super.additionalSetup(context);
+		Ability a = BuildUtilities.getFeatCat().newInstance();
+		a.setName("Dummy");
+		context.getReferenceContext().importObject(a);
+	}
+	
+	
 }

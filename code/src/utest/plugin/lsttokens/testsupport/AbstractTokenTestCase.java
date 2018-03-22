@@ -18,6 +18,7 @@
 package plugin.lsttokens.testsupport;
 
 
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -29,7 +30,6 @@ import junit.framework.TestCase;
 import pcgen.cdom.base.Categorized;
 import pcgen.cdom.base.Category;
 import pcgen.cdom.base.Loadable;
-import pcgen.core.AbilityCategory;
 import pcgen.core.Campaign;
 import pcgen.core.bonus.BonusObj;
 import pcgen.persistence.PersistenceLayerException;
@@ -82,20 +82,15 @@ public abstract class AbstractTokenTestCase<T extends Loadable> extends
 
 	protected void resetContext()
 	{
-		URI testURI = testCampaign.getURI();
 		primaryContext = getPrimaryContext();
 		secondaryContext =
 				new RuntimeLoadContext(RuntimeReferenceContext.createRuntimeReferenceContext(),
 					new ConsolidatedListCommitStrategy());
-		primaryContext.setSourceURI(testURI);
-		primaryContext.setExtractURI(testURI);
-		secondaryContext.setSourceURI(testURI);
-		secondaryContext.setExtractURI(testURI);
-		primaryContext.getReferenceContext().importObject(AbilityCategory.FEAT);
-		secondaryContext.getReferenceContext().importObject(AbilityCategory.FEAT);
-		primaryProf = getPrimary("TestObj");
+		additionalSetup(primaryContext);
+		additionalSetup(secondaryContext);
+		primaryProf = get(primaryContext, "TestObj");
 		primaryProf.setSourceURI(testCampaign.getURI());
-		secondaryProf = getSecondary("TestObj");
+		secondaryProf = get(secondaryContext, "TestObj");
 		secondaryProf.setSourceURI(testCampaign.getURI());
 	}
 
@@ -105,14 +100,9 @@ public abstract class AbstractTokenTestCase<T extends Loadable> extends
 				new ConsolidatedListCommitStrategy());
 	}
 
-	protected T getSecondary(String name)
+	protected T get(LoadContext context, String name)
 	{
-		return secondaryContext.getReferenceContext().constructCDOMObject(getCDOMClass(), name);
-	}
-
-	protected T getPrimary(String name)
-	{
-		return primaryContext.getReferenceContext().constructCDOMObject(getCDOMClass(), name);
+		return context.getReferenceContext().constructCDOMObject(getCDOMClass(), name);
 	}
 
 	public abstract Class<? extends T> getCDOMClass();
@@ -314,6 +304,20 @@ public abstract class AbstractTokenTestCase<T extends Loadable> extends
 				.getAnswer(getLegalValue(), getAlternateLegalValue()));
 	}
 
+	@Test
+	public void testCleanup() throws PersistenceLayerException
+	{
+		String s = new String(getLegalValue());
+		WeakReference<String> wr = new WeakReference<>(s);
+		assertTrue(parse(s));
+		s = null;
+		System.gc();
+		if (wr.get() != null)
+		{
+			fail("retained");
+		}
+	}
+
 	protected abstract String getLegalValue();
 
 	protected abstract String getAlternateLegalValue();
@@ -354,5 +358,37 @@ public abstract class AbstractTokenTestCase<T extends Loadable> extends
 		obj.setName(name);
 		context.getReferenceContext().importObject(obj);
 		return obj;
+	}
+
+	@Test
+	public void testAvoidContext() throws PersistenceLayerException
+	{
+		RuntimeLoadContext context = new RuntimeLoadContext(
+			RuntimeReferenceContext.createRuntimeReferenceContext(),
+			new ConsolidatedListCommitStrategy());
+		additionalSetup(context);
+		WeakReference<LoadContext> wr = new WeakReference<>(context);
+		T item = this.get(context, "TestObj");
+		ParseResult pr = getToken().parseToken(context, item, getLegalValue());
+		if (!pr.passed())
+		{
+			fail();
+		}
+		context.commit();
+		assertTrue(pr.passed());
+		context = null;
+		System.gc();
+		if (wr.get() != null)
+		{
+			fail("retained");
+		}
+	}
+
+	protected void additionalSetup(LoadContext context)
+	{
+		URI testURI = testCampaign.getURI();
+		context.setSourceURI(testURI);
+		context.setExtractURI(testURI);
+		context.getReferenceContext().importObject(BuildUtilities.getFeatCat());
 	}
 }

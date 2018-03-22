@@ -361,20 +361,6 @@ public final class Globals
 	}
 
 	/**
-	 * Get global deity list
-	 * @return global deity lis
-	 */
-	public static List<String> getGlobalDeityList()
-	{
-		if (SettingsHandler.getGame() != null)
-		{
-			return SettingsHandler.getGame().getDeityList();
-		}
-
-		return new ArrayList<>();
-	}
-
-	/**
 	 * Return TRUE if in a particular game mode
 	 * @param gameMode
 	 * @return TRUE if in a particular game mode
@@ -695,17 +681,29 @@ public final class Globals
 		{
 			Logging.log(logLevel, "Number of objects loaded. The following should "
 				+ "all be greater than 0:");
-			Logging.log(logLevel, "Races=" + getContext().getReferenceContext().getConstructedCDOMObjects(Race.class).size());
-			Logging.log(logLevel, "Classes=" + getContext().getReferenceContext().getConstructedCDOMObjects(PCClass.class).size());
-			Logging.log(logLevel, "Skills=" + getContext().getReferenceContext().getConstructedCDOMObjects(Skill.class).size());
-			Logging.log(logLevel, "Feats=" + getContext().getReferenceContext()
-				.getManufacturerId(AbilityCategory.FEAT).getConstructedObjectCount());
-			Logging.log(logLevel, "Equipment=" + getContext().getReferenceContext().getConstructedCDOMObjects(Equipment.class).size());
-			Logging.log(logLevel, "ArmorProfs=" + getContext().getReferenceContext().getConstructedCDOMObjects(ArmorProf.class).size());
-			Logging.log(logLevel, "ShieldProfs=" + getContext().getReferenceContext().getConstructedCDOMObjects(ShieldProf.class).size());
-			Logging.log(logLevel, "WeaponProfs=" + getContext().getReferenceContext().getConstructedCDOMObjects(WeaponProf.class).size());
-			Logging.log(logLevel, "Kits=" + getContext().getReferenceContext().getConstructedCDOMObjects(Kit.class).size());
-			Logging.log(logLevel, "Templates=" + getContext().getReferenceContext().getConstructedCDOMObjects(PCTemplate.class).size());
+			AbstractReferenceContext referenceContext = getContext().getReferenceContext();
+			Logging.log(logLevel,
+				"Races=" + referenceContext.getConstructedCDOMObjects(Race.class).size());
+			Logging.log(logLevel, "Classes="
+				+ referenceContext.getConstructedCDOMObjects(PCClass.class).size());
+			Logging.log(logLevel, "Skills="
+				+ referenceContext.getConstructedCDOMObjects(Skill.class).size());
+			AbilityCategory featCategory =
+					referenceContext.get(AbilityCategory.class, "FEAT");
+			Logging.log(logLevel, "Feats=" + referenceContext
+				.getManufacturerId(featCategory).getConstructedObjectCount());
+			Logging.log(logLevel, "Equipment="
+				+ referenceContext.getConstructedCDOMObjects(Equipment.class).size());
+			Logging.log(logLevel, "ArmorProfs="
+				+ referenceContext.getConstructedCDOMObjects(ArmorProf.class).size());
+			Logging.log(logLevel, "ShieldProfs="
+				+ referenceContext.getConstructedCDOMObjects(ShieldProf.class).size());
+			Logging.log(logLevel, "WeaponProfs="
+				+ referenceContext.getConstructedCDOMObjects(WeaponProf.class).size());
+			Logging.log(logLevel,
+				"Kits=" + referenceContext.getConstructedCDOMObjects(Kit.class).size());
+			Logging.log(logLevel, "Templates="
+				+ referenceContext.getConstructedCDOMObjects(PCTemplate.class).size());
 		}
 		return listsHappy;
 	}

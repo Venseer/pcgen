@@ -15,8 +15,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id 'com.gradle.build-scan' version '1.11'
-
-	id 'eclipse'
+    id 'eclipse'
     id 'application'
     id 'build-dashboard'
     id 'checkstyle'
@@ -24,7 +23,7 @@ plugins {
     id 'java'
     id 'maven'
     id 'pmd'
-    id "de.undercouch.download" version '3.3.0'
+    id "de.undercouch.download" version '3.4.2'
     id 'edu.sc.seis.launch4j' version '2.4.3'
     id 'com.github.ben-manes.versions' version '0.17.0'
     id 'nebula.lint' version '8.3.1'
@@ -169,8 +168,8 @@ dependencies {
     gradleLint.ignore('unused-dependency') {
         // Eclipse requires this to be in the standard path for some unknown reason.
         compile group: 'org.xmlunit', name: 'xmlunit-core', version:'2.5.1'
-        compile group: 'net.sourceforge.pcgen', name: 'PCGen-base', version:'1.0.128'
-        compile group: 'net.sourceforge.pcgen', name: 'PCGen-Formula', version:'1.0.158'
+        compile group: 'net.sourceforge.pcgen', name: 'PCGen-base', version:'1.0.133'
+        compile group: 'net.sourceforge.pcgen', name: 'PCGen-Formula', version:'1.0.160'
         compile group: 'xml-apis', name: 'xml-apis', version:'1.3.04'
     }
 
@@ -243,8 +242,8 @@ task copyToLibs(type: Copy) {
 }
 
 import org.apache.tools.ant.filters.FixCrLfFilter;
-task copyToRoot(type: Copy, dependsOn: [cleanCreateExe, createExe, copyToLibs, 
-        jar, converterJar]) {
+task copyToRoot(type: Copy, dependsOn: [createExe, copyToLibs, jar, 
+        converterJar]) {
     from "$buildDir/libs/pcgen-${version}.jar"
     from "$buildDir/libs/pcgen-${version}-batch-convert.jar"
     from "$buildDir/launch4j/pcgen.exe"

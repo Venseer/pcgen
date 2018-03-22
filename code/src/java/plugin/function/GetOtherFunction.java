@@ -21,9 +21,9 @@ import java.util.Optional;
 import pcgen.base.formula.base.DependencyManager;
 import pcgen.base.formula.base.DynamicDependency;
 import pcgen.base.formula.base.EvaluationManager;
+import pcgen.base.formula.base.FormulaFunction;
 import pcgen.base.formula.base.FormulaManager;
 import pcgen.base.formula.base.FormulaSemantics;
-import pcgen.base.formula.base.Function;
 import pcgen.base.formula.base.LegalScope;
 import pcgen.base.formula.base.ScopeInstance;
 import pcgen.base.formula.base.ScopeInstanceFactory;
@@ -46,7 +46,7 @@ import pcgen.rules.context.LoadContext;
  * This function is capable of "jumping" to another scope and getting a variable from that
  * scope. In general, this is useful to grab local variables from another object.
  */
-public class GetOtherFunction implements Function
+public class GetOtherFunction implements FormulaFunction
 {
 
 	@Override
@@ -167,13 +167,14 @@ public class GetOtherFunction implements Function
 				(PCGenScope) scopeInstanceFactory.getScope(legalScopeName);
 		LoadContext context = fdm.get(ManagerKey.CONTEXT);
 		args[1].jjtAccept(visitor,
-			fdm.getWith(DependencyManager.VARSTRATEGY, ts).getWith(
+			fdm.getWith(DependencyManager.VARSTRATEGY, Optional.of(ts)).getWith(
 				DependencyManager.ASSERTED,
 				Optional.of(legalScope.getFormatManager(context))));
 		DynamicDependency dd = new DynamicDependency(ts.getControlVar(),
 			LegalScope.getFullName(legalScope));
 		fdm.get(DependencyManager.DYNAMIC).addDependency(dd);
-		DependencyManager dynamic = fdm.getWith(DependencyManager.VARSTRATEGY, dd);
+		DependencyManager dynamic =
+				fdm.getWith(DependencyManager.VARSTRATEGY, Optional.of(dd));
 		dynamic = dynamic.getWith(DependencyManager.SCOPE, legalScope);
 		//Rest of Equation
 		return (FormatManager<?>) args[2].jjtAccept(visitor, dynamic);

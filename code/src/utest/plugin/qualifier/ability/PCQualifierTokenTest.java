@@ -22,13 +22,13 @@ import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.content.CNAbilityFactory;
 import pcgen.cdom.enumeration.Nature;
 import pcgen.core.Ability;
-import pcgen.core.AbilityCategory;
 import pcgen.persistence.PersistenceLayerException;
 import pcgen.rules.context.LoadContext;
 import pcgen.rules.persistence.token.CDOMSecondaryToken;
 import pcgen.rules.persistence.token.QualifierToken;
 import plugin.lsttokens.choose.AbilityToken;
 import plugin.lsttokens.testsupport.AbstractPCQualifierTokenTestCase;
+import plugin.lsttokens.testsupport.BuildUtilities;
 import plugin.lsttokens.testsupport.TokenRegistration;
 import plugin.lsttokens.testsupport.TransparentPlayerCharacter;
 
@@ -46,9 +46,6 @@ public class PCQualifierTokenTest extends
 	{
 		super.setUp();
 		TokenRegistration.register(PC_TOKEN);
-		//Dummy to ensure initialization
-		construct(primaryContext, "Dummy");
-		construct(secondaryContext, "Dummy");
 	}
 
 	@Override
@@ -66,7 +63,7 @@ public class PCQualifierTokenTest extends
 	@Override
 	protected void addToPCSet(TransparentPlayerCharacter pc, Ability item)
 	{
-		pc.abilitySet.add(CNAbilityFactory.getCNAbility(AbilityCategory.FEAT,
+		pc.abilitySet.add(CNAbilityFactory.getCNAbility(BuildUtilities.getFeatCat(),
 			Nature.NORMAL, item));
 	}
 
@@ -93,7 +90,7 @@ public class PCQualifierTokenTest extends
 	@Override
 	protected CDOMObject construct(LoadContext loadContext, String one)
 	{
-		Ability a = AbilityCategory.FEAT.newInstance();
+		Ability a = BuildUtilities.getFeatCat().newInstance();
 		a.setName(one);
 		loadContext.getReferenceContext().importObject(a);
 		return a;
@@ -105,4 +102,14 @@ public class PCQualifierTokenTest extends
 	{
 		return construct(loadContext, name);
 	}
+
+	@Override
+	protected void additionalSetup(LoadContext context)
+	{
+		super.additionalSetup(context);
+		//Dummy to ensure initialization
+		construct(context, "Dummy");
+	}
+	
+	
 }
