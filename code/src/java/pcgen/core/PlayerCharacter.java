@@ -37,8 +37,6 @@ import java.util.TreeSet;
 import org.jetbrains.annotations.TestOnly;
 
 import pcgen.base.formula.Formula;
-import pcgen.base.formula.base.ScopeInstance;
-import pcgen.base.formula.base.VarScoped;
 import pcgen.base.formula.inst.NEPFormula;
 import pcgen.base.solver.DynamicSolverManager;
 import pcgen.base.solver.IndividualSetup;
@@ -66,7 +64,6 @@ import pcgen.cdom.content.HitDie;
 import pcgen.cdom.content.LevelCommandFactory;
 import pcgen.cdom.content.Processor;
 import pcgen.cdom.content.RollMethod;
-import pcgen.cdom.content.VarModifier;
 import pcgen.cdom.enumeration.AssociationKey;
 import pcgen.cdom.enumeration.AssociationListKey;
 import pcgen.cdom.enumeration.BiographyField;
@@ -5375,37 +5372,13 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 	{
 		int total = 0;
 
-		String aString = SettingsHandler.getGame().getHPFormula();
-		if (!aString.isEmpty())
+		double iConMod = getStatBonusTo("HP", "BONUS");
+
+		for (PCClass pcClass : getClassSet())
 		{
-			for (;;)
-			{
-				int startIdx = aString.indexOf("$$");
-				if (startIdx < 0)
-				{
-					break;
-				}
-				int endIdx = aString.indexOf("$$", startIdx + 2);
-				if (endIdx < 0)
-				{
-					break;
-				}
-
-				String lookupString = aString.substring(startIdx + 2, endIdx);
-				lookupString = pcgen.io.ExportHandler.getTokenString(this, lookupString);
-				aString = aString.substring(0, startIdx) + lookupString + aString.substring(endIdx + 2);
-			}
-			total = getVariableValue(aString, "").intValue();
-		} else
-		{
-			final double iConMod = getStatBonusTo("HP", "BONUS");
-
-			for (PCClass pcClass : getClassSet())
-			{
-				total += getClassHitPoints(pcClass, (int) iConMod);
-			}
-
+			total += getClassHitPoints(pcClass, (int) iConMod);
 		}
+
 		total += (int) getTotalBonusTo("HP", "CURRENTMAX");
 
 		//
@@ -10210,13 +10183,6 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 	public boolean hasAbilityInPool(AbilityCategory aCategory)
 	{
 		return grantedAbilityFacet.hasAbilityInPool(id, aCategory);
-	}
-
-	public <T> void addModifier(VarModifier<T> modifier, VarScoped vs,
-		VarScoped source)
-	{
-		ScopeInstance inst = scopeFacet.get(id, source.getLocalScopeName(), source);
-		solverManagerFacet.addModifier(id, modifier, vs, inst);
 	}
 
 	public Object getGlobal(String varName)
