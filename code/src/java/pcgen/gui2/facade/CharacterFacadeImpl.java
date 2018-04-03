@@ -1610,7 +1610,6 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 			return 0;
 		}
 
-		//return Integer.valueOf(currentStatAnalysis.getTotalStatFor(aStat) - currentStatAnalysis.getBaseStatFor(aStat));
 		int rBonus = (int) theCharacter.getRaceBonusTo("STAT", activeStat.getKeyName()); //$NON-NLS-1$
 		rBonus += (int) theCharacter.getBonusDueToType("STAT", activeStat.getKeyName(), "RACIAL");
 
@@ -1633,7 +1632,6 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 			return 0;
 		}
 
-		//return Integer.valueOf(currentStatAnalysis.getTotalStatFor(aStat) - currentStatAnalysis.getBaseStatFor(aStat));
 		int iRace = (int) theCharacter.getRaceBonusTo("STAT", activeStat.getKeyName()); //$NON-NLS-1$
 		iRace += (int) theCharacter.getBonusDueToType("STAT", activeStat.getKeyName(), "RACIAL");
 
@@ -1804,14 +1802,6 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 
 	private void refreshStatScores()
 	{
-//		for (StatFacade stat : statScoreMap.keySet())
-//		{
-//			WriteableReferenceFacade<Integer> score = statScoreMap.get(stat);
-//			if (stat instanceof PCStat)
-//			{
-//				score.set(theCharacter.getTotalStatFor((PCStat) stat));
-//			}
-//		}
 		if (charLevelsFacade != null)
 		{
 			charLevelsFacade.fireSkillBonusEvent(this, 0, true);
@@ -1950,7 +1940,6 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 		xpForNextlevel.set(charDisplay.minXPForNextECL());
 		xpTableName.set(charDisplay.getXPTableName());
 		hpRef.set(theCharacter.hitPoints());
-		alignment.set(charDisplay.getPCAlignment());
 		refreshAvailableTempBonuses();
 		companionSupportFacade.refreshCompanionData();
 
@@ -2658,7 +2647,6 @@ public class CharacterFacadeImpl implements CharacterFacade, EquipmentListListen
 			{
 				Logging.log(Logging.DEBUG, "Starting export at serial " + theCharacter.getSerial() + " to " + theHandler.getTemplateFile());
 				PlayerCharacter exportPc =  getExportCharacter();
-				//PlayerCharacter exportPc =  theCharacter;
 				theHandler.write(exportPc, buf);
 				Logging.log(Logging.DEBUG, "Finished export at serial " + theCharacter.getSerial() + " to " + theHandler.getTemplateFile());
 				return;
