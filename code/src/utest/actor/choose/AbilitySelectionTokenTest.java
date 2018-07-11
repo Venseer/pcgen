@@ -17,24 +17,23 @@
  */
 package actor.choose;
 
-import java.net.URISyntaxException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import pcgen.cdom.content.AbilitySelection;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.core.Ability;
 import pcgen.core.Globals;
 import pcgen.core.SettingsHandler;
-import pcgen.persistence.PersistenceLayerException;
 import pcgen.rules.context.LoadContext;
 import pcgen.rules.persistence.token.ParseResult;
-
-import org.junit.Before;
-import org.junit.Test;
 import plugin.lsttokens.choose.AbilitySelectionToken;
 import plugin.lsttokens.choose.StringToken;
 import plugin.lsttokens.testsupport.BuildUtilities;
-
-import static org.junit.Assert.*;
 
 /**
  * Unit test of the class AbilitySelectionToken.
@@ -49,7 +48,7 @@ public class AbilitySelectionTokenTest
 	protected LoadContext context;
 
 	@Before
-	public void setUp() throws PersistenceLayerException, URISyntaxException
+	public void setUp()
 	{
 		Globals.emptyLists();
 		SettingsHandler.getGame().clearLoadContext();
@@ -73,7 +72,7 @@ public class AbilitySelectionTokenTest
 		ParseResult pr = st.parseToken(Globals.getContext(), sel, "selection|Acrobatics");
 		assertTrue(pr.passed());
 		Globals.getContext().commit();
-		as = new AbilitySelection(sel,"selection");
+		as = new AbilitySelection(sel, "selection");
 		assertEquals("CATEGORY=FEAT|ChooseName|selection", pca.encodeChoice(as));
 	}
 
