@@ -19,20 +19,20 @@ package actor.add;
 
 import pcgen.cdom.base.Persistent;
 import pcgen.core.PCTemplate;
+import plugin.lsttokens.add.TemplateToken;
 
 import actor.testsupport.AbstractPersistentCDOMChoiceActorTestCase;
-import plugin.lsttokens.add.TemplateToken;
 
 public class TemplateTokenTest extends
 		AbstractPersistentCDOMChoiceActorTestCase<PCTemplate>
 {
 
-	private static final Persistent<PCTemplate> pca = new TemplateToken();
+	private static final Persistent<PCTemplate> PCA = new TemplateToken();
 
 	@Override
 	public Persistent<PCTemplate> getActor()
 	{
-		return pca;
+		return PCA;
 	}
 
 	@Override

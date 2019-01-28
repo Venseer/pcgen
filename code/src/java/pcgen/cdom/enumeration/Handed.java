@@ -17,18 +17,16 @@
  */
 package pcgen.cdom.enumeration;
 
-import pcgen.facade.core.HandedFacade;
 import pcgen.system.LanguageBundle;
 
 /**
  * Represents the handedness available in PCGen.
  * 
- * It is designed to hold Genders in a type-safe fashion, so that they can be
- * quickly compared and use less memory when identical Genders exist in two
+ * It is designed to hold Handedness in a type-safe fashion, so that they can be
+ * quickly compared and use less memory when identical Handedness exist in two
  * CDOMObjects.
- * 
  */
-public enum Handed implements HandedFacade
+public enum Handed
 {
 	Right
 	{
@@ -74,32 +72,4 @@ public enum Handed implements HandedFacade
 			return LanguageBundle.getString("in_comboOther");
 		}
 	};
-
-	public static Handed getDefaultValue()
-	{
-		return Right;
-	}
-
-	/**
-	 * Retrieve a Gender object to match the name ({@link #name()}) or localized name
-	 * (output by {@link #toString()}). The localized lookup is kept for legacy purpose
-	 * when the localized name was saved in the character files (instead of the
-	 * {@link #name()}).
-	 * 
-	 * @param name
-	 *            The localized display name of the Gender.
-	 * @return The matching Gender.
-	 */
-	public static Handed getHandedByName(String name)
-	{
-		for (Handed hand : values())
-		{
-			if (hand.toString().equals(name))
-			{
-				return hand;
-			}
-		}
-
-		return valueOf(name);
-	}
 }

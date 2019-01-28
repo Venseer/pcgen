@@ -20,6 +20,7 @@ package plugin.pretokens.writer;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Locale;
 
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteOperator;
@@ -52,7 +53,7 @@ public class PreVariableWriter extends AbstractPrerequisiteWriter implements Pre
 		try
 		{
 			writer.write("PREVAR");
-			writer.write(prereq.getOperator().toString().toUpperCase());
+			writer.write(prereq.getOperator().toString().toUpperCase(Locale.ENGLISH));
 			writer.write(':' + (prereq.isOverrideQualify() ? "Q:" : ""));
 			writer.write(prereq.getKey());
 			writer.write(',');
@@ -69,7 +70,7 @@ public class PreVariableWriter extends AbstractPrerequisiteWriter implements Pre
 		}
 		catch (IOException e)
 		{
-			throw new PersistenceLayerException(e.getMessage());
+			throw new PersistenceLayerException(e);
 		}
 	}
 
@@ -122,11 +123,11 @@ public class PreVariableWriter extends AbstractPrerequisiteWriter implements Pre
 		writer.write("PREVAR");
 		if (prereq.getOperator() == PrerequisiteOperator.LT)
 		{
-			writer.write(oper.invert().toString().toUpperCase());
+			writer.write(oper.invert().toString().toUpperCase(Locale.ENGLISH));
 		}
 		else
 		{
-			writer.write(oper.toString().toUpperCase());
+			writer.write(oper.toString().toUpperCase(Locale.ENGLISH));
 		}
 		writer.write(':' + (prereq.isOverrideQualify() ? "Q:" : ""));
 		boolean first = true;

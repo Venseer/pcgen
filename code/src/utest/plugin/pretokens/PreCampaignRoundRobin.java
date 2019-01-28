@@ -17,11 +17,12 @@
  */
 package plugin.pretokens;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import plugin.lsttokens.testsupport.TokenRegistration;
 import plugin.pretokens.parser.PreCampaignParser;
 import plugin.pretokens.writer.PreCampaignWriter;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * The Class {@code PreCampaignRoundRobin} is responsible for testing
@@ -31,20 +32,7 @@ import plugin.pretokens.writer.PreCampaignWriter;
  */
 public class PreCampaignRoundRobin extends AbstractBasicRoundRobin
 {
-
-	/**
-	 * Suite.
-	 * 
-	 * @return Test
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(PreCampaignRoundRobin.class);
-	}
-
-	/**
-	 * @see junit.framework.TestCase#setUp()
-	 */
+	@BeforeEach
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -53,24 +41,19 @@ public class PreCampaignRoundRobin extends AbstractBasicRoundRobin
 		TokenRegistration.register(new PreCampaignWriter());
 	}
 
-	/**
-	 * @see plugin.pretokens.AbstractBasicRoundRobin#getBaseString()
-	 */
 	@Override
 	public String getBaseString()
 	{
 		return "CAMPAIGN";
 	}
 
-	/**
-	 * @see plugin.pretokens.AbstractBasicRoundRobin#isTypeAllowed()
-	 */
 	@Override
 	public boolean isTypeAllowed()
 	{
 		return false;
 	}
 
+	@Test
 	public void testNegateItem()
 	{
 		AbstractPreRoundRobin.runSimpleRoundRobin("PRE" + getBaseString() + ":1,Foo,[TYPE=Bar]",

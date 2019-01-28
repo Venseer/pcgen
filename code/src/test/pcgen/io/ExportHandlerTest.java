@@ -17,6 +17,8 @@
  */
 package pcgen.io;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -25,8 +27,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.base.FormulaFactory;
 import pcgen.cdom.enumeration.FormulaKey;
@@ -56,7 +56,7 @@ import pcgen.util.TestHelper;
 import plugin.lsttokens.testsupport.BuildUtilities;
 
 /**
- * <code>SkillTokenTest</code> contains tests to verify that the
+ * {@code SkillTokenTest} contains tests to verify that the
  * SKILL token and its sub tokens are working correctly.
  */
 
@@ -70,33 +70,10 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 	private Equipment gem = null;
 	private Equipment armor = null;
 
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(ExportHandlerTest.class);
-	}
-
-	/**
-	 * Basic constructor, name only.
-	 * @param name The name of the test class.
-	 */
-	public ExportHandlerTest(String name)
-	{
-		super(name);
-	}
-
-	/**
-	 * @see pcgen.AbstractCharacterTestCase#setUp()
-	 */
 	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		PlayerCharacter character = getCharacter();
-		LoadContext context = Globals.getContext();
 
 		final LevelInfo levelInfo = new LevelInfo();
 		levelInfo.setLevelString("LEVEL");
@@ -105,9 +82,8 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		GameMode gamemode = SettingsHandler.getGame();
 		gamemode.addLevelInfo("Default", levelInfo);
 
-		//Stats
-		setPCStat(character, dex, 16);
-		setPCStat(character, intel, 17);
+		LoadContext context = Globals.getContext();
+
 		BonusObj aBonus = Bonus.newBonus(context, "MODSKILLPOINTS|NUMBER|INT");
 		
 		if (aBonus != null)
@@ -115,16 +91,14 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 			intel.addToListFor(ListKey.BONUS, aBonus);
 		}
 
-		// Race
 		Race testRace = new Race();
 		testRace.setName("TestRace");
-		character.setRace(testRace);
+		context.getReferenceContext().importObject(testRace);
 
-		// Class
 		PCClass myClass = new PCClass();
-		myClass.setName("My Class");
+		myClass.setName("MyClass");
 		myClass.put(FormulaKey.START_SKILL_POINTS, FormulaFactory.getFormulaFor(3));
-		character.incrementClassLevel(5, myClass, true);
+		context.getReferenceContext().importObject(myClass);
 
 		// Skills
 		knowledge = new Skill[2];
@@ -134,18 +108,14 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		TestHelper.addType(knowledge[0], "KNOWLEDGE.INT");
 		CDOMDirectSingleRef<PCStat> intelRef = CDOMDirectSingleRef.getRef(intel);
 		knowledge[0].put(ObjectKey.KEY_STAT, intelRef);
-		character.setSkillOrder(knowledge[0], 2);
 		Globals.getContext().getReferenceContext().importObject(knowledge[0]);
-		SkillRankControl.modRanks(8.0, myClass, true, character, knowledge[0]);
 
 		knowledge[1] = new Skill();
 		context.unconditionallyProcess(knowledge[1], "CLASSES", "MyClass");
 		knowledge[1].setName("KNOWLEDGE (RELIGION)");
 		TestHelper.addType(knowledge[1], "KNOWLEDGE.INT");
 		knowledge[1].put(ObjectKey.KEY_STAT, intelRef);
-		character.setSkillOrder(knowledge[1], 3);
 		Globals.getContext().getReferenceContext().importObject(knowledge[1]);
-		SkillRankControl.modRanks(5.0, myClass, true, character, knowledge[1]);
 
 		tumble = new Skill();
 		context.unconditionallyProcess(tumble, "CLASSES", "MyClass");
@@ -153,16 +123,13 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		tumble.addToListFor(ListKey.TYPE, Type.getConstant("DEX"));
 		CDOMDirectSingleRef<PCStat> dexRef = CDOMDirectSingleRef.getRef(dex);
 		tumble.put(ObjectKey.KEY_STAT, dexRef);
-		character.setSkillOrder(tumble, 4);
 		Globals.getContext().getReferenceContext().importObject(tumble);
-		SkillRankControl.modRanks(7.0, myClass, true, character, tumble);
 
 		balance = new Skill();
 		context.unconditionallyProcess(balance, "CLASSES", "MyClass");
 		balance.setName("Balance");
 		balance.addToListFor(ListKey.TYPE, Type.getConstant("DEX"));
 		balance.put(ObjectKey.KEY_STAT, dexRef);
-		character.setSkillOrder(balance, 1);
 		aBonus = Bonus.newBonus(context, "SKILL|Balance|2|PRESKILL:1,Tumble=5|TYPE=Synergy.STACK");
 		
 		if (aBonus != null)
@@ -170,10 +137,7 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 			balance.addToListFor(ListKey.BONUS, aBonus);
 		}
 		Globals.getContext().getReferenceContext().importObject(balance);
-		SkillRankControl.modRanks(4.0, myClass, true, character, balance);
-
-		character.calcActiveBonuses();
-
+		
 		weapon = new Equipment();
 		weapon.setName("TestWpn");
 		weapon.addToListFor(ListKey.TYPE, Type.WEAPON);
@@ -187,13 +151,33 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 		armor.setName("TestArmorSuit");
 		TestHelper.addType(armor, "armor.suit");
 
-		context.getReferenceContext().buildDerivedObjects();
-		context.getReferenceContext().resolveReferences(null);
+		finishLoad();
+
+		PlayerCharacter character = getCharacter();
+		//Stats
+		setPCStat(character, dex, 16);
+		setPCStat(character, intel, 17);
+
+		// Race
+		character.setRace(testRace);
+
+		// Class
+		character.incrementClassLevel(5, myClass, true);
+
+		character.setSkillOrder(balance, 1);
+		character.setSkillOrder(knowledge[0], 2);
+		character.setSkillOrder(knowledge[1], 3);
+		character.setSkillOrder(tumble, 4);
+		SkillRankControl.modRanks(7.0, myClass, true, character, tumble);
+		SkillRankControl.modRanks(8.0, myClass, true, character, knowledge[0]);
+
+		SkillRankControl.modRanks(5.0, myClass, true, character, knowledge[1]);
+		SkillRankControl.modRanks(4.0, myClass, true, character, balance);
+
+		character.calcActiveBonuses();
+
 	}
 
-	/**
-	 * @see pcgen.AbstractCharacterTestCase#tearDown()
-	 */
 	@Override
 	protected void tearDown() throws Exception
 	{
@@ -252,7 +236,7 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 	public void testJepIif() throws IOException
 	{
 		PlayerCharacter character = getCharacter();
-		assertEquals("Basic JEP boolean", new Float(1.0), character
+		assertEquals("Basic JEP boolean", 1.0f, character
 			.getVariableValue("max(0,2)==2", ""));
 		assertEquals("JEP boolean in IF", "true", evaluateToken(
 			"OIF(max(0,2)==2,true,false)", character));
@@ -397,28 +381,28 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 	
 		tok = "count(\"ABILITIES\", \"CATEGORY=Maneuver\")";		
 		// if this evaluates math wise, the values should be string "1.0"
-		assertFalse("Token: |" + tok + "| != 1.0: ", evaluateToken(tok, pc).equals("1.0"));
+		assertNotEquals("Token: |" + tok + "| != 1.0: ", "1.0", evaluateToken(tok, pc));
 		
-		tok = "VAR.count(\"ABILITIES\", \"CATEGORY=Maneuver\")";		
-		assertTrue("Token: |" + tok + "| == 1.0: ",  evaluateToken(tok, pc).equals("1.0"));
+		tok = "VAR.count(\"ABILITIES\", \"CATEGORY=Maneuver\")";
+		assertEquals("Token: |" + tok + "| == 1.0: ", "1.0", evaluateToken(tok, pc));
 	
-		tok = "COUNT[\"ABILITIES\", \"CATEGORY=Maneuver\"]";		
-		assertFalse("Token: |" + tok + "| != 1.0: ",  evaluateToken(tok, pc).equals("1.0"));
+		tok = "COUNT[\"ABILITIES\", \"CATEGORY=Maneuver\"]";
+		assertNotEquals("Token: |" + tok + "| != 1.0: ", "1.0", evaluateToken(tok, pc));
 		
 		tok = "count(\"ABILITIES\", \"CATEGORY=Maneuver(Special)\")";
-		assertFalse("Token: |" + tok + "| != 1.0 ",  evaluateToken(tok, pc).equals("1.0"));
+		assertNotEquals("Token: |" + tok + "| != 1.0 ", "1.0", evaluateToken(tok, pc));
 		
 		tok = "${count(\"ABILITIES\", \"CATEGORY=Maneuver(Special)\")+5}";
-		assertFalse("Token: |" + tok + "| == 5.0 ",  evaluateToken(tok, pc).equals("5.0"));
+		assertNotEquals("Token: |" + tok + "| == 5.0 ", "5.0", evaluateToken(tok, pc));
 		
 		tok = "${count(\"ABILITIES\", \"CATEGORY=Maneuver(Special)\")+5}";
-		assertTrue("Token: |" + tok + "| != 6.0 ",  evaluateToken(tok, pc).equals("6.0"));
+		assertEquals("Token: |" + tok + "| != 6.0 ", "6.0", evaluateToken(tok, pc));
 		
 		tok = "${(count(\"ABILITIES\", \"CATEGORY=Maneuver(Special)\")+5)/3}";
-		assertFalse("Token: |" + tok + "| == 3.0 ",  evaluateToken(tok, pc).equals("3.0"));
+		assertNotEquals("Token: |" + tok + "| == 3.0 ", "3.0", evaluateToken(tok, pc));
 		
 		tok = "${(count(\"ABILITIES\", \"CATEGORY=Maneuver(Special)\")+5)/3}";
-		assertTrue("Token: |" + tok + "| != 2.0 ",  evaluateToken(tok, pc).equals("2.0"));
+		assertEquals("Token: |" + tok + "| != 2.0 ", "2.0", evaluateToken(tok, pc));
 		
 		
 	}
@@ -479,4 +463,12 @@ public class ExportHandlerTest extends AbstractCharacterTestCase
 
 		return retWriter.toString();
 	}
+
+	@Override
+	protected void defaultSetupEnd()
+	{
+		//We will handle this locally
+	}
+	
+	
 }

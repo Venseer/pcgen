@@ -19,14 +19,16 @@ package pcgen.output.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Objects;
 
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import freemarker.template.TemplateSequenceModel;
 import pcgen.cdom.base.SetFacet;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.facet.FacetLibrary;
 import pcgen.cdom.facet.ObjectWrapperFacet;
+
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
+import freemarker.template.TemplateSequenceModel;
 
 /**
  * A SetFacetModel wraps a SetFacet and serves as a TemplateSequenceModel for
@@ -63,30 +65,18 @@ public class SetFacetModel<T> implements TemplateSequenceModel, Iterable<T>
 	 */
 	public SetFacetModel(CharID id, SetFacet<CharID, T> facet)
 	{
-		if (id == null)
-		{
-			throw new IllegalArgumentException("CharID may not be null");
-		}
-		if (facet == null)
-		{
-			throw new IllegalArgumentException("SetFacet may not be null");
-		}
+		Objects.requireNonNull(id, "CharID may not be null");
+		Objects.requireNonNull(facet, "SetFacet may not be null");
 		this.id = id;
 		this.facet = facet;
 	}
 
-	/**
-	 * @see java.lang.Iterable#iterator()
-	 */
 	@Override
 	public Iterator<T> iterator()
 	{
 		return facet.getSet(id).iterator();
 	}
 
-	/**
-	 * @see freemarker.template.TemplateSequenceModel#get(int)
-	 */
 	@Override
 	public TemplateModel get(int index) throws TemplateModelException
 	{
@@ -102,9 +92,6 @@ public class SetFacetModel<T> implements TemplateSequenceModel, Iterable<T>
 		return WRAPPER_FACET.wrap(id, list.get(index));
 	}
 
-	/*
-	 * @see freemarker.template.TemplateSequenceModel#size()
-	 */
 	@Override
 	public int size() throws TemplateModelException
 	{

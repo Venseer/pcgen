@@ -129,13 +129,15 @@ public class GetOtherFunction implements FormulaFunction
 			manager.getWith(EvaluationManager.ASSERTED, Optional.of(legalScope.getFormatManager(context))));
 		FormulaManager fm = manager.get(EvaluationManager.FMANAGER);
 		ScopeInstanceFactory siFactory = fm.getScopeInstanceFactory();
-		ScopeInstance scopeInst = siFactory.get(vs.getLocalScopeName(), vs);
+		Optional<String> localScopeName = vs.getLocalScopeName();
+		//TODO This may be a bug?  What if it doesn't have a localScopeName?
+		ScopeInstance scopeInst = siFactory.get(localScopeName.get(), Optional.of(vs));
 		//Rest of Equation
 		return args[2].jjtAccept(visitor, manager.getWith(EvaluationManager.INSTANCE, scopeInst));
 	}
 
 	@Override
-	public FormatManager<?> getDependencies(DependencyVisitor visitor, DependencyManager fdm, Node[] args)
+	public Optional<FormatManager<?>> getDependencies(DependencyVisitor visitor, DependencyManager fdm, Node[] args)
 	{
 		String legalScopeName = ((ASTQuotString) args[0]).getText();
 		TrainingStrategy ts = new TrainingStrategy();
@@ -148,8 +150,8 @@ public class GetOtherFunction implements FormulaFunction
 		DynamicDependency dd = new DynamicDependency(ts.getControlVar(), LegalScope.getFullName(legalScope));
 		fdm.get(DependencyManager.DYNAMIC).addDependency(dd);
 		DependencyManager dynamic = fdm.getWith(DependencyManager.VARSTRATEGY, Optional.of(dd));
-		dynamic = dynamic.getWith(DependencyManager.SCOPE, legalScope);
+		dynamic = dynamic.getWith(DependencyManager.SCOPE, Optional.of(legalScope));
 		//Rest of Equation
-		return (FormatManager<?>) args[2].jjtAccept(visitor, dynamic);
+		return (Optional<FormatManager<?>>) args[2].jjtAccept(visitor, dynamic);
 	}
 }

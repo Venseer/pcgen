@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
@@ -37,16 +36,16 @@ import java.util.concurrent.Future;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.commons.lang3.StringUtils;
-
 import pcgen.base.util.HashMapToList;
 import pcgen.base.util.MapToList;
 import pcgen.util.Logging;
 
+import org.apache.commons.lang3.StringUtils;
+
 class PluginClassLoader extends PCGenTask
 {
 
-	private static final FilenameFilter pluginFilter = (dir, name) -> {
+	private static final FilenameFilter PLUGIN_FILTER = (dir, name) -> {
 		if (name.contains("plugin"))
 		{
 			return true;
@@ -157,12 +156,6 @@ class PluginClassLoader extends PCGenTask
 
 	private boolean processClass(Class<?> clazz)
 	{
-		int modifiers = clazz.getModifiers();
-		if (Modifier.isInterface(modifiers) || Modifier.isAbstract(modifiers))
-		{
-			return false;
-		}
-
 		boolean loaded = false;
 		for (final Class<?> key : loaderMap.getKeySet())
 		{
@@ -228,7 +221,7 @@ class PluginClassLoader extends PCGenTask
 		{
 			return;
 		}
-		File[] pluginFiles = pluginDir.listFiles(PluginClassLoader.pluginFilter);
+		File[] pluginFiles = pluginDir.listFiles(PluginClassLoader.PLUGIN_FILTER);
 		for (final File file : pluginFiles)
 		{
 			if (file.isDirectory())

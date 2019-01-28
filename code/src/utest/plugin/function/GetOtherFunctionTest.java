@@ -17,9 +17,13 @@
  */
 package plugin.function;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+import static plugin.function.testsupport.TestUtilities.doParse;
 
-import junit.framework.TestCase;
+import java.util.Optional;
+
 import pcgen.base.formatmanager.FormatUtilities;
 import pcgen.base.formatmanager.SimpleFormatManagerLibrary;
 import pcgen.base.formula.base.FormulaSemantics;
@@ -36,8 +40,13 @@ import pcgen.base.formula.visitor.SemanticsVisitor;
 import pcgen.cdom.formula.ManagerKey;
 import pcgen.cdom.formula.scope.GlobalScope;
 import pcgen.core.Skill;
+import pcgen.rules.context.AbstractReferenceContext;
 import pcgen.rules.context.VariableContext;
 import plugin.function.testsupport.AbstractFormulaTestCase;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import util.FormatSupport;
 
 /**
  * Test getOther() function in the new formula system
@@ -45,12 +54,16 @@ import plugin.function.testsupport.AbstractFormulaTestCase;
 public class GetOtherFunctionTest extends AbstractFormulaTestCase
 {
 
+	@BeforeEach
 	@Override
-	protected void setUp() throws Exception
+	public void setUp() throws Exception
 	{
 		super.setUp();
 		SimpleFormatManagerLibrary formatLibrary = new SimpleFormatManagerLibrary();
 		FormatUtilities.loadDefaultFormats(formatLibrary);
+		AbstractReferenceContext refContext = context.getReferenceContext();
+		refContext.constructNowIfNecessary(Skill.class, "NONE");
+		FormatSupport.addNoneAsDefault(context, refContext.getManufacturer(Skill.class));
 		getFunctionLibrary().addFunction(new GetOtherFunction());
 		getOperatorLibrary().addAction(new NumberMinus());
 	}
@@ -59,37 +72,30 @@ public class GetOtherFunctionTest extends AbstractFormulaTestCase
 	public void testInvalidWrongArg()
 	{
 		String formula = "getOther(\"PC.SKILL\")";
-		SimpleNode node = TestUtilities.doParse(formula);
-		isNotValid(formula, node, numberManager, null);
+		SimpleNode node = doParse(formula);
+		isNotValid(formula, node);
 		String s = "getOther(\"PC.SKILL\", \"Foo\", 4, 5)";
-		SimpleNode simpleNode = TestUtilities.doParse(s);
-		isNotValid(s, simpleNode, numberManager, null);
+		SimpleNode simpleNode = doParse(s);
+		isNotValid(s, simpleNode);
 	}
 
 	@Test
 	public void testInvalidWrongFormat1()
 	{
 		String formula = "getOther(3,\"SkillKey\",3)";
-		SimpleNode node = TestUtilities.doParse(formula);
-		isNotValid(formula, node, numberManager, null);
+		SimpleNode node = doParse(formula);
+		isNotValid(formula, node);
 	}
 
 	@Test
 	public void testInvalidWrongFormat2()
 	{
 		String formula = "getOther(\"PC.SKILL\",3,3)";
-		SimpleNode node = TestUtilities.doParse(formula);
+		SimpleNode node = doParse(formula);
 		SemanticsVisitor semanticsVisitor = new SemanticsVisitor();
 		FormulaSemantics semantics = generateFormulaSemantics(null);
-		try
-		{
-			semanticsVisitor.visit(node, semantics.getWith(ManagerKey.CONTEXT, context));
-			TestCase.fail("Expected Invalid Formula: " + formula + " but was valid");
-		}
-		catch (SemanticsFailureException e)
-		{
-			//Expected
-		}
+		assertThrows(SemanticsFailureException.class,
+				() -> semanticsVisitor.visit(node, semantics.getWith(ManagerKey.CONTEXT, context)));
 	}
 
 	@Test
@@ -97,21 +103,14 @@ public class GetOtherFunctionTest extends AbstractFormulaTestCase
 	{
 		String formula =
 				"getOther(\"PC.SKILL\", \"SkillKey\",\"Stuff\")";
-		SimpleNode node = TestUtilities.doParse(formula);
+		SimpleNode node = doParse(formula);
 		SemanticsVisitor semanticsVisitor = new SemanticsVisitor();
 		FormulaSemantics semantics = generateFormulaSemantics(null);
 		Object result = semanticsVisitor.visit(node,
 			semantics.getWith(ManagerKey.CONTEXT, context));
-		try
+		if (result instanceof Number)
 		{
-			if (result instanceof Number)
-			{
-				TestCase.fail("Expected Invalid Formula: " + formula + " but was valid");
-			}
-		}
-		catch (SemanticsFailureException e)
-		{
-			//Also okay
+			fail(() -> "Expected Invalid Formula: " + formula + " but was valid");
 		}
 	}
 
@@ -124,7 +123,7 @@ public class GetOtherFunctionTest extends AbstractFormulaTestCase
 
 		String formula =
 				"getOther(\"PC.SKILL\",\"SkillKey\",LocalVar)";
-		SimpleNode node = TestUtilities.doParse(formula);
+		SimpleNode node = doParse(formula);
 		SemanticsVisitor semanticsVisitor = new SemanticsVisitor();
 		FormulaSemantics semantics = generateFormulaSemantics(null);
 		semanticsVisitor.visit(node, semantics.getWith(ManagerKey.CONTEXT, context));
@@ -132,7 +131,7 @@ public class GetOtherFunctionTest extends AbstractFormulaTestCase
 		Skill skill = new Skill();
 		skill.setName("SkillKey");
 		ScopeInstance scopeInst =
-				getFormulaManager().getScopeInstanceFactory().get("PC.SKILL", skill);
+				getFormulaManager().getScopeInstanceFactory().get("PC.SKILL", Optional.of(skill));
 		VariableID varID = vl.getVariableID(scopeInst, "LocalVar");
 		getVariableStore().put(varID, 2);
 		context.getReferenceContext().importObject(skill);
@@ -154,7 +153,7 @@ public class GetOtherFunctionTest extends AbstractFormulaTestCase
 
 		String formula =
 				"getOther(\"PC.SKILL\",SkillVar,LocalVar)";
-		SimpleNode node = TestUtilities.doParse(formula);
+		SimpleNode node = doParse(formula);
 		SemanticsVisitor semanticsVisitor = new SemanticsVisitor();
 		FormulaSemantics semantics = generateFormulaSemantics(null);
 		semanticsVisitor.visit(node, semantics.getWith(ManagerKey.CONTEXT, context));
@@ -165,10 +164,10 @@ public class GetOtherFunctionTest extends AbstractFormulaTestCase
 		skillalt.setName("SkillAlt");
 		ScopeInstanceFactory scopeInstanceFactory =
 				getFormulaManager().getScopeInstanceFactory();
-		ScopeInstance scopeInste = scopeInstanceFactory.get("PC.SKILL", skill);
+		ScopeInstance scopeInste = scopeInstanceFactory.get("PC.SKILL", Optional.of(skill));
 		VariableID varIDe = vl.getVariableID(scopeInste, "LocalVar");
 		getVariableStore().put(varIDe, 2);
-		ScopeInstance scopeInsta = scopeInstanceFactory.get("PC.SKILL", skillalt);
+		ScopeInstance scopeInsta = scopeInstanceFactory.get("PC.SKILL", Optional.of(skillalt));
 		VariableID varIDa = vl.getVariableID(scopeInsta, "LocalVar");
 		getVariableStore().put(varIDa, 3);
 		ScopeInstance globalInst =

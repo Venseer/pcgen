@@ -17,14 +17,17 @@
  */
 package pcgen.output.model;
 
-import freemarker.template.TemplateHashModel;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import java.util.Objects;
+
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.enumeration.PCStringKey;
 import pcgen.cdom.facet.FacetLibrary;
 import pcgen.cdom.facet.ObjectWrapperFacet;
 import pcgen.cdom.facet.fact.FactFacet;
+
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 
 /**
  * An FactFacetModel wraps a FactFacet and serves as a TemplateHashModel for
@@ -59,14 +62,8 @@ public class FactFacetModel implements TemplateHashModel
 	 */
 	public FactFacetModel(CharID id, FactFacet facet)
 	{
-		if (id == null)
-		{
-			throw new IllegalArgumentException("CharID may not be null");
-		}
-		if (facet == null)
-		{
-			throw new IllegalArgumentException("FactFacet may not be null");
-		}
+		Objects.requireNonNull(id, "CharID may not be null");
+		Objects.requireNonNull(facet, "FactFacet may not be null");
 		this.id = id;
 		this.facet = facet;
 	}

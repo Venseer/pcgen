@@ -18,10 +18,8 @@
 package pcgen.output.model;
 
 import java.text.MessageFormat;
+import java.util.Objects;
 
-import freemarker.template.TemplateHashModel;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
 import pcgen.base.lang.CaseInsensitiveString;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.CharID;
@@ -30,6 +28,10 @@ import pcgen.cdom.facet.FacetLibrary;
 import pcgen.cdom.facet.ObjectWrapperFacet;
 import pcgen.cdom.helper.InfoUtilities;
 import pcgen.util.Logging;
+
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 
 /**
  * A InfoModel is a TemplateHashModel that wraps the Info data in a CDOMObject
@@ -57,22 +59,14 @@ public class InfoModel implements TemplateHashModel
 	 */
 	public InfoModel(CharID id, CDOMObject cdo)
 	{
-		if (id == null)
-		{
-			throw new IllegalArgumentException("CharID cannot be null");
-		}
-		if (cdo == null)
-		{
-			throw new IllegalArgumentException("CDOMObject cannot be null");
-		}
+		Objects.requireNonNull(id, "CharID cannot be null");
+		Objects.requireNonNull(cdo, "CDOMObject cannot be null");
 		this.id = id;
 		this.cdo = cdo;
 	}
 
 	/**
 	 * Acts as a hash for producing the contents of this model.
-	 * 
-	 * @see freemarker.template.TemplateHashModel#get(java.lang.String)
 	 */
 	@Override
 	public TemplateModel get(String key) throws TemplateModelException

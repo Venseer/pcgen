@@ -18,8 +18,6 @@
 
 package pcgen.core.prereq;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.ObjectKey;
@@ -32,20 +30,11 @@ import plugin.lsttokens.testsupport.BuildUtilities;
 import plugin.pretokens.parser.PreAbilityParser;
 
 /**
- * <code>PreAbilityTest</code> verifies the function of the 
+ * {@code PreAbilityTest} verifies the function of the
  * PreAbilityTester. 
  */
 public class PreAbilityTest extends AbstractCharacterTestCase
 {
-
-	/**
-	 * @return Test
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(PreAbilityTest.class);
-	}
-
 	/**
 	 * Test the function of the ANY key.
 	 *

@@ -52,7 +52,7 @@ import pcgen.system.LanguageBundle;
 @SuppressWarnings("serial")
 public class HouseRulesPanel extends PCGenPrefsPanel
 {
-	private static final String in_houseRules = LanguageBundle.getString("in_Prefs_houseRules");
+	private static final String IN_HOUSE_RULES = LanguageBundle.getString("in_Prefs_houseRules");
 	private final Collection<RuleCheck> ruleCheckList;
 
 	private static final String HOUSE_RULE_STR = "{0} ({1})";
@@ -72,7 +72,7 @@ public class HouseRulesPanel extends PCGenPrefsPanel
 		GridBagConstraints c = new GridBagConstraints();
 		JLabel label;
 		Border etched = null;
-		TitledBorder title1 = BorderFactory.createTitledBorder(etched, in_houseRules);
+		TitledBorder title1 = BorderFactory.createTitledBorder(etched, IN_HOUSE_RULES);
 
 		title1.setTitleJustification(TitledBorder.LEFT);
 		mainPanel.setBorder(title1);
@@ -268,18 +268,12 @@ public class HouseRulesPanel extends PCGenPrefsPanel
 		}
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#getTitle()
-	 */
 	@Override
 	public String getTitle()
 	{
-		return in_houseRules;
+		return IN_HOUSE_RULES;
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#setOptionsBasedOnControls()
-	 */
 	@Override
 	public void setOptionsBasedOnControls()
 	{
@@ -318,9 +312,6 @@ public class HouseRulesPanel extends PCGenPrefsPanel
 		}
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#applyOptionValuesToControls()
-	 */
 	@Override
 	public void applyOptionValuesToControls()
 	{

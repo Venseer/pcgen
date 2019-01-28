@@ -4,10 +4,9 @@
  */
 package pcgen;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
-import pcgen.base.calculation.FormulaModifier;
-import pcgen.base.util.FormatManager;
 import pcgen.cdom.base.FormulaFactory;
 import pcgen.cdom.base.UserSelection;
 import pcgen.cdom.content.CNAbility;
@@ -17,34 +16,39 @@ import pcgen.cdom.enumeration.FormulaKey;
 import pcgen.cdom.enumeration.Nature;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.enumeration.VariableKey;
-import pcgen.cdom.formula.local.ModifierDecoration;
 import pcgen.cdom.helper.CNAbilitySelection;
+import pcgen.cdom.util.CControl;
 import pcgen.core.Ability;
 import pcgen.core.AbilityCategory;
 import pcgen.core.GameMode;
 import pcgen.core.Globals;
 import pcgen.core.Language;
+import pcgen.core.LevelInfo;
 import pcgen.core.PCAlignment;
 import pcgen.core.PCClass;
 import pcgen.core.PCStat;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.SettingsHandler;
 import pcgen.core.SizeAdjustment;
+import pcgen.core.SystemCollections;
+import pcgen.core.system.LoadInfo;
 import pcgen.persistence.GameModeFileLoader;
 import pcgen.persistence.SourceFileLoader;
 import pcgen.rules.context.AbstractReferenceContext;
 import pcgen.rules.context.LoadContext;
-import pcgen.rules.persistence.TokenLibrary;
-import pcgen.rules.persistence.token.ModifierFactory;
 import pcgen.util.TestHelper;
 import plugin.lsttokens.testsupport.BuildUtilities;
+
+import junit.framework.TestCase;
+import org.junit.Assert;
+import util.FormatSupport;
 
 /**
  * This is an abstract TestClass designed to be able to create a PlayerCharacter
  * Object.
  */
 @SuppressWarnings("nls")
-public abstract class AbstractCharacterTestCase extends PCGenTestCase
+public abstract class AbstractCharacterTestCase extends TestCase
 {
 	private PlayerCharacter character = null;
 	protected PCStat str;
@@ -70,6 +74,7 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 	protected SizeAdjustment tiny;
 	protected SizeAdjustment diminutive;
 	protected SizeAdjustment fine;
+	private LoadContext context;
 
 	/**
 	 * Sets up the absolute minimum amount of data to create a PlayerCharacter
@@ -80,15 +85,34 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 	protected void setUp() throws Exception
 	{
 		super.setUp();
+		final GameMode gamemode = new GameMode("3.5");
+		gamemode.setBonusFeatLevels("3|3");
+		ControlTestSupport.enableFeature(gamemode.getModeContext(), CControl.ALIGNMENTFEATURE);
+		gamemode.addLevelInfo("Normal", new LevelInfo());
+		gamemode.addXPTableName("Normal");
+		gamemode.setDefaultXPTableName("Normal");
+		gamemode.clearLoadContext();
+		LoadInfo loadable =
+				gamemode.getModeContext().getReferenceContext().constructNowIfNecessary(
+						LoadInfo.class, gamemode.getName());
+		loadable.addLoadScoreValue(0, BigDecimal.ONE);
+		GameModeFileLoader.addDefaultTabInfo(gamemode);
+		SystemCollections.addToGameModeList(gamemode);
+		SettingsHandler.setGame("3.5");
 		TestHelper.loadPlugins();
 
 		Globals.setUseGUI(false);
 		Globals.emptyLists();
-		final GameMode gamemode = SettingsHandler.getGame();
-		LoadContext context = Globals.getContext();
+
+		context = Globals.getContext();
 		BuildUtilities.buildUnselectedRace(context);
+		AbstractReferenceContext ref = context.getReferenceContext();
+		ref.importObject(BuildUtilities.createAlignment("None", "NONE"));
 		
-		SourceFileLoader.defineBuiltinVariables(gamemode, context);
+		FormatSupport.addBasicDefaults(context);
+		FormatSupport.addNoneAsDefault(context,
+			context.getReferenceContext().getManufacturer(PCAlignment.class));
+		SourceFileLoader.defineBuiltinVariables(context);
 		str = BuildUtilities.createStat("Strength", "STR", "A");
 		str.put(VariableKey.getConstant("LOADSCORE"),
 				FormulaFactory.getFormulaFor("STRSCORE"));
@@ -126,7 +150,6 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 		gamemode.setBonusFeatLevels("3|3");
 		SettingsHandler.setGame("3.5");
 
-		AbstractReferenceContext ref = context.getReferenceContext();
 		lg = BuildUtilities.createAlignment("Lawful Good", "LG");
 		ref.importObject(lg);
 		ln = BuildUtilities.createAlignment("Lawful Neutral", "LN");
@@ -145,7 +168,6 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 		ref.importObject(cn);
 		ce = BuildUtilities.createAlignment("Chaotic Evil", "CE");
 		ref.importObject(ce);
-		ref.importObject(BuildUtilities.createAlignment("None", "NONE"));
 		ref.importObject(BuildUtilities.createAlignment("Deity's", "Deity"));
 
 		GameModeFileLoader.addDefaultWieldCategories(context);
@@ -177,64 +199,39 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 		colossal = BuildUtilities.createSize("Colossal", 8);
 
 		SourceFileLoader.createLangBonusObject(context);
-		FormatManager<?> fmtManager = ref.getFormatManager("ALIGNMENT");
-		proc(context, fmtManager);
 		GameModeFileLoader.addDefaultUnitSet(SettingsHandler.getGame());
 		SettingsHandler.getGame().selectDefaultUnitSet();
 		ref.importObject(BuildUtilities.getFeatCat());
-		additionalSetUp();
-		context.getReferenceContext().buildDerivedObjects();
-		context.resolveDeferredTokens();
-		assertTrue(ref.resolveReferences(null));
-		context.loadCampaignFacets();
+		defaultSetupEnd();
+	}
 
+	protected void defaultSetupEnd()
+	{
+		finishLoad();
+	}
+
+	protected void finishLoad()
+	{
+		context.commit();
+		AbstractReferenceContext ref = context.getReferenceContext();
+		SourceFileLoader.processFactDefinitions(context);
+		context.resolveDeferredTokens();
+		ref.buildDeferredObjects();
+		ref.buildDerivedObjects();
+		Assert.assertTrue(ref.validate(null));
+		Assert.assertTrue(ref.resolveReferences(null));
+		context.resolvePostDeferredTokens();
+		context.loadCampaignFacets();
 		character = new PlayerCharacter();
 	}
 
-	private <T> void proc(LoadContext context, FormatManager<T> fmtManager)
-	{
-		Class<T> cl = fmtManager.getManagedClass();
-		ModifierFactory<T> m = TokenLibrary.getModifier(cl, "SET");
-		FormulaModifier<T> defaultModifier = m.getFixedModifier(fmtManager, "NONE");
-		context.getVariableContext().addDefault(cl,
-			new ModifierDecoration<>(defaultModifier));
-	}
 
-	protected void additionalSetUp() throws Exception
-	{
-		//override to provide info
-	}
-
-	/**
-	 * Constructs a new {@code AbstractCharacterTestCase}.
-	 *
-	 * @see pcgen.PCGenTestCase#PCGenTestCase()
-	 */
-	public AbstractCharacterTestCase()
-	{
-	}
-
-	/**
-	 * Constructs a new {@code AbstractCharacterTestCase} with the given
-	 * <var>name</var>.
-	 *
-	 * @param name the test case name
-	 *
-	 * @see pcgen.PCGenTestCase#PCGenTestCase(String)
-	 */
-	public AbstractCharacterTestCase(final String name)
-	{
-		super(name);
-	}
-
-	/**
-	 * @see junit.framework.TestCase#tearDown()
-	 */
 	@Override
 	protected void tearDown() throws Exception
 	{
 		character = null;
-		super.tearDown();
+		context = null;
+		SystemCollections.clearGameModeList();
 	}
 
 	/**
@@ -279,20 +276,14 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 	 * @return <tt>true</tt> if the character has the ability with the
 	 *         criteria specified.
 	 */
-	public boolean hasAbility(PlayerCharacter pc,
-		final AbilityCategory aCategory, final Nature anAbilityType,
-		final Ability anAbility)
+	protected boolean hasAbility(PlayerCharacter pc,
+	                             final AbilityCategory aCategory, final Nature anAbilityType,
+	                             final Ability anAbility)
 	{
 		Collection<CNAbility> cnabilities = pc.getCNAbilities(aCategory, anAbilityType);
-		for (CNAbility cna : cnabilities)
-		{
-			Ability a = cna.getAbility();
-			if (a.getKeyName().equals(anAbility.getKeyName()))
-			{
-				return true;
-			}
-		}
-		return false;
+		return cnabilities.stream()
+		                  .map(CNAbility::getAbility)
+		                  .anyMatch(a -> a.getKeyName().equals(anAbility.getKeyName()));
 	}
 
 	public static CNAbility applyAbility(PlayerCharacter character,
@@ -300,7 +291,7 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 	{
 		if (a.getCDOMCategory() == null)
 		{
-			fail("Attempt to apply an Ability " + a.getKeyName()
+			Assert.fail("Attempt to apply an Ability " + a.getKeyName()
 				+ " that never received a Category");
 		}
 		CNAbility cna = CNAbilityFactory.getCNAbility(cat, Nature.NORMAL, a);
@@ -314,7 +305,7 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 	{
 		if (a.getSafe(ObjectKey.MULTIPLE_ALLOWED))
 		{
-			fail("addAbility takes Mult:NO Abilities");
+			Assert.fail("addAbility takes Mult:NO Abilities");
 		}
 		applyAbility(character, cat, a, null);
 	}
@@ -323,7 +314,7 @@ public abstract class AbstractCharacterTestCase extends PCGenTestCase
 	{
 		if (a.getSafe(ObjectKey.MULTIPLE_ALLOWED))
 		{
-			fail("addAbility takes Mult:NO Abilities");
+			Assert.fail("addAbility takes Mult:NO Abilities");
 		}
 		CNAbility cna = CNAbilityFactory.getCNAbility(cat, Nature.NORMAL, a);
 		character.removeAbility(new CNAbilitySelection(cna, null),

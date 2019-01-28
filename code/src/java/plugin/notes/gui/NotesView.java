@@ -95,8 +95,6 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
-import org.apache.commons.io.FileUtils;
-
 import gmgen.GMGenSystem;
 import gmgen.GMGenSystemView;
 import gmgen.gui.ExtendedHTMLDocument;
@@ -112,6 +110,8 @@ import pcgen.gui2.tools.Icons;
 import pcgen.system.LanguageBundle;
 import pcgen.util.Logging;
 import plugin.notes.NotesPlugin;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  *  This class is the main view for the Notes Plugin. Mostof the work is done
@@ -1299,7 +1299,7 @@ public class NotesView extends JPanel
 		formatBar.add(underlineButton);
 
 		colorButton.setForeground(java.awt.SystemColor.text);
-		colorButton.setIcon(Icons.createImageIcon("menu-mode-RGB-alt.png"));
+		colorButton.setIcon(Icons.menu_mode_rgb.getImageIcon());
 		colorButton.setToolTipText("Color");
 		colorButton.setBorder(new EtchedBorder());
 		colorButton.addActionListener(new java.awt.event.ActionListener()

@@ -17,11 +17,12 @@
  */
 package pcgen.cdom.content.fact;
 
+import java.util.Objects;
+
 import pcgen.base.util.FormatManager;
 import pcgen.base.util.ObjectContainer;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.GroupDefinition;
-import pcgen.cdom.base.Loadable;
 import pcgen.cdom.enumeration.GroupingState;
 import pcgen.cdom.grouping.GroupingCollection;
 import pcgen.cdom.grouping.GroupingDefinition;
@@ -61,10 +62,7 @@ public class FactGroupDefinition<T extends CDOMObject, F> implements GroupDefini
 	 */
 	public FactGroupDefinition(FactInfo<T, F> fi)
 	{
-		if (fi == null)
-		{
-			throw new IllegalArgumentException("Fact Info cannot be null");
-		}
+		Objects.requireNonNull(fi, "Fact Info cannot be null");
 		def = fi;
 	}
 
@@ -116,7 +114,7 @@ public class FactGroupDefinition<T extends CDOMObject, F> implements GroupDefini
 		FactGrouping<T, F> groupGrouping = new FactGrouping<>(def, info);
 		if (info.hasChild())
 		{
-			GroupingCollection<? extends Loadable> childCollection =
+			GroupingCollection<?> childCollection =
 					ChoiceSetLoadUtilities.getDynamicGroup(context, info.getChild());
 			groupGrouping.setChild(childCollection);
 		}

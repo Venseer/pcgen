@@ -17,7 +17,7 @@
  */
 package pcgen.util.chooser;
 
-import java.util.Stack;
+import java.util.Optional;
 
 import pcgen.facade.core.UIDelegate;
 
@@ -26,17 +26,14 @@ import pcgen.facade.core.UIDelegate;
  * to reduce the core/gui interdependence. Much more work is needed on this...
  * Currently only a SwingChooser has been implemented.
  */
+@Deprecated()
 public final class ChooserFactory
 {
 	private static UIDelegate delegate;
-	private static final Stack<String> interfaceClassNameStack = new Stack<>();
+	private static  boolean useRandomChooser = false;
 
-	/**
-	 * Deliberately private so it can't be instantiated.
-	 */
 	private ChooserFactory()
 	{
-		// Empty Constructor
 	}
 
 	/**
@@ -47,50 +44,24 @@ public final class ChooserFactory
 	 * 
 	 * @return The most recently registered ChoiceHandler, if any.
 	 */
-	public static ChoiceHandler getChoiceHandler()
+	public static Optional<RandomChooser> getChoiceHandler()
 	{
-		if (interfaceClassNameStack.isEmpty())
+		if (useRandomChooser)
 		{
-			return null;
+			return Optional.of(new RandomChooser());
 		}
-		String className = interfaceClassNameStack.peek();
-		try
+		else
 		{
-			Class<?> c = Class.forName(className);
-			ChoiceHandler ci = (ChoiceHandler) c.newInstance();
-			return ci;
+			return Optional.empty();
 		}
-		catch (ClassNotFoundException | IllegalAccessException | InstantiationException e)
-		{
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	/**
-	 * Add a chooser class name to the top of the stack of class names. 
-	 * Existing chooser class names will be preserved but will not 
-	 * be used until this one is popped off the stack.
-	 * 
-	 * @param chooserClassname The chooser class name to add.  
+	 * Used by tests to use random choice.
 	 */
-	public static void pushChooserClassname(String chooserClassname)
+	public static void useRandomChooser()
 	{
-		ChooserFactory.interfaceClassNameStack.push(chooserClassname);
-	}
-
-	/**
-	 * Remove a name from the top of the stack of chooser class names. This 
-	 * will then expose the next newest class name, or empty the stack. 
-	 * @return The class name that was removed.
-	 */
-	public static String popChooserClassname()
-	{
-		if (ChooserFactory.interfaceClassNameStack.isEmpty())
-		{
-			return null;
-		}
-		return ChooserFactory.interfaceClassNameStack.pop();
+		useRandomChooser = true;
 	}
 
 	/**

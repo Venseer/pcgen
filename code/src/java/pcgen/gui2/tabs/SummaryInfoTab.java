@@ -62,20 +62,18 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import org.apache.commons.lang3.StringUtils;
-
+import pcgen.cdom.enumeration.Gender;
+import pcgen.cdom.enumeration.Handed;
+import pcgen.cdom.util.CControl;
+import pcgen.core.Deity;
 import pcgen.core.PCAlignment;
+import pcgen.core.PCClass;
+import pcgen.core.Race;
 import pcgen.facade.core.CharacterFacade;
 import pcgen.facade.core.CharacterLevelFacade;
 import pcgen.facade.core.CharacterLevelsFacade;
-import pcgen.facade.core.ClassFacade;
 import pcgen.facade.core.DataSetFacade;
-import pcgen.facade.core.DeityFacade;
-import pcgen.facade.core.GenderFacade;
-import pcgen.facade.core.HandedFacade;
 import pcgen.facade.core.InfoFacade;
-import pcgen.facade.core.RaceFacade;
-import pcgen.facade.core.SimpleFacade;
 import pcgen.facade.core.TodoFacade;
 import pcgen.facade.util.ReferenceFacade;
 import pcgen.facade.util.event.ListEvent;
@@ -100,11 +98,14 @@ import pcgen.gui2.tools.Icons;
 import pcgen.gui2.tools.Utility;
 import pcgen.gui2.util.FacadeComboBoxModel;
 import pcgen.gui2.util.FontManipulation;
+import pcgen.gui2.util.ManagedField;
 import pcgen.gui2.util.SignIcon;
 import pcgen.gui2.util.SignIcon.Sign;
 import pcgen.gui2.util.SimpleTextIcon;
 import pcgen.system.LanguageBundle;
 import pcgen.util.enumeration.Tab;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This component displays a basic summary of a character such as name,
@@ -729,12 +730,24 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 		private final LabelHandler statTotalHandler;
 		private final LabelHandler modTotalLabelHandler;
 		private final LabelHandler modTotalHandler;
-		private final TextFieldHandler charNameHandler;
-		private final TextFieldHandler playerNameHandler;
-		private final TextFieldHandler tabNameHandler;
-		private final FormattedFieldHandler ageHandler;
-		private final FormattedFieldHandler expHandler;
-		private final FormattedFieldHandler nextLevelHandler;
+		
+		/**
+		 * Field for Character Name
+		 */
+		private final ManagedField charNameHandler;
+
+		/**
+		 * Field for PlayerName
+		 */
+		private final ManagedField playerNameHandler;
+
+		/**
+		 * Field for Tab Name
+		 */
+		private final ManagedField tabNameHandler;
+		private final ManagedField ageHandler;
+		private final ManagedField expHandler;
+		private final ManagedField nextLevelHandler;
 
 		LabelAndFieldHandler(final CharacterFacade character)
 		{
@@ -858,13 +871,13 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 	private class ComboBoxModelHandler
 	{
 		private final CharacterFacade character;
-		private final CharacterComboBoxModel<GenderFacade> genderModel;
-		private final CharacterComboBoxModel<HandedFacade> handsModel;
+		private final CharacterComboBoxModel<Gender> genderModel;
+		private final CharacterComboBoxModel<Handed> handsModel;
 		private CharacterComboBoxModel<PCAlignment> alignmentModel;
-		private CharacterComboBoxModel<DeityFacade> deityModel;
-		private final DeferredCharacterComboBoxModel<RaceFacade> raceModel;
-		private final CharacterComboBoxModel<SimpleFacade> ageCatModel;
-		private final FacadeComboBoxModel<ClassFacade> classModel;
+		private CharacterComboBoxModel<Deity> deityModel;
+		private final DeferredCharacterComboBoxModel<Race> raceModel;
+		private final CharacterComboBoxModel<String> ageCatModel;
+		private final FacadeComboBoxModel<PCClass> classModel;
 		private final CharacterComboBoxModel<String> xpTableModel;
 		private final CharacterComboBoxModel<String> characterTypeModel;
 
@@ -888,26 +901,26 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 
 			//initialize gender model
 			genderModel =
-					new CharacterComboBoxModel<GenderFacade>(character.getAvailableGenders(), character.getGenderRef())
+					new CharacterComboBoxModel<Gender>(character.getAvailableGenders(), character.getGenderRef())
 					{
 
 						@Override
 						public void setSelectedItem(Object anItem)
 						{
-							character.setGender((GenderFacade) anItem);
+							character.setGender((Gender) anItem);
 						}
 
 					};
 
 			//initialize handed model
 			handsModel =
-					new CharacterComboBoxModel<HandedFacade>(character.getAvailableHands(), character.getHandedRef())
+					new CharacterComboBoxModel<Handed>(character.getAvailableHands(), character.getHandedRef())
 					{
 
 						@Override
 						public void setSelectedItem(Object anItem)
 						{
-							character.setHanded((HandedFacade) anItem);
+							character.setHanded((Handed) anItem);
 						}
 
 					};
@@ -928,42 +941,42 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 						};
 			}
 
-			if (dataset.hasDeityDomain())
+			if (character.isFeatureEnabled(CControl.DOMAINFEATURE))
 			{
 				//initialize deity model
-				deityModel = new CharacterComboBoxModel<DeityFacade>(dataset.getDeities(), character.getDeityRef())
+				deityModel = new CharacterComboBoxModel<Deity>(dataset.getDeities(), character.getDeityRef())
 				{
 
 					@Override
 					public void setSelectedItem(Object anItem)
 					{
-						character.setDeity((DeityFacade) anItem);
+						character.setDeity((Deity) anItem);
 					}
 
 				};
 			}
 
 			//initialize race model
-			raceModel = new DeferredCharacterComboBoxModel<RaceFacade>(dataset.getRaces(), character.getRaceRef())
+			raceModel = new DeferredCharacterComboBoxModel<Race>(dataset.getRaces(), character.getRaceRef())
 			{
 
 				@Override
 				public void commitSelectedItem(Object anItem)
 				{
-					character.setRace((RaceFacade) anItem);
+					character.setRace((Race) anItem);
 				}
 
 			};
 
 			//initialize age category model
-			ageCatModel = new CharacterComboBoxModel<SimpleFacade>(character.getAgeCategories(),
+			ageCatModel = new CharacterComboBoxModel<String>(character.getAgeCategories(),
 				character.getAgeCategoryRef())
 			{
 
 				@Override
 				public void setSelectedItem(Object anItem)
 				{
-					character.setAgeCategory((SimpleFacade) anItem);
+					character.setAgeCategory((String) anItem);
 				}
 
 			};
@@ -997,7 +1010,7 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 				alignmentComboBox.setModel(alignmentModel);
 				alignmentComboBox.setVisible(true);
 			}
-			boolean hasDeityDomain = character.getDataSet().hasDeityDomain();
+			boolean hasDeityDomain = character.isFeatureEnabled(CControl.DOMAINFEATURE);
 			deityComboBox.setVisible(hasDeityDomain);
 			if (hasDeityDomain)
 			{
@@ -1093,7 +1106,7 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 			boolean cellHasFocus)
 		{
 			super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			if (value instanceof ClassFacade && !character.isQualifiedFor((ClassFacade) value))
+			if (value instanceof PCClass && !character.isQualifiedFor((PCClass) value))
 			{
 				if (index == -1)
 				{// this is a hack to prevent the combobox from overwriting the text color
@@ -1247,9 +1260,6 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 			update();
 		}
 
-		/**
-		 * @see pcgen.facade.util.event.ListListener#elementsChanged(ListEvent)
-		 */
 		@Override
 		public void elementsChanged(ListEvent<CharacterLevelFacade> e)
 		{
@@ -1355,13 +1365,13 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 		@Override
 		public void actionPerformed(ActionEvent e)
 		{
-			ClassFacade c = (ClassFacade) classComboBox.getSelectedItem();
+			PCClass c = (PCClass) classComboBox.getSelectedItem();
 			if (c != null)
 			{
 				Number levels = (Number) addLevelsField.getValue();
 				if (levels.intValue() >= 0)
 				{
-					ClassFacade[] classes = new ClassFacade[levels.intValue()];
+					PCClass[] classes = new PCClass[levels.intValue()];
 					Arrays.fill(classes, c);
 					character.addCharacterLevels(classes);
 				}
@@ -1374,7 +1384,7 @@ public class SummaryInfoTab extends JPanel implements CharacterInfoTab, TodoHand
 			int maxLvl = characterLevelsFacade.getSize();
 			if (maxLvl > 0)
 			{
-				ClassFacade classTaken =
+				PCClass classTaken =
 						characterLevelsFacade.getClassTaken(characterLevelsFacade.getElementAt(maxLvl - 1));
 				classComboBox.setSelectedItem(classTaken);
 			}

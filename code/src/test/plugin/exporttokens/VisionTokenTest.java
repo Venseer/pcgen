@@ -22,8 +22,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.base.lang.UnreachableError;
 import pcgen.core.Campaign;
@@ -37,7 +35,7 @@ import pcgen.persistence.lst.GenericLoader;
 import pcgen.rules.context.LoadContext;
 
 /**
- * <code>VisionTokenTest</code> tests the function of the VISION token.  
+ * {@code VisionTokenTest} tests the function of the VISION token.
  */
 public class VisionTokenTest extends AbstractCharacterTestCase
 {
@@ -46,18 +44,6 @@ public class VisionTokenTest extends AbstractCharacterTestCase
 	private PCTemplate astralT;
 	private UnitSet metricUS;
 
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(VisionTokenTest.class);
-	}
-
-	/*
-	 * @see TestCase#setUp()
-	 */
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -105,9 +91,6 @@ public class VisionTokenTest extends AbstractCharacterTestCase
 		SettingsHandler.getGame().getModeContext().getReferenceContext().importObject(metricUS);
 	}
 
-	/*
-	 * @see TestCase#tearDown()
-	 */
 	@Override
 	protected void tearDown() throws Exception
 	{

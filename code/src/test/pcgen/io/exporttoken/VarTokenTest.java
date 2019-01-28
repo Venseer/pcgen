@@ -17,8 +17,6 @@
  */
 package pcgen.io.exporttoken;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.base.FormulaFactory;
 import pcgen.cdom.enumeration.VariableKey;
@@ -27,24 +25,11 @@ import pcgen.core.PlayerCharacter;
 import plugin.exporttokens.VarToken;
 
 /**
- * <code>VarTokenTest</code> tests the functioning of the VAR 
+ * {@code VarTokenTest} tests the functioning of the VAR
  * token processing code. 
  */
 public class VarTokenTest extends AbstractCharacterTestCase
 {
-
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(VarTokenTest.class);
-	}
-
-	/*
-	 * @see TestCase#setUp()
-	 */
     @Override
 	protected void setUp() throws Exception
 	{

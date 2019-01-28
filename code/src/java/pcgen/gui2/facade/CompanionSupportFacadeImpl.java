@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.list.CompanionList;
 import pcgen.core.FollowerOption;
@@ -38,7 +36,6 @@ import pcgen.facade.core.CompanionFacade;
 import pcgen.facade.core.CompanionStubFacade;
 import pcgen.facade.core.CompanionSupportFacade;
 import pcgen.facade.core.PartyFacade;
-import pcgen.facade.core.RaceFacade;
 import pcgen.facade.util.DefaultListFacade;
 import pcgen.facade.util.DefaultMapFacade;
 import pcgen.facade.util.ListFacade;
@@ -51,6 +48,8 @@ import pcgen.facade.util.event.ReferenceListener;
 import pcgen.system.CharacterManager;
 import pcgen.util.Logging;
 import pcgen.util.enumeration.Tab;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class implements the basic CompanionSupportFacade
@@ -265,7 +264,7 @@ public class CompanionSupportFacadeImpl implements CompanionSupportFacade, ListL
 
 		CharacterFacadeImpl compFacadeImpl = (CharacterFacadeImpl) companion;
 		CompanionList compList = keyToCompanionListMap.get(companionType);
-		Race compRace = (Race) compFacadeImpl.getRaceRef().get();
+		Race compRace = compFacadeImpl.getRaceRef().get();
 		FollowerOption followerOpt = getFollowerOpt(compList, compRace);
 		if (followerOpt == null)
 		{
@@ -363,7 +362,7 @@ public class CompanionSupportFacadeImpl implements CompanionSupportFacade, ListL
 		{
 			File file = delegate.getFileRef().get();
 			String name = delegate.getNameRef().get();
-			RaceFacade race = delegate.getRaceRef().get();
+			Race race = delegate.getRaceRef().get();
 			if (file.equals(character.getFileRef().get()) && name.equals(character.getNameRef().get())
 				&& (race == null || race.equals(character.getRaceRef().get())))
 			{
@@ -377,7 +376,7 @@ public class CompanionSupportFacadeImpl implements CompanionSupportFacade, ListL
 				{
 					CompanionList compList = keyToCompanionListMap.get(companionType);
 					final Follower newMaster = new Follower(charDisplay.getFileName(), charDisplay.getName(), compList);
-					FollowerOption followerOpt = getFollowerOpt(compList, (Race) character.getRaceRef().get());
+					FollowerOption followerOpt = getFollowerOpt(compList, character.getRaceRef().get());
 					if (followerOpt != null)
 					{
 						newMaster.setAdjustment(followerOpt.getAdjustment());

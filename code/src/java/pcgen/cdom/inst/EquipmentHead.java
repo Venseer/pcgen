@@ -17,6 +17,9 @@
  */
 package pcgen.cdom.inst;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import pcgen.base.formula.base.VarScoped;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.CharID;
@@ -61,10 +64,7 @@ public final class EquipmentHead extends CDOMObject
 	 */
 	public EquipmentHead(VarScoped source, int idx)
 	{
-		if (source == null)
-		{
-			throw new IllegalArgumentException("Source for EquipmentHead cannot be null");
-		}
+		Objects.requireNonNull(source, "Source for EquipmentHead cannot be null");
 		index = idx;
 		headSource = source;
 	}
@@ -79,11 +79,6 @@ public final class EquipmentHead extends CDOMObject
 		return index;
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this EquipmentHead
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
@@ -95,13 +90,6 @@ public final class EquipmentHead extends CDOMObject
 		return headSource;
 	}
 
-	/**
-	 * Returns true if this EquipmentHead is equal to the given Object. Equality
-	 * is defined as being another EquipmentHead object with equal CDOM
-	 * characteristics
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -117,11 +105,6 @@ public final class EquipmentHead extends CDOMObject
 		return other.index == index && other.headSource.equals(headSource);
 	}
 
-	/**
-	 * Returns true if the EquipmentHead is of the given Type; false otherwise.
-	 * 
-	 * @see pcgen.cdom.base.CDOMObject#isType(java.lang.String)
-	 */
 	@Override
 	public boolean isType(String type)
 	{
@@ -129,15 +112,15 @@ public final class EquipmentHead extends CDOMObject
 	}
 
 	@Override
-	public String getLocalScopeName()
+	public Optional<String> getLocalScopeName()
 	{
-		return EquipmentPartScope.PC_EQUIPMENT_PART;
+		return Optional.of(EquipmentPartScope.PC_EQUIPMENT_PART);
 	}
 
 	@Override
-	public VarScoped getVariableParent()
+	public Optional<VarScoped> getVariableParent()
 	{
-		return headSource;
+		return Optional.of(headSource);
 	}
 
 	public Object getLocalVariable(CharID id, String varName)

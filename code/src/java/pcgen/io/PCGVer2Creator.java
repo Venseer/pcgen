@@ -25,13 +25,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-
-import org.apache.commons.lang3.StringUtils;
 
 import pcgen.base.lang.StringUtil;
 import pcgen.cdom.base.CDOMList;
@@ -56,10 +55,12 @@ import pcgen.cdom.helper.ClassSource;
 import pcgen.cdom.inst.PCClassLevel;
 import pcgen.cdom.list.ClassSpellList;
 import pcgen.cdom.reference.CDOMSingleRef;
+import pcgen.cdom.util.CControl;
 import pcgen.core.Ability;
 import pcgen.core.AbilityCategory;
 import pcgen.core.BonusManager;
 import pcgen.core.BonusManager.TempBonusInfo;
+import pcgen.core.Campaign;
 import pcgen.core.ChronicleEntry;
 import pcgen.core.Deity;
 import pcgen.core.Description;
@@ -92,11 +93,14 @@ import pcgen.core.display.CharacterDisplay;
 import pcgen.core.pclevelinfo.PCLevelInfo;
 import pcgen.core.pclevelinfo.PCLevelInfoStat;
 import pcgen.core.spell.Spell;
-import pcgen.facade.core.CampaignFacade;
+import pcgen.output.channel.compat.AlignmentCompat;
+import pcgen.output.channel.compat.HandedCompat;
 import pcgen.system.PCGenPropBundle;
 import pcgen.util.FileHelper;
 import pcgen.util.Logging;
 import pcgen.util.StringPClassUtil;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@code PCGVer2Creator}<br>
@@ -123,13 +127,13 @@ public final class PCGVer2Creator
 	private final PlayerCharacter thePC;
 	private final CharacterDisplay charDisplay;
 	private GameMode mode;
-	private List<? extends CampaignFacade> campaigns;
+	private List<? extends Campaign> campaigns;
 
 	/**
 	 * Constructor
 	 * @param aPC
 	 */
-	public PCGVer2Creator(final PlayerCharacter aPC, GameMode mode, List<? extends CampaignFacade> campaigns)
+	public PCGVer2Creator(final PlayerCharacter aPC, GameMode mode, List<? extends Campaign> campaigns)
 	{
 		thePC = aPC;
 		charDisplay = aPC.getDisplay();
@@ -482,7 +486,7 @@ public final class PCGVer2Creator
 		if (campaigns != null)
 		{
 			String del = Constants.EMPTY_STRING;
-			for (CampaignFacade campaign : campaigns)
+			for (Campaign campaign : campaigns)
 			{
 				buffer.append(del);
 				buffer.append(IOConstants.TAG_CAMPAIGN).append(':');
@@ -637,10 +641,11 @@ public final class PCGVer2Creator
 		//
 		// Only save alignment if game mode supports it
 		//
-		if (!Globals.getGameModeAlignmentText().isEmpty() && charDisplay.getPCAlignment() != null)
+		PCAlignment pcAlignment = AlignmentCompat.getCurrentAlignment(thePC.getCharID());
+		if (thePC.isFeatureEnabled(CControl.ALIGNMENTFEATURE) && pcAlignment != null)
 		{
 			buffer.append(IOConstants.TAG_ALIGNMENT).append(':');
-			buffer.append(charDisplay.getPCAlignment().getKeyName());
+			buffer.append(pcAlignment.getKeyName());
 			buffer.append(IOConstants.LINE_SEP);
 		}
 	}
@@ -1346,7 +1351,7 @@ public final class PCGVer2Creator
 
 		Collection<CNAbilitySelection> virtSave = thePC.getSaveAbilities();
 
-		categories.sort((a, b) -> a.getKeyName().compareTo(b.getKeyName()));
+		categories.sort(Comparator.comparing(AbilityCategory::getKeyName));
 
 		for (final AbilityCategory cat : categories)
 		{
@@ -1491,7 +1496,7 @@ public final class PCGVer2Creator
 	private void appendGenderLine(StringBuilder buffer)
 	{
 		buffer.append(IOConstants.TAG_GENDER).append(':');
-		buffer.append(EntityEncoder.encode(charDisplay.getGenderObject().name()));
+		buffer.append(EntityEncoder.encode(thePC.getGenderObject().name()));
 		buffer.append(IOConstants.LINE_SEP);
 	}
 
@@ -1512,7 +1517,7 @@ public final class PCGVer2Creator
 	private void appendHandedLine(StringBuilder buffer)
 	{
 		buffer.append(IOConstants.TAG_HANDED).append(':');
-		buffer.append(EntityEncoder.encode(charDisplay.getHandedObject().name()));
+		buffer.append(EntityEncoder.encode(HandedCompat.getCurrentHandedness(thePC.getCharID()).name()));
 		buffer.append(IOConstants.LINE_SEP);
 	}
 
@@ -1918,7 +1923,7 @@ public final class PCGVer2Creator
 	private void appendExperienceLine(StringBuilder buffer)
 	{
 		buffer.append(IOConstants.TAG_EXPERIENCE).append(':');
-		buffer.append(charDisplay.getXP());
+		buffer.append(thePC.getXP());
 		buffer.append(IOConstants.LINE_SEP);
 	}
 

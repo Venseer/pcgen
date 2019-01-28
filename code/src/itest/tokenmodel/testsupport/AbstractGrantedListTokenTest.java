@@ -17,8 +17,6 @@
  */
 package tokenmodel.testsupport;
 
-import org.junit.Test;
-
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.list.CompanionList;
 import pcgen.core.Campaign;
@@ -27,7 +25,9 @@ import pcgen.core.EquipmentModifier;
 import pcgen.core.PCCheck;
 import pcgen.core.PCStat;
 import pcgen.core.character.CompanionMod;
-import pcgen.output.channel.ChannelCompatibility;
+import pcgen.output.channel.compat.AlignmentCompat;
+
+import org.junit.Test;
 
 public abstract class AbstractGrantedListTokenTest<T extends CDOMObject>
 		extends AbstractAddListTokenTest<T>
@@ -38,10 +38,10 @@ public abstract class AbstractGrantedListTokenTest<T extends CDOMObject>
 		T granted = createGrantedObject();
 		processToken(lg);
 		assertEquals(0, getCount());
-		ChannelCompatibility.setCurrentAlignment(pc.getCharID(), lg);
+		AlignmentCompat.setCurrentAlignment(pc.getCharID(), lg);
 		assertTrue(containsExpected(granted));
 		assertEquals(1, getCount());
-		ChannelCompatibility.setCurrentAlignment(pc.getCharID(), ng);
+		AlignmentCompat.setCurrentAlignment(pc.getCharID(), ng);
 		assertEquals(0, getCount());
 		assertTrue(cleanedSideEffects());
 	}

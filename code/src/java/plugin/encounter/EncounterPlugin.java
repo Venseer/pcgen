@@ -213,7 +213,6 @@ public class EncounterPlugin extends MouseAdapter implements InteractivePlugin, 
 	/**
 	 * Calls the appropriate methods depending on the source of the event.
 	 * @param e the source of the event from the GUI.
-	 * @see ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e)
@@ -333,11 +332,10 @@ public class EncounterPlugin extends MouseAdapter implements InteractivePlugin, 
 	{
 		if (!theView.getEncounterCreatures().isSelectionEmpty())
 		{
-			Object[] values = theView.getEncounterCreatures().getSelectedValues();
-
-			for (int i = 0; i < values.length; i++)
+			List values = theView.getEncounterCreatures().getSelectedValuesList();
+			for (Object value : values)
 			{
-				theModel.removeElement(values[i]);
+				theModel.removeElement(value);
 			}
 
 			updateUI();
@@ -413,7 +411,6 @@ public class EncounterPlugin extends MouseAdapter implements InteractivePlugin, 
 	/**
 	 * Enables or disables items on the GUI depending on the state of the
 	 * model.
-	 * @see ItemListener#itemStateChanged(ItemEvent)
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e)

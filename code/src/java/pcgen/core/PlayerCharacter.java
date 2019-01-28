@@ -30,11 +30,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-
-import org.jetbrains.annotations.TestOnly;
 
 import pcgen.base.formula.Formula;
 import pcgen.base.formula.base.FormulaManager;
@@ -69,7 +69,6 @@ import pcgen.cdom.enumeration.EquipmentLocation;
 import pcgen.cdom.enumeration.FactKey;
 import pcgen.cdom.enumeration.FormulaKey;
 import pcgen.cdom.enumeration.Gender;
-import pcgen.cdom.enumeration.Handed;
 import pcgen.cdom.enumeration.IntegerKey;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.MapKey;
@@ -169,7 +168,6 @@ import pcgen.cdom.facet.fact.FactFacet;
 import pcgen.cdom.facet.fact.FollowerFacet;
 import pcgen.cdom.facet.fact.GenderFacet;
 import pcgen.cdom.facet.fact.GoldFacet;
-import pcgen.cdom.facet.fact.HandedFacet;
 import pcgen.cdom.facet.fact.HeightFacet;
 import pcgen.cdom.facet.fact.IgnoreCostFacet;
 import pcgen.cdom.facet.fact.PortraitThumbnailRectFacet;
@@ -264,7 +262,8 @@ import pcgen.core.utils.MessageType;
 import pcgen.core.utils.ShowMessageDelegate;
 import pcgen.io.PCGFile;
 import pcgen.io.exporttoken.EqToken;
-import pcgen.output.channel.ChannelCompatibility;
+import pcgen.output.channel.ChannelUtilities;
+import pcgen.output.channel.compat.AlignmentCompat;
 import pcgen.persistence.lst.GlobalModifierLoader;
 import pcgen.rules.context.AbstractReferenceContext;
 import pcgen.rules.context.LoadContext;
@@ -275,13 +274,15 @@ import pcgen.util.Logging;
 import pcgen.util.enumeration.AttackType;
 import pcgen.util.enumeration.Load;
 
+import org.jetbrains.annotations.TestOnly;
+
 public class PlayerCharacter implements Cloneable, VariableContainer
 {
 
 	// Constants for use in getBonus
 	private static String lastVariable;
 	// This marker is static so that the spells allocated to it can also be found in the cloned character.
-	private static final ObjectCache grantedSpellCache = new ObjectCache();
+	private static final ObjectCache GRANTED_SPELL_CACHE = new ObjectCache();
 
 	private final CharID id;
 	private final SAtoStringProcessor SA_TO_STRING_PROC;
@@ -297,7 +298,6 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 	private final ChronicleEntryFacet chronicleEntryFacet = FacetLibrary.getFacet(ChronicleEntryFacet.class);
 	private final IgnoreCostFacet ignoreCostFacet = FacetLibrary.getFacet(IgnoreCostFacet.class);
 	private final GenderFacet genderFacet = FacetLibrary.getFacet(GenderFacet.class);
-	private final HandedFacet handedFacet = FacetLibrary.getFacet(HandedFacet.class);
 	private final HeightFacet heightFacet = FacetLibrary.getFacet(HeightFacet.class);
 	private final WeightFacet weightFacet = FacetLibrary.getFacet(WeightFacet.class);
 	private final AddLanguageFacet addLangFacet = FacetLibrary.getFacet(AddLanguageFacet.class);
@@ -562,6 +562,8 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 	{
 		LoadContext context = Globals.getContext();
 		id = CharID.getID(context.getDataSetID());
+		AbstractReferenceContext refContext = context.getReferenceContext();
+		controller = refContext.constructNowIfNecessary(CodeControl.class, "Controller");
 		doFormulaSetup(context);
 
 		display = new CharacterDisplay(id);
@@ -576,12 +578,10 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 		{
 			ageSetKitSelections[i] = false;
 		}
-		AbstractReferenceContext refContext = context.getReferenceContext();
 		GlobalModifiers gm =
 				refContext.constructNowIfNecessary(GlobalModifiers.class, GlobalModifierLoader.GLOBAL_MODIFIERS);
 		GlobalModifierFacet globalModifierFacet = FacetLibrary.getFacet(GlobalModifierFacet.class);
 		globalModifierFacet.set(id, gm);
-		controller = refContext.constructNowIfNecessary(CodeControl.class, "Controller");
 
 		//Do BioSet first, since required by Race
 		bioSetFacet.set(id, SettingsHandler.getGame().getBioSet());
@@ -625,11 +625,16 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 	private void doFormulaSetup(LoadContext context)
 	{
 		VariableContext variableContext = context.getVariableContext();
-		FormulaManager formulaManager = variableContext.getFormulaManager();
+		FormulaManager formulaManager = variableContext.getPCFormulaManager();
 		MonitorableVariableStore varStore = new MonitorableVariableStore();
 		scopeFacet.set(id, formulaManager.getScopeInstanceFactory());
 		variableStoreFacet.set(id, varStore);
 		solverManagerFacet.set(id, variableContext.generateSolverManager(varStore));
+		if (isFeatureEnabled(CControl.ALIGNMENTFEATURE))
+		{
+			ChannelUtilities.setDirtyOnChannelChange(this, CControl.ALIGNMENTINPUT);
+		}
+		ChannelUtilities.setDirtyOnChannelChange(this, CControl.HANDEDINPUT);
 	}
 
 	@Override
@@ -1388,19 +1393,6 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 	{
 		BigDecimal g = goldFacet.get(id);
 		return (g == null) ? BigDecimal.ZERO : g;
-	}
-
-	/**
-	 * Sets the character's handedness.
-	 *
-	 * @param h A handedness to try and set.
-	 */
-	public void setHanded(final Handed h)
-	{
-		if (handedFacet.setHanded(id, h))
-		{
-			setDirty(true);
-		}
 	}
 
 	/**
@@ -2280,16 +2272,15 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 			lastVariable = variableString;
 			value = getVariableValue(variableString, Constants.EMPTY_STRING);
 			includeBonus = false;
-			found = true;
 			lastVariable = null;
 		}
 
-		if (found && includeBonus)
+		if (includeBonus)
 		{
 			value += getTotalBonusTo("VAR", variableString);
 		}
 
-		return new Float(value);
+		return (float) value;
 	}
 
 	public void setPointBuyPoints(final int argPointBuyPoints)
@@ -2302,17 +2293,62 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 		return pointBuyPoints;
 	}
 
-	public void setXP(final int xp)
+	/**
+	 * Sets the total Experience Points for the Player Character to the given value.
+	 * 
+	 * Note this sets earned Experience Points as a side effect (calculated based on the
+	 * level-adjusted Experience Points the Player Character may have). If the given xp
+	 * value is less than the level-adjusted Experience Points possessed by the Player
+	 * Character, then an error will be logged, and the earned Experience Points will be
+	 * set to 0.
+	 * 
+	 * @param xp
+	 *            The total Experience Points for the Player Character
+	 */
+	public void setXP(int xp)
 	{
-		if (xpFacet.setXP(id, xp))
+		// Remove the effect of LEVELADJ when storing our
+		// internal notion of experience
+		int realXP = xp - getLAXP();
+
+		if (realXP < 0)
+		{
+			Logging.errorPrint("ERROR: too little experience: " + realXP);
+			realXP = 0;
+		}
+
+		if (xpFacet.set(id, realXP))
 		{
 			setDirty(true);
 		}
 	}
 
+	/**
+	 * Return the total Experience Points for the Player Character.
+	 * 
+	 * @return The total Experience Points for the Player Character
+	 */
 	public int getXP()
 	{
-		return xpFacet.getXP(id);
+		// Add the effect of LEVELADJ when showing our external notion of XP.
+		Integer earnedXP = xpFacet.get(id);
+		return ((earnedXP == null) ? 0 : earnedXP) + getLAXP();
+	}
+
+	/**
+	 * Returns the level-adjusted Experience Points for the Player Character.
+	 * 
+	 * @return The level-adjusted Experience Points for the Player Character
+	 */
+	private int getLAXP()
+	{
+		/*
+		 * Why +1? Adjustments are deltas, not absolute levels, so are not
+		 * subject to the "back off one" element of the algorithm in
+		 * minXPForLevel. This still means that levelAdjustment of 0 gives you 0
+		 * XP, but we need LA of 1 to give us 1,000 XP.
+		 */
+		return levelTableFacet.minXPForLevel(levelFacet.getLevelAdjustment(id) + 1, id);
 	}
 
 	public final void setXPTable(final String xpTableName)
@@ -2877,10 +2913,6 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 	/**
 	 * Returns the &quot;Base&quot; check value for the check at the index
 	 * specified.
-	 *
-	 * <p>
-	 * This method caps the base check based on the game mode setting for
-	 * {@link pcgen.core.GameMode#getChecksMaxLvl() checks max level}.
 	 *
 	 * @param check
 	 *            The index of the check to get
@@ -5883,7 +5915,7 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 
 	public int sizeInt()
 	{
-		return sizeFacet.sizeInt(id);
+		return getSizeAdjustment().get(IntegerKey.SIZEORDER);
 	}
 
 	private int totalHitDice()
@@ -6230,9 +6262,9 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 
 		// Alignment
 
-		if (!SettingsHandler.getGame().getAlignmentText().isEmpty())
+		if (isFeatureEnabled(CControl.ALIGNMENTFEATURE))
 		{
-			PCAlignment align = ChannelCompatibility.getCurrentAlignment(id);
+			PCAlignment align = AlignmentCompat.getCurrentAlignment(id);
 			if (align != null)
 			{
 				list.add(align);
@@ -6284,7 +6316,7 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 		}
 
 		// SizeAdjustment
-		SizeAdjustment sa = sizeFacet.get(id);
+		SizeAdjustment sa = getSizeAdjustment();
 		if (sa != null)
 		{
 			list.add(sa);
@@ -6667,7 +6699,15 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 
 	public SizeAdjustment getSizeAdjustment()
 	{
-		return sizeFacet.get(id);
+		String sizeControl = getControl(CControl.PCSIZE);
+		if (sizeControl != null)
+		{
+			return (SizeAdjustment) getGlobal(sizeControl);
+		}
+		else
+		{
+			return sizeFacet.get(id);
+		}
 	}
 
 	public int getSpellClassCount()
@@ -7266,8 +7306,8 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 		aClone.outputSheetPDF = outputSheetPDF;
 		aClone.defaultDomainSource = defaultDomainSource;
 
-		aClone.ageSetKitSelections = new boolean[ageSetKitSelections.length];
-		System.arraycopy(ageSetKitSelections, 0, aClone.ageSetKitSelections, 0, ageSetKitSelections.length);
+		aClone.ageSetKitSelections =
+				Arrays.copyOf(ageSetKitSelections, ageSetKitSelections.length);
 
 		// Not sure what this is for
 		aClone.importing = false;
@@ -9521,7 +9561,7 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 			for (Spell spell : knownSpellFacet.getSet(id, classSpellList, spellLevel))
 			{
 				CharacterSpell acs = null;
-				Collection<? extends CharacterSpell> characterSpells = getCharacterSpells(grantedSpellCache);
+				Collection<? extends CharacterSpell> characterSpells = getCharacterSpells(GRANTED_SPELL_CACHE);
 				for (CharacterSpell cs : characterSpells)
 				{
 					Spell sp = cs.getSpell();
@@ -9536,7 +9576,7 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 				{
 					acs = new CharacterSpell(aClass, spell);
 					acs.addInfo(spellLevel, 1, Globals.getDefaultSpellBook());
-					addCharacterSpell(grantedSpellCache, acs);
+					addCharacterSpell(GRANTED_SPELL_CACHE, acs);
 				}
 				if (!cSpells.contains(acs))
 				{
@@ -10129,9 +10169,40 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 		return controller.get(ObjectKey.getKeyFor(String.class, '*' + string));
 	}
 
+	/**
+	 * Returns the value of a CodeControl, or the default value if the code control has
+	 * not been set in the data.
+	 * 
+	 * @param control
+	 *            The CodeControl for which the value should be returned
+	 * @return The value of a CodeControl, or the default value if the code control has
+	 *         not been set in the data
+	 */
+	public String getControl(CControl control)
+	{
+		ObjectKey<String> ok = ObjectKey.getKeyFor(String.class,
+			"*" + Objects.requireNonNull(control.getName()));
+		return Optional.ofNullable(controller.get(ok))
+			.orElse(control.getDefaultValue());
+	}
+
 	public boolean hasControl(String string)
 	{
 		return controller.get(ObjectKey.getKeyFor(String.class, '*' + string)) != null;
+	}
+
+	/**
+	 * Returns true if a feature code control is enabled.
+	 * 
+	 * @param feature
+	 *            The feature code control for which the value should be returned
+	 * @return true if a feature code control is enabled; false otherwise
+	 */
+	public boolean isFeatureEnabled(String feature)
+	{
+		Boolean object = controller.get(ObjectKey.getKeyFor(Boolean.class,
+			"*" + Objects.requireNonNull(feature)));
+		return (object != null) && object;
 	}
 
 	/**
@@ -10145,5 +10216,33 @@ public class PlayerCharacter implements Cloneable, VariableContainer
 	public <T> T solve(NEPFormula<T> formula)
 	{
 		return solverManagerFacet.get(id).solve(formula);
+	}
+
+	/**
+	 *
+	 * @return the racial size
+	 */
+	public int racialSizeInt()
+	{
+		String baseSizeControl = getControl(CControl.BASESIZE);
+		if (baseSizeControl != null)
+		{
+			SizeAdjustment baseSize = (SizeAdjustment) getGlobal(baseSizeControl);
+			return baseSize.get(IntegerKey.SIZEORDER);
+		}
+		else
+		{
+			return sizeFacet.racialSizeInt(id);
+		}
+	}
+
+	public String getGenderString()
+	{
+		return genderFacet.getGender(id).toString();
+	}
+
+	public Gender getGenderObject()
+	{
+		return genderFacet.getGender(id);
 	}
 }

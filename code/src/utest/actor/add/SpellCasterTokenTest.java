@@ -19,20 +19,20 @@ package actor.add;
 
 import pcgen.cdom.base.Persistent;
 import pcgen.core.PCClass;
+import plugin.lsttokens.add.SpellCasterToken;
 
 import actor.testsupport.AbstractPersistentCDOMChoiceActorTestCase;
-import plugin.lsttokens.add.SpellCasterToken;
 
 public class SpellCasterTokenTest extends
 		AbstractPersistentCDOMChoiceActorTestCase<PCClass>
 {
 
-	private static final Persistent<PCClass> pca = new SpellCasterToken();
+	private static final Persistent<PCClass> PCA = new SpellCasterToken();
 
 	@Override
 	public Persistent<PCClass> getActor()
 	{
-		return pca;
+		return PCA;
 	}
 
 	@Override

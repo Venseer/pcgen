@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -151,10 +152,7 @@ public class SimpleChoiceSet<T> implements PrimitiveChoiceSet<T>
 	 */
 	public SimpleChoiceSet(Collection<? extends T> col, Comparator<? super T> comp, String sep)
 	{
-		if (col == null)
-		{
-			throw new IllegalArgumentException("Choice Collection cannot be null");
-		}
+		Objects.requireNonNull(col, "Choice Collection cannot be null");
 		if (col.isEmpty())
 		{
 			throw new IllegalArgumentException("Choice Collection cannot be empty");
@@ -229,24 +227,12 @@ public class SimpleChoiceSet<T> implements PrimitiveChoiceSet<T>
 		return new HashSet<>(set);
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this SimpleChoiceSet
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return set.size();
 	}
 
-	/**
-	 * Returns true if this SimpleChoiceSet is equal to the given Object.
-	 * Equality is defined as being another SimpleChoiceSet object with equal
-	 * underlying contents.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{

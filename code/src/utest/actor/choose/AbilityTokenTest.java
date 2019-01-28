@@ -19,16 +19,16 @@ package actor.choose;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import pcgen.cdom.base.CategorizedChooser;
 import pcgen.core.Ability;
 import pcgen.core.Globals;
-import pcgen.core.SettingsHandler;
 import pcgen.rules.context.LoadContext;
 import plugin.lsttokens.choose.AbilityToken;
 import plugin.lsttokens.testsupport.BuildUtilities;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * The Class {@code AbilityTokenTest} verifies the AbilityToken
@@ -37,7 +37,7 @@ import plugin.lsttokens.testsupport.BuildUtilities;
 public class AbilityTokenTest
 {
 
-	private static final CategorizedChooser<Ability> pca = new AbilityToken();
+	private static final CategorizedChooser<Ability> PCA = new AbilityToken();
 	private static final String ITEM_NAME = "ItemName";
 
 	private LoadContext context;
@@ -45,9 +45,16 @@ public class AbilityTokenTest
 	@Before
 	public void setUp()
 	{
-		SettingsHandler.getGame().clearLoadContext();
+		Globals.emptyLists();
 		context = Globals.getContext();
 		context.getReferenceContext().importObject(BuildUtilities.getFeatCat());
+	}
+
+	@After
+	public void tearDown()
+	{
+		Globals.emptyLists();
+		context = null;
 	}
 
 	private Ability getObject()
@@ -61,7 +68,7 @@ public class AbilityTokenTest
 	@Test
 	public void testEncodeChoice()
 	{
-		assertEquals(getExpected(), pca.encodeChoice(getObject()));
+		assertEquals(getExpected(), PCA.encodeChoice(getObject()));
 	}
 
 	protected String getExpected()
@@ -73,13 +80,13 @@ public class AbilityTokenTest
 	public void testDecodeChoice()
 	{
 		assertEquals(getObject(),
-			pca.decodeChoice(context, getExpected(), BuildUtilities.getFeatCat()));
+			PCA.decodeChoice(context, getExpected(), BuildUtilities.getFeatCat()));
 	}
 
 	@Test
 	public void testLegacyDecodeChoice()
 	{
-		assertEquals(getObject(), pca.decodeChoice(context, "CATEGORY=FEAT|" + ITEM_NAME,
+		assertEquals(getObject(), PCA.decodeChoice(context, "CATEGORY=FEAT|" + ITEM_NAME,
 			BuildUtilities.getFeatCat()));
 	}
 

@@ -17,12 +17,12 @@ package pcgen.cdom.formula.local;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Optional;
 
 import pcgen.base.formula.base.DependencyManager;
 import pcgen.base.formula.base.EvaluationManager;
 import pcgen.base.formula.base.FormulaFunction;
 import pcgen.base.formula.base.FormulaSemantics;
-import pcgen.base.formula.base.VarScoped;
 import pcgen.base.formula.exception.SemanticsFailureException;
 import pcgen.base.formula.parse.Node;
 import pcgen.base.formula.visitor.DependencyVisitor;
@@ -47,7 +47,7 @@ public class DefinedFunction implements FormulaFunction
 	/**
 	 * The return value for this DefinedFunction.
 	 */
-	private final VarScoped definedValue;
+	private final Object definedValue;
 
 	/**
 	 * The FormatManager indicating the format of the return value for this
@@ -66,7 +66,7 @@ public class DefinedFunction implements FormulaFunction
 	 *            The FormatManager indicating the format of the return value for this
 	 *            DefinedFunction
 	 */
-	public DefinedFunction(String name, VarScoped definedValue, FormatManager<?> formatManager)
+	public DefinedFunction(String name, Object definedValue, FormatManager<?> formatManager)
 	{
 		this.name = Objects.requireNonNull(name);
 		this.definedValue = Objects.requireNonNull(definedValue);
@@ -103,9 +103,9 @@ public class DefinedFunction implements FormulaFunction
 	}
 
 	@Override
-	public FormatManager<?> getDependencies(DependencyVisitor visitor, DependencyManager manager, Node[] args)
+	public Optional<FormatManager<?>> getDependencies(DependencyVisitor visitor, DependencyManager manager, Node[] args)
 	{
-		return formatManager;
+		return Optional.of(formatManager);
 	}
 
 }

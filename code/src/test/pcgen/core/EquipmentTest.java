@@ -18,13 +18,15 @@
  */
 package pcgen.core;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
+
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.base.lang.UnreachableError;
 import pcgen.cdom.base.Constants;
@@ -38,6 +40,8 @@ import pcgen.persistence.PersistenceLayerException;
 import pcgen.persistence.lst.CampaignSourceEntry;
 import pcgen.persistence.lst.GenericLoader;
 
+import org.hamcrest.Matchers;
+
 /**
  * Equipment Test
  */
@@ -47,52 +51,13 @@ public class EquipmentTest extends AbstractCharacterTestCase
 
 	private Equipment eq = null;
 	private Equipment eqDouble = null;
-	private static final String OriginalKey = "OrigKey";
+	private static final String ORIGINAL_KEY = "OrigKey";
 	private CampaignSourceEntry source;
 
-	/**
-	 * Main
-	 * @param args
-	 */
-	public static void main(final String[] args)
-	{
-		TestRunner.run(EquipmentTest.class);
-	}
-
-	/**
-	 * @return Test
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(EquipmentTest.class);
-	}
-
-	/**
-	 * Constructs a new <code>EquipmentTest</code>.
-	 *
-	 * @see pcgen.PCGenTestCase#PCGenTestCase()
-	 */
-	public EquipmentTest()
-	{
-		// Constructor
-	}
-
-	/**
-	 * Constructs a new <code>EquipmentTest</code> with the given
-	 * <var>name</var>.
-	 *
-	 * @param name the test case name
-	 *
-	 * @see pcgen.PCGenTestCase#PCGenTestCase(String)
-	 */
-	public EquipmentTest(final String name)
-	{
-		super(name);
-	}
-
 	@Override
-	public void additionalSetUp() throws PersistenceLayerException
+	public void setUp() throws Exception
 	{
+		super.setUp();
 		try
 		{
 			source = new CampaignSourceEntry(new Campaign(),
@@ -108,7 +73,7 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		eq = eqLoader.parseLine(Globals.getContext(), null,
 			"Dummy	SIZE:M 	KEY:OrigKey	TYPE:Weapon", source);
 		eq = Globals.getContext().getReferenceContext().silentlyGetConstructedCDOMObject(
-				Equipment.class, OriginalKey);
+				Equipment.class, ORIGINAL_KEY);
 
 		eqDouble = eqLoader.parseLine(Globals.getContext(), null,
 			"Double	SIZE:M 	KEY:DoubleKey	TYPE:Weapon.Double", source);
@@ -138,17 +103,17 @@ public class EquipmentTest extends AbstractCharacterTestCase
 
 		SettingsHandler.getGame().addPlusCalculation(
 			"WEAPON|(2000*PLUS*PLUS)+(2000*ALTPLUS*ALTPLUS)");
-
+		
+		finishLoad();
 	}
 
 	/*****************************************************************************
 	 * createKeyForAutoResize Tests
 	 ****************************************************************************/
 
-	// Original Key was what I expected
 	public void testcreateKeyForAutoResize001()
 	{
-		is(this.eq.getKeyName(), strEq(OriginalKey));
+		assertThat(this.eq.getKeyName(), Matchers.is(equalTo(ORIGINAL_KEY)));
 	}
 
 	/** 
@@ -160,12 +125,12 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		
 		final String expectedKey =
 				Constants.AUTO_RESIZE_PREFIX + newSize.getKeyName().toUpperCase()
-					+ OriginalKey;
+					+ ORIGINAL_KEY;
 
-		is(this.eq.createKeyForAutoResize(newSize), strEq(expectedKey));
+		assertThat(this.eq.createKeyForAutoResize(newSize), Matchers.is(equalTo((expectedKey))));
 	}
 
-	/** 
+	/**
 	 * Try upper case word for size
 	 */
 	public void testcreateKeyForAutoResize003()
@@ -174,15 +139,15 @@ public class EquipmentTest extends AbstractCharacterTestCase
 
 		final String expectedKey =
 				Constants.AUTO_RESIZE_PREFIX + newSize.getKeyName().toUpperCase().substring(0, 1)
-					+ OriginalKey;
+					+ ORIGINAL_KEY;
 
-		is(this.eq.createKeyForAutoResize(newSize), strEq(expectedKey));
+		assertThat(this.eq.createKeyForAutoResize(newSize), Matchers.is(equalTo((expectedKey))));
 	}
 
 	/** Try empty new size */
 	public void testcreateKeyForAutoResize004()
 	{
-		is(this.eq.createKeyForAutoResize(null), strEq(OriginalKey));
+		assertThat(this.eq.createKeyForAutoResize(null), Matchers.is(equalTo((ORIGINAL_KEY))));
 	}
 
 	/** Ensure that second customisation will work correctly */
@@ -192,26 +157,26 @@ public class EquipmentTest extends AbstractCharacterTestCase
 
 		String expectedKey =
 				Constants.AUTO_RESIZE_PREFIX + newSize.getKeyName().toUpperCase().substring(0, 1)
-					+ OriginalKey;
+					+ ORIGINAL_KEY;
 
-		is(this.eq.createKeyForAutoResize(newSize), strEq(expectedKey));
+		assertThat(this.eq.createKeyForAutoResize(newSize), Matchers.is(equalTo((expectedKey))));
 
 		newSize = diminutive;
 
 		expectedKey =
 				Constants.AUTO_RESIZE_PREFIX + newSize.getKeyName().toUpperCase().substring(0, 1)
-					+ OriginalKey;
+					+ ORIGINAL_KEY;
 
-		is(this.eq.createKeyForAutoResize(newSize), strEq(expectedKey));
+		assertThat(this.eq.createKeyForAutoResize(newSize), Matchers.is(equalTo((expectedKey))));
 	}
 
 	/** Try nonsense abbreviation for Size */
 	public void testcreateKeyForAutoResize006()
 	{
-		String unExpectedKey = Constants.AUTO_RESIZE_PREFIX + "X" + OriginalKey;
+		String unExpectedKey = Constants.AUTO_RESIZE_PREFIX + "X" + ORIGINAL_KEY;
 
-		is(this.eq.createKeyForAutoResize(null), not(strEq(unExpectedKey)));
-		is(this.eq.createKeyForAutoResize(null), strEq(OriginalKey));
+		assertThat(unExpectedKey, not(Matchers.is(this.eq.createKeyForAutoResize(null))));
+		assertThat(this.eq.createKeyForAutoResize(null), Matchers.is(equalTo((ORIGINAL_KEY))));
 	}
 
 	/*****************************************************************************
@@ -221,19 +186,19 @@ public class EquipmentTest extends AbstractCharacterTestCase
 	/** Test with Size that exists and is formatted correctly */
 	public void testcreateNameForAutoResize002()
 	{
-		is(this.eq.createNameForAutoResize(large), strEq("Dummy (Large)"));
+		assertThat(this.eq.createNameForAutoResize(large), Matchers.is(equalTo(("Dummy (Large)"))));
 	}
 
 	/** Test with Abbreviation for Size that exists */
 	public void testcreateNameForAutoResize003()
 	{
-		is(this.eq.createNameForAutoResize(fine), strEq("Dummy (Fine)"));
+		assertThat(this.eq.createNameForAutoResize(fine), Matchers.is(equalTo(("Dummy (Fine)"))));
 	}
 
 	/** Test with Nonexistant size */
 	public void testcreateNameForAutoResize004()
 	{
-		is(this.eq.createNameForAutoResize(null), strEq("Dummy"));
+		assertThat(this.eq.createNameForAutoResize(null), Matchers.is(equalTo(("Dummy"))));
 	}
 
 	/** Test that size is replaced correctly */
@@ -245,16 +210,16 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		eq.setName("Pointy Stick (Large)");
 		eq.put(StringKey.KEY_NAME, newKey);
 
-		String expectedKey = Constants.AUTO_RESIZE_PREFIX + "L" + OriginalKey;
+		String expectedKey = Constants.AUTO_RESIZE_PREFIX + "L" + ORIGINAL_KEY;
 
 		// confirm test set up
-		is(eq.getKeyName(), strEq(expectedKey));
-		is(eq.getName(), strEq("Pointy Stick (Large)"));
-		is(eq.getSize(), strEq("L"));
+		assertThat(eq.getKeyName(), Matchers.is(equalTo((expectedKey))));
+		assertThat(eq.getName(), Matchers.is(equalTo(("Pointy Stick (Large)"))));
+		assertThat(eq.getSize(), Matchers.is(equalTo(("L"))));
 
 		// Now check that new name is generated Correctly
-		is(this.eq.createNameForAutoResize(diminutive),
-			strEq("Pointy Stick (Diminutive)"));
+		assertThat(this.eq.createNameForAutoResize(diminutive),
+			Matchers.is(equalTo(("Pointy Stick (Diminutive)"))));
 
 	}
 
@@ -268,16 +233,16 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		eq.setName("Pointy Stick (+1/Large)");
 		eq.put(StringKey.KEY_NAME, newKey);
 
-		String expectedKey = Constants.AUTO_RESIZE_PREFIX + "L" + OriginalKey;
+		String expectedKey = Constants.AUTO_RESIZE_PREFIX + "L" + ORIGINAL_KEY;
 
 		// confirm test set up
-		is(eq.getKeyName(), strEq(expectedKey));
-		is(eq.getName(), strEq("Pointy Stick (+1/Large)"));
-		is(eq.getSize(), strEq("L"));
+		assertThat(eq.getKeyName(), Matchers.is(equalTo((expectedKey))));
+		assertThat(eq.getName(), Matchers.is(equalTo(("Pointy Stick (+1/Large)"))));
+		assertThat(eq.getSize(), Matchers.is(equalTo(("L"))));
 
 		// Now check that new name is generated Correctly
-		is(this.eq.createNameForAutoResize(gargantuan),
-			strEq("Pointy Stick (+1/Gargantuan)"));
+		assertThat(this.eq.createNameForAutoResize(gargantuan),
+			Matchers.is(equalTo(("Pointy Stick (+1/Gargantuan)"))));
 
 	}
 
@@ -290,16 +255,16 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		eq.setName("Pointy Stick (+1/Large/Speed)");
 		eq.put(StringKey.KEY_NAME, newKey);
 
-		String expectedKey = Constants.AUTO_RESIZE_PREFIX + "L" + OriginalKey;
+		String expectedKey = Constants.AUTO_RESIZE_PREFIX + "L" + ORIGINAL_KEY;
 
 		// confirm test set up
-		is(eq.getKeyName(), strEq(expectedKey));
-		is(eq.getName(), strEq("Pointy Stick (+1/Large/Speed)"));
-		is(eq.getSize(), strEq("L"));
+		assertThat(eq.getKeyName(), Matchers.is(equalTo((expectedKey))));
+		assertThat(eq.getName(), Matchers.is(equalTo(("Pointy Stick (+1/Large/Speed)"))));
+		assertThat(eq.getSize(), Matchers.is(equalTo(("L"))));
 
 		// Now check that new name is generated Correctly
-		is(this.eq.createNameForAutoResize(colossal),
-			strEq("Pointy Stick (+1/Colossal/Speed)"));
+		assertThat(this.eq.createNameForAutoResize(colossal),
+			Matchers.is(equalTo(("Pointy Stick (+1/Colossal/Speed)"))));
 	}
 
 	/** Test that size is replaced correctly */
@@ -311,16 +276,16 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		eq.setName("Pointy Stick (+1/Speed)");
 		eq.put(StringKey.KEY_NAME, newKey);
 
-		String expectedKey = Constants.AUTO_RESIZE_PREFIX + "L" + OriginalKey;
+		String expectedKey = Constants.AUTO_RESIZE_PREFIX + "L" + ORIGINAL_KEY;
 
 		// confirm test set up
-		is(eq.getKeyName(), strEq(expectedKey));
-		is(eq.getName(), strEq("Pointy Stick (+1/Speed)"));
-		is(eq.getSize(), strEq("L"));
+		assertThat(eq.getKeyName(), Matchers.is(equalTo((expectedKey))));
+		assertThat(eq.getName(), Matchers.is(equalTo(("Pointy Stick (+1/Speed)"))));
+		assertThat(eq.getSize(), Matchers.is(equalTo(("L"))));
 
 		// Now check that new name is generated Correctly
-		is(this.eq.createNameForAutoResize(colossal),
-			strEq("Pointy Stick (+1/Speed) (Colossal)"));
+		assertThat(this.eq.createNameForAutoResize(colossal),
+			Matchers.is(equalTo(("Pointy Stick (+1/Speed) (Colossal)"))));
 	}
 
 	public void testResizeItem()
@@ -337,9 +302,9 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		Globals.getContext().getReferenceContext().importObject(eq);
 
 		GameMode gameMode = SettingsHandler.getGame();
-		is(Globals.getContext().getReferenceContext()
-				.getConstructedObjectCount(SizeAdjustment.class), gt(0),
-				"size list initialised");
+		assertThat("size list initialised",
+				Globals.getContext().getReferenceContext().getConstructedObjectCount(SizeAdjustment.class),
+			Matchers.is(greaterThan(0)));
 		BaseDice d6 = gameMode.getModeContext().getReferenceContext().constructCDOMObject(BaseDice.class, "1d6");
 		d6.addToDownList(new RollInfo("1d4"));
 		d6.addToDownList(new RollInfo("1d3"));
@@ -354,18 +319,18 @@ public class EquipmentTest extends AbstractCharacterTestCase
 		d6.addToUpList(new RollInfo("12d6"));
 		Globals.getContext().getReferenceContext().importObject(d6);
 
-		is(custEq.getSize(), eq("M"), "starting size");
-		is(custEq.getDamage(getCharacter()), eq("1d6"), "starting size");
+		assertThat("starting size", custEq.getSize(), Matchers.is("M"));
+		assertThat("starting size", custEq.getDamage(getCharacter()), Matchers.is("1d6"));
 
 		// Drop the size
 		custEq.resizeItem(getCharacter(), small);
-		is(custEq.getSize(), eq("S"), "reduce size size");
-		is(custEq.getDamage(getCharacter()), eq("1d4"), "reduce size damage");
+		assertThat("reduce size", custEq.getSize(), Matchers.is("S"));
+		assertThat("reduce size", custEq.getDamage(getCharacter()), Matchers.is("1d4"));
 
 		// Increase the size
 		custEq.resizeItem(getCharacter(), large);
-		is(custEq.getSize(), eq("L"), "reduce size size");
-		is(custEq.getDamage(getCharacter()), eq("1d8"), "reduce size damage");
+		assertThat("increase size", custEq.getSize(), Matchers.is("L"));
+		assertThat("increase size", custEq.getDamage(getCharacter()), Matchers.is("1d8"));
 	}
 	
 	/**
@@ -631,5 +596,26 @@ assertNotNull("Eqmod should be present", eqMod);
 		assertTrue("Should have eqmod with choice now", aEquip.isPreType("EQMOD=PLUS1W(Choice)"));
 		assertFalse("Should not have choice Bad", aEquip.isPreType("EQMOD=PLUS1W(Bad)"));
 		
+	}
+
+	/**
+	 * EquipmentModifiers must have a parent in order to be rendered to an output sheet
+	 */
+	public void testAddEqModifierSetsEquipmentAsParentOfTheModifier()
+	{
+		EquipmentModifier eqMod = Globals.getContext().getReferenceContext().silentlyGetConstructedCDOMObject(
+				EquipmentModifier.class, "PLUS1W");
+		assertNotNull("Eqmod should be present", eqMod);
+		assertTrue("Eqmod parent should be null at beginning", eqMod.getVariableParent().isEmpty());
+
+		Equipment aEquip = eq.clone();
+		aEquip.addEqModifier(eqMod, true, null);
+		assertSame("Eqmod parent should be the equipment", aEquip, eqMod.getVariableParent().get());
+	}
+
+	@Override
+	protected void defaultSetupEnd()
+	{
+		//Nothing, we will trigger ourselves
 	}
 }

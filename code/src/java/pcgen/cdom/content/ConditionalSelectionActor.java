@@ -17,6 +17,8 @@
  */
 package pcgen.cdom.content;
 
+import java.util.Objects;
+
 import pcgen.cdom.base.ChooseDriver;
 import pcgen.cdom.base.ChooseSelectionActor;
 import pcgen.cdom.base.ConcretePrereqObject;
@@ -53,10 +55,7 @@ public class ConditionalSelectionActor<T> extends ConcretePrereqObject implement
 	 */
 	public ConditionalSelectionActor(ChooseSelectionActor<T> csa)
 	{
-		if (csa == null)
-		{
-			throw new IllegalArgumentException("Cannot have null ChoiceActor");
-		}
+		Objects.requireNonNull(csa, "Cannot have null ChoiceActor");
 		actor = csa;
 	}
 
@@ -105,12 +104,6 @@ public class ConditionalSelectionActor<T> extends ConcretePrereqObject implement
 		actor.removeChoice(cdo, choice, pc);
 	}
 
-	/**
-	 * Returns true if the given object is a ConditionalSelectionActor with
-	 * identical underlying ChooseSelectionActor and Prerequisites.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -122,11 +115,6 @@ public class ConditionalSelectionActor<T> extends ConcretePrereqObject implement
 		return false;
 	}
 
-	/**
-	 * Returns a consistent-with-equals hashCode for this ConditionalSelectionActor
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{

@@ -17,6 +17,8 @@
  */
 package pcgen.cdom.content;
 
+import java.util.Objects;
+
 import pcgen.cdom.base.ConcretePrereqObject;
 import pcgen.cdom.reference.CDOMSingleRef;
 import pcgen.core.PCClass;
@@ -71,10 +73,7 @@ public class LevelExchange extends ConcretePrereqObject
 	 */
 	public LevelExchange(CDOMSingleRef<PCClass> pcc, int minDonatingLvl, int maxDonated, int donatingLowerBound)
 	{
-		if (pcc == null)
-		{
-			throw new IllegalArgumentException("Error: Exchange Class must not be null");
-		}
+		Objects.requireNonNull(pcc, "Error: Exchange Class must not be null");
 		if (minDonatingLvl <= 0)
 		{
 			throw new IllegalArgumentException(
@@ -147,23 +146,12 @@ public class LevelExchange extends ConcretePrereqObject
 		return minDonatingLevel;
 	}
 
-	/**
-	 * Returns a consistent-with-equals hashCode for this LevelExchange
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return minDonatingLevel * 23 + maxDonatedLevels * 31 + donatingLowerLevelBound;
 	}
 
-	/**
-	 * Returns true if the given object is a LevelExchange with identical
-	 * exchange class and exchange limits
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{

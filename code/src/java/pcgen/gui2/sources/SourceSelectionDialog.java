@@ -57,14 +57,15 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import pcgen.facade.core.CampaignFacade;
-import pcgen.facade.core.GameModeFacade;
+import pcgen.core.Campaign;
+import pcgen.core.GameMode;
 import pcgen.facade.core.LoadableFacade.LoadingState;
 import pcgen.facade.core.SourceSelectionFacade;
 import pcgen.facade.util.ListFacade;
 import pcgen.facade.util.ListFacades;
 import pcgen.facade.util.SortedListFacade;
 import pcgen.gui2.PCGenFrame;
+import pcgen.gui2.UIContext;
 import pcgen.gui2.UIPropertyContext;
 import pcgen.gui2.dialog.DataInstaller;
 import pcgen.gui2.filter.FilteredListFacadeTableModel;
@@ -83,7 +84,7 @@ import pcgen.util.Comparators;
 public class SourceSelectionDialog extends JDialog implements ActionListener, ChangeListener, ListSelectionListener
 {
 
-	private static final UIPropertyContext context =
+	private static final UIPropertyContext CONTEXT =
 			UIPropertyContext.createContext("SourceSelectionDialog"); //$NON-NLS-1$
 	private static final String PROP_SELECTED_SOURCE = "selectedSource"; //$NON-NLS-1$
 	private static final String LOAD_COMMAND = "Load"; //$NON-NLS-1$
@@ -105,14 +106,14 @@ public class SourceSelectionDialog extends JDialog implements ActionListener, Ch
 	private final JButton saveButton;
 	private final JCheckBox alwaysAdvancedCheck;
 
-	public SourceSelectionDialog(PCGenFrame frame)
+	public SourceSelectionDialog(PCGenFrame frame, UIContext uiContext)
 	{
 		super(frame, true);
 		this.frame = frame;
 		setTitle(LanguageBundle.getString("in_mnuSourcesLoadSelect")); //$NON-NLS-1$
 		this.tabs = new JTabbedPane();
 		this.basicPanel = new QuickSourceSelectionPanel();
-		this.advancedPanel = new AdvancedSourceSelectionPanel(frame);
+		this.advancedPanel = new AdvancedSourceSelectionPanel(frame, uiContext);
 		this.buttonPanel = new JPanel();
 		this.loadButton = new JButton();
 		CommonMenuText.name(loadButton, "load"); //$NON-NLS-1$
@@ -183,7 +184,7 @@ public class SourceSelectionDialog extends JDialog implements ActionListener, Ch
 
 	private void initDefaults()
 	{
-		boolean useBasic = context.initBoolean("useBasic", true); //$NON-NLS-1$
+		boolean useBasic = CONTEXT.initBoolean("useBasic", true); //$NON-NLS-1$
 		SourceSelectionFacade selection = basicPanel.getSourceSelection();
 		if (selection != null && useBasic)
 		{
@@ -286,8 +287,8 @@ public class SourceSelectionDialog extends JDialog implements ActionListener, Ch
 			if (ret == JOptionPane.OK_OPTION)
 			{
 				String name = nameField.getText();
-				List<CampaignFacade> selectedCampaigns = advancedPanel.getSelectedCampaigns();
-				GameModeFacade selectedGameMode = advancedPanel.getSelectedGameMode();
+				List<Campaign> selectedCampaigns = advancedPanel.getSelectedCampaigns();
+				GameMode selectedGameMode = advancedPanel.getSelectedGameMode();
 
 				SourceSelectionFacade selection = null;
 				for (SourceSelectionFacade sourceSelectionFacade : sources)
@@ -366,7 +367,7 @@ public class SourceSelectionDialog extends JDialog implements ActionListener, Ch
 		{
 			return;
 		}
-		List<CampaignFacade> campaigns = ListFacades.wrap(selection.getCampaigns());
+		List<Campaign> campaigns = ListFacades.wrap(selection.getCampaigns());
 		if (FacadeFactory.passesPrereqs(campaigns))
 		{
 			setVisible(false);
@@ -538,7 +539,7 @@ public class SourceSelectionDialog extends JDialog implements ActionListener, Ch
 		private void initDefaults()
 		{
 			final ListModel sortedModel = sourceList.getModel();
-			String defaultSelectedSource = context.initProperty(PROP_SELECTED_SOURCE, DEFAULT_SOURCE);
+			String defaultSelectedSource = CONTEXT.initProperty(PROP_SELECTED_SOURCE, DEFAULT_SOURCE);
 			int index = Collections.binarySearch(new AbstractList<Object>()
 			{
 
@@ -582,7 +583,7 @@ public class SourceSelectionDialog extends JDialog implements ActionListener, Ch
 			SourceSelectionFacade selection = getSourceSelection();
 			if (selection != null)
 			{
-				context.setProperty(PROP_SELECTED_SOURCE, selection.toString());
+				CONTEXT.setProperty(PROP_SELECTED_SOURCE, selection.toString());
 				makeSourceSelected(selection);
 			}
 			else

@@ -15,36 +15,27 @@
  */
 package pcgen.cdom.facet;
 
-import pcgen.base.formula.base.ScopeInstance;
 import pcgen.base.formula.base.VariableID;
-import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.facet.base.AbstractSourcedListFacet;
 import pcgen.cdom.facet.event.DataFacetChangeEvent;
 import pcgen.cdom.facet.event.DataFacetChangeListener;
+import pcgen.cdom.facet.model.VarScopedFacet;
+import pcgen.cdom.formula.PCGenScoped;
+import pcgen.cdom.formula.VariableUtilities;
 import pcgen.cdom.helper.BridgeListener;
 
 /**
  * This Facet controls items granted from variables
  */
-public class GrantedVarFacet extends AbstractSourcedListFacet<CharID, CDOMObject>
-		implements DataFacetChangeListener<CharID, CDOMObject>
+public class GrantedVarFacet extends AbstractSourcedListFacet<CharID, PCGenScoped>
+		implements DataFacetChangeListener<CharID, PCGenScoped>
 {
 
 	/**
 	 * The source facet to watch for the addition of new objects
 	 */
-	private CDOMObjectSourceFacet cdomSourceFacet;
-
-	/**
-	 * The Scope Facet
-	 */
-	private ScopeFacet scopeFacet;
-
-	/**
-	 * The global LoadContextFacet used to get VariableIDs
-	 */
-	private final LoadContextFacet loadContextFacet = FacetLibrary.getFacet(LoadContextFacet.class);
+	private VarScopedFacet varScopedFacet;
 
 	/**
 	 * The VariableStore Facet
@@ -52,9 +43,9 @@ public class GrantedVarFacet extends AbstractSourcedListFacet<CharID, CDOMObject
 	private VariableStoreFacet variableStoreFacet;
 
 	@Override
-	public void dataAdded(DataFacetChangeEvent<CharID, CDOMObject> dfce)
+	public void dataAdded(DataFacetChangeEvent<CharID, PCGenScoped> dfce)
 	{
-		CDOMObject cdo = dfce.getCDOMObject();
+		PCGenScoped cdo = dfce.getCDOMObject();
 		String[] grantedVariables = cdo.getGrantedVariableArray();
 		if (grantedVariables.length == 0)
 		{
@@ -62,11 +53,10 @@ public class GrantedVarFacet extends AbstractSourcedListFacet<CharID, CDOMObject
 		}
 		Object source = dfce.getSource();
 		CharID id = dfce.getCharID();
-		ScopeInstance inst = scopeFacet.get(id, cdo);
-		for (String VariableName : grantedVariables)
+		for (String variableName : grantedVariables)
 		{
-			VariableID<?> varID = loadContextFacet.get(id.getDatasetID()).get().getVariableContext().getVariableID(inst,
-				VariableName);
+			VariableID<?> varID =
+					VariableUtilities.getGlobalVariableID(id, variableName);
 			processAdd(id, varID, source);
 		}
 	}
@@ -85,27 +75,25 @@ public class GrantedVarFacet extends AbstractSourcedListFacet<CharID, CDOMObject
 		{
 			for (Object o : (Object[]) value)
 			{
-				add(id, (CDOMObject) o, source);
+				add(id, (PCGenScoped) o, source);
 			}
 		}
 		else
 		{
-			add(id, (CDOMObject) value, source);
+			add(id, (PCGenScoped) value, source);
 		}
 	}
 
 	@Override
-	public void dataRemoved(DataFacetChangeEvent<CharID, CDOMObject> dfce)
+	public void dataRemoved(DataFacetChangeEvent<CharID, PCGenScoped> dfce)
 	{
-		CDOMObject cdo = dfce.getCDOMObject();
+		PCGenScoped cdo = dfce.getCDOMObject();
 		String[] list = cdo.getGrantedVariableArray();
 		Object source = dfce.getSource();
 		CharID id = dfce.getCharID();
-		ScopeInstance inst = scopeFacet.get(id, cdo);
-		for (String s : list)
+		for (String varName : list)
 		{
-			VariableID<?> varID =
-					loadContextFacet.get(id.getDatasetID()).get().getVariableContext().getVariableID(inst, s);
+			VariableID<?> varID =  VariableUtilities.getGlobalVariableID(id, varName);
 			processRemove(id, varID, source);
 		}
 	}
@@ -118,23 +106,18 @@ public class GrantedVarFacet extends AbstractSourcedListFacet<CharID, CDOMObject
 		{
 			for (Object o : (Object[]) value)
 			{
-				remove(id, (CDOMObject) o, source);
+				remove(id, (PCGenScoped) o, source);
 			}
 		}
 		else
 		{
-			remove(id, (CDOMObject) value, source);
+			remove(id, (PCGenScoped) value, source);
 		}
 	}
 
-	public void setCdomSourceFacet(CDOMObjectSourceFacet cdomSourceFacet)
+	public void setVarScopedFacet(VarScopedFacet varScopedFacet)
 	{
-		this.cdomSourceFacet = cdomSourceFacet;
-	}
-
-	public void setScopeFacet(ScopeFacet scopeFacet)
-	{
-		this.scopeFacet = scopeFacet;
+		this.varScopedFacet = varScopedFacet;
 	}
 
 	public void setVariableStoreFacet(VariableStoreFacet variableStoreFacet)
@@ -150,6 +133,6 @@ public class GrantedVarFacet extends AbstractSourcedListFacet<CharID, CDOMObject
 	 */
 	public void init()
 	{
-		cdomSourceFacet.addDataFacetChangeListener(this);
+		varScopedFacet.addDataFacetChangeListener(this);
 	}
 }

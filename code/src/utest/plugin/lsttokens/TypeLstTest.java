@@ -17,7 +17,10 @@
  */
 package plugin.lsttokens;
 
-import org.junit.Test;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.Constants;
@@ -28,6 +31,8 @@ import pcgen.rules.persistence.CDOMLoader;
 import pcgen.rules.persistence.token.CDOMPrimaryToken;
 import plugin.lsttokens.testsupport.AbstractGlobalTypeSafeListTestCase;
 import plugin.lsttokens.testsupport.CDOMTokenLoader;
+
+import org.junit.jupiter.api.Test;
 
 public class TypeLstTest extends AbstractGlobalTypeSafeListTestCase
 {
@@ -48,7 +53,13 @@ public class TypeLstTest extends AbstractGlobalTypeSafeListTestCase
 	}
 
 	@Override
-	public CDOMPrimaryToken<CDOMObject> getToken()
+	public CDOMPrimaryToken<CDOMObject> getReadToken()
+	{
+		return token;
+	}
+
+	@Override
+	public CDOMPrimaryToken<CDOMObject> getWriteToken()
 	{
 		return token;
 	}
@@ -88,19 +99,19 @@ public class TypeLstTest extends AbstractGlobalTypeSafeListTestCase
 	{
 		String[] unparsed;
 		assertTrue(parse("REMOVE.TestWP1"));
-		unparsed = getToken().unparse(primaryContext, primaryProf);
-		assertNull("Expected item to be equal", unparsed);
+		unparsed = getWriteToken().unparse(primaryContext, primaryProf);
+		assertNull(unparsed);
 
 		assertTrue(parse("TestWP1"));
 		assertTrue(parse("ADD.TestWP2"));
-		unparsed = getToken().unparse(primaryContext, primaryProf);
-		assertEquals("Expected item to be equal", "TestWP1"
+		unparsed = getWriteToken().unparse(primaryContext, primaryProf);
+		assertEquals("TestWP1"
 			+ getJoinCharacter() + "TestWP2", unparsed[0]);
 		if (isClearLegal())
 		{
 			assertTrue(parse(Constants.LST_DOT_CLEAR));
-			unparsed = getToken().unparse(primaryContext, primaryProf);
-			assertNull("Expected item to be null", unparsed);
+			unparsed = getWriteToken().unparse(primaryContext, primaryProf);
+			assertNull(unparsed);
 		}
 	}
 
@@ -110,12 +121,12 @@ public class TypeLstTest extends AbstractGlobalTypeSafeListTestCase
 		String[] unparsed;
 		assertTrue(parse("TestWP1"));
 		assertTrue(parse("TestWP2"));
-		unparsed = getToken().unparse(primaryContext, primaryProf);
-		assertEquals("Expected item to be equal", "TestWP1"
+		unparsed = getWriteToken().unparse(primaryContext, primaryProf);
+		assertEquals("TestWP1"
 			+ getJoinCharacter() + "TestWP2", unparsed[0]);
 		assertTrue(parse("REMOVE.TestWP1"));
-		unparsed = getToken().unparse(primaryContext, primaryProf);
-		assertEquals("Expected item to be equal", "TestWP2", unparsed[0]);
+		unparsed = getWriteToken().unparse(primaryContext, primaryProf);
+		assertEquals("TestWP2", unparsed[0]);
 	}
 
 	@Test

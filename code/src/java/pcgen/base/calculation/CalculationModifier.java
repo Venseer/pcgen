@@ -17,6 +17,8 @@
  */
 package pcgen.base.calculation;
 
+import java.util.Objects;
+
 import pcgen.base.formula.base.DependencyManager;
 import pcgen.base.formula.base.EvaluationManager;
 import pcgen.base.util.FormatManager;
@@ -54,14 +56,8 @@ public final class CalculationModifier<T> extends AbstractPCGenModifier<T>
 	 */
 	public CalculationModifier(NEPCalculation<T> calc, FormatManager<T> fmtManager)
 	{
-		if (calc == null)
-		{
-			throw new IllegalArgumentException("Calculation cannot be null");
-		}
-		if (fmtManager == null)
-		{
-			throw new IllegalArgumentException("FormatManager cannot be null");
-		}
+		Objects.requireNonNull(calc, "Calculation cannot be null");
+		Objects.requireNonNull(fmtManager, "FormatManager cannot be null");
 		toDo = calc;
 		formatManager = fmtManager;
 	}
@@ -132,5 +128,12 @@ public final class CalculationModifier<T> extends AbstractPCGenModifier<T>
 	public boolean isCompatible(FormatManager<?> fm)
 	{
 		return formatManager.equals(fm);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + ": " + toDo + " ["
+			+ formatManager.getIdentifierType() + "]";
 	}
 }

@@ -19,19 +19,19 @@ package selectionactor.auto;
 
 import pcgen.cdom.base.ChooseSelectionActor;
 import pcgen.core.WeaponProf;
-
 import plugin.lsttokens.auto.WeaponProfToken;
+
 import selectionactor.testsupport.AbstractSelectionActorTest;
 
 public class WeaponProfTokenTest extends AbstractSelectionActorTest<WeaponProf>
 {
 
-	private static final ChooseSelectionActor cra = new WeaponProfToken();
+	private static final ChooseSelectionActor CRA = new WeaponProfToken();
 
 	@Override
 	public ChooseSelectionActor<WeaponProf> getActor()
 	{
-		return cra;
+		return CRA;
 	}
 
 	@Override

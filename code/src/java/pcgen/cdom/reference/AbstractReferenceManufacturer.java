@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.TreeMap;
 
 import javax.swing.event.EventListenerList;
@@ -41,6 +43,7 @@ import pcgen.cdom.base.CDOMReference;
 import pcgen.cdom.base.ClassIdentity;
 import pcgen.cdom.base.Loadable;
 import pcgen.cdom.content.RollMethod;
+import pcgen.cdom.inst.Dynamic;
 import pcgen.util.Logging;
 import pcgen.util.StringPClassUtil;
 
@@ -632,10 +635,7 @@ public abstract class AbstractReferenceManufacturer<T extends Loadable> implemen
 		 * continue that long term? Once tokens are truly tested this may not be
 		 * necessary or desirable.
 		 */
-		if (key == null)
-		{
-			throw new IllegalArgumentException("Cannot request a reference to null identifier");
-		}
+		Objects.requireNonNull(key, "Cannot request a reference to null identifier");
 		if (key.isEmpty())
 		{
 			throw new IllegalArgumentException("Cannot request a reference to an empty identifier");
@@ -1229,10 +1229,7 @@ public abstract class AbstractReferenceManufacturer<T extends Loadable> implemen
 	@Override
 	public void addDerivativeObject(T obj)
 	{
-		if (obj == null)
-		{
-			throw new IllegalArgumentException("Derivative Object cannot be null");
-		}
+		Objects.requireNonNull(obj, "Derivative Object cannot be null");
 		derivatives.add(obj);
 	}
 
@@ -1257,6 +1254,10 @@ public abstract class AbstractReferenceManufacturer<T extends Loadable> implemen
 	@Override
 	public String getIdentifierType()
 	{
+		if (Dynamic.class.equals(getManagedClass()))
+		{
+			return factory.getPersistentFormat();
+		}
 		return StringPClassUtil.getStringFor(getManagedClass());
 	}
 
@@ -1273,10 +1274,9 @@ public abstract class AbstractReferenceManufacturer<T extends Loadable> implemen
 	}
 
 	@Override
-	@SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-	public FormatManager<?> getComponentManager()
+	public Optional<FormatManager<?>> getComponentManager()
 	{
-		return null;
+		return Optional.empty();
 	}
 
 	@Override

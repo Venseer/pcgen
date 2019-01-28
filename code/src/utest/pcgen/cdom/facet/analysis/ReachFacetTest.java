@@ -17,13 +17,11 @@
  */
 package pcgen.cdom.facet.analysis;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-
-import junit.framework.TestCase;
-
-import org.junit.Test;
 
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.enumeration.DataSetID;
@@ -34,7 +32,11 @@ import pcgen.cdom.facet.model.TemplateFacet;
 import pcgen.core.PCTemplate;
 import pcgen.core.Race;
 
-public class ReachFacetTest extends TestCase
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class ReachFacetTest
 {
 	/*
 	 * NOTE: This is not literal unit testing - it is leveraging the existing
@@ -50,10 +52,9 @@ public class ReachFacetTest extends TestCase
 	private TemplateFacet tfacet = new TemplateFacet();
 	private Map<CharID, Double> bonusInfo;
 
-	@Override
+	@BeforeEach
 	public void setUp() throws Exception
 	{
-		super.setUp();
 		DataSetID cid = DataSetID.getID();
 		id = CharID.getID(cid);
 		altid = CharID.getID(cid);
@@ -61,6 +62,17 @@ public class ReachFacetTest extends TestCase
 		facet.setRaceFacet(rfacet);
 		facet.setTemplateFacet(tfacet);
 		bonusInfo = new HashMap<>();
+	}
+
+	@AfterEach
+	public void tearDown()
+	{
+		id = null;
+		altid = null;
+		facet = null;
+		rfacet = null;
+		tfacet = null;
+		bonusInfo = null;
 	}
 
 	@Test

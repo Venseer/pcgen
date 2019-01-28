@@ -17,24 +17,21 @@
  */
 package pcgen.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import pcgen.base.formula.Formula;
 import pcgen.cdom.base.ChooseDriver;
 import pcgen.cdom.base.ChooseInformation;
 import pcgen.cdom.base.ChooseSelectionActor;
+import pcgen.cdom.base.LimitedVarHolder;
 import pcgen.cdom.enumeration.FormulaKey;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.ObjectKey;
-import pcgen.cdom.enumeration.RaceSubType;
-import pcgen.cdom.enumeration.RaceType;
-import pcgen.facade.core.RaceFacade;
 
 /**
  * {@code Race}.
  */
-public final class Race extends PObject implements RaceFacade, ChooseDriver
+public final class Race extends PObject implements ChooseDriver, LimitedVarHolder
 {
 
 	/**
@@ -62,39 +59,6 @@ public final class Race extends PObject implements RaceFacade, ChooseDriver
 	{
 		List<Integer> hda = getListFor(ListKey.HITDICE_ADVANCEMENT);
 		return hda == null ? 0 : hda.get(hda.size() - 1);
-	}
-
-	@Override
-	public String getSize()
-	{
-		Formula formula = get(FormulaKey.SIZE);
-		if (formula != null)
-		{
-			return formula.toString();
-		}
-		return null;
-	}
-
-	@Override
-	public String getRaceType()
-	{
-		RaceType rt = getSafe(ObjectKey.RACETYPE);
-		return rt == null ? "" : rt.toString();
-	}
-
-	@Override
-	public List<String> getRaceSubTypes()
-	{
-		List<String> subTypeNames = new ArrayList<>();
-		List<RaceSubType> rst = getListFor(ListKey.RACESUBTYPE);
-		if (rst != null)
-		{
-			for (RaceSubType subtype : rst)
-			{
-				subTypeNames.add(subtype.toString());
-			}
-		}
-		return subTypeNames;
 	}
 
 	@Override
@@ -128,9 +92,8 @@ public final class Race extends PObject implements RaceFacade, ChooseDriver
 	}
 
 	@Override
-	public boolean isUnselected()
+	public String getIdentifier()
 	{
-		return getSafeListFor(ListKey.GROUP).stream().filter(s -> "Unselected".equalsIgnoreCase(s)).findFirst()
-			.isPresent();
+		return "RACE";
 	}
 }

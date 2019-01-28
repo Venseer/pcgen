@@ -100,12 +100,6 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel implements Sor
 			return true;
 		}
 
-		@Override
-		public boolean shouldCache()
-		{
-			return false;
-		}
-
 	};
 
 	protected final Set<E> dataElements = new HashSet<>();
@@ -205,10 +199,7 @@ public class TreeViewTableModel<E> extends AbstractTreeTableModel implements Sor
 			Vector<TreeViewPath<? super E>> paths = new Vector<>();
 			for (E element : dataElements)
 			{
-				for (TreeViewPath<? super E> path : view.getPaths(element))
-				{
-					paths.add(path);
-				}
+				paths.addAll(view.getPaths(element));
 			}
 			setRoot(new TreeViewNode(paths));
 		}

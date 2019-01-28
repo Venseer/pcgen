@@ -17,57 +17,34 @@
  */
 package plugin.jepcommands;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.number.IsCloseTo.closeTo;
+
 import java.util.Stack;
 
-import pcgen.PCGenTestCase;
-import pcgen.util.testchecker.CompareEqualDouble;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
 import org.nfunk.jep.ParseException;
 import org.nfunk.jep.function.PostfixMathCommandI;
 
 /**
- * <code>OrCommandTest</code> tests the functioning of the jep or plugin
+ * {@code OrCommandTest} tests the functioning of the jep or plugin
  */
-public class OrCommandTest extends PCGenTestCase
+public class OrCommandTest
 {
-
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(OrCommandTest.class);
-	}
-
-	/*
-	 * @see TestCase#setUp()
-	 */
-    @Override
-	protected void setUp() throws Exception
-	{
-		super.setUp();
-
-    }
-
-    private static boolean runOr(final Stack stack, final PostfixMathCommandI pCommand)
+    private static void runOr(final Stack stack, final PostfixMathCommandI pCommand)
     {
-        boolean b;
         try
         {
             pCommand.run(stack);
-            b = true;
         }
-        catch (ParseException e)
+        catch (ParseException ignored)
         {
-            b = false;
         }
-        return b;
     }
 
     /* Test the case where the first operand is true */
+    @Test
     public void testOr01()
     {
         final PostfixMathCommandI   c = new OrCommand();
@@ -82,10 +59,11 @@ public class OrCommandTest extends PCGenTestCase
 
         final Double result = (Double) s.pop();
 
-        is(result, eq(1.0, 0.1), "if (1.0,2.0) returns 1.0");
+        assertThat("if (1.0,2.0) returns 1.0", result, closeTo(1.0, 0.1));
     }
 
     /* Test the case where the first operand is false, but the second is true */
+    @Test
     public void testOr02()
     {
         final PostfixMathCommandI   c = new OrCommand();
@@ -100,10 +78,11 @@ public class OrCommandTest extends PCGenTestCase
 
         final Double result = s.pop();
 
-        is(result, eq(2.0, 0.1), "if (0.0,2.0) returns 2.0");
+        assertThat("if (0.0,2.0) returns 2.0", result, closeTo(2.0, 0.1));
     }
 
     /* Test the case where the first two operands are false*/
+    @Test
     public void testOr03()
     {
         final PostfixMathCommandI   c = new OrCommand();
@@ -119,14 +98,15 @@ public class OrCommandTest extends PCGenTestCase
 
         final Boolean result = s.pop();
 
-        is(result, eq(true), "if (false,false,true) returns true");
+        assertThat("if (false,false,true) returns true", result, is(true));
     }
 
     /* Test the case where false and zero are skipped */
+    @Test
     public void testOr04()
     {
         final PostfixMathCommandI   c = new OrCommand();
-        final Stack                 s = new Stack();
+        final Stack<Object>         s = new Stack<>();
 
         s.push(0.0);
         s.push(false);
@@ -138,14 +118,15 @@ public class OrCommandTest extends PCGenTestCase
 
         final Object result = s.pop();
 
-        is(result, eq(true), "if (0.0,false,true) returns true");
+        assertThat("if (0.0,false,true) returns true", result, is(true));
     }
 
     /* Test the case where false and zero are skipped */
+    @Test
     public void testOr05()
     {
         final PostfixMathCommandI   c = new OrCommand();
-        final Stack                 s = new Stack();
+        final Stack<Object>         s = new Stack<>();
 
         s.push(false);
         s.push(false);
@@ -158,6 +139,6 @@ public class OrCommandTest extends PCGenTestCase
 
         final Object result = s.pop();
 
-        is(result, new CompareEqualDouble(0.0), "if (false,false,false,false) returns 0.0");
+        assertThat("if (false,false,false,false) returns 0.0", (Double)result, is(closeTo(0.0, 0.1)));
     }
 }

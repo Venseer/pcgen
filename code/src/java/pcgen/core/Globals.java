@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,7 +35,9 @@ import java.util.stream.Collectors;
 
 import javax.swing.JFrame;
 
+import pcgen.base.util.FormatManager;
 import pcgen.cdom.base.CDOMObject;
+import pcgen.cdom.base.SortKeyRequired;
 import pcgen.cdom.content.BaseDice;
 import pcgen.cdom.content.CNAbilityFactory;
 import pcgen.cdom.enumeration.FactKey;
@@ -43,7 +46,6 @@ import pcgen.cdom.enumeration.IntegerKey;
 import pcgen.cdom.enumeration.RaceType;
 import pcgen.cdom.enumeration.SourceFormat;
 import pcgen.cdom.enumeration.StringKey;
-import pcgen.cdom.util.SortKeyComparator;
 import pcgen.core.character.EquipSlot;
 import pcgen.core.chooser.CDOMChooserFacadeImpl;
 import pcgen.core.utils.CoreUtility;
@@ -57,6 +59,7 @@ import pcgen.rules.context.RuntimeReferenceContext;
 import pcgen.system.ConfigurationSettings;
 import pcgen.system.PCGenSettings;
 import pcgen.util.Logging;
+import pcgen.util.SortKeyAware;
 import pcgen.util.chooser.ChooserFactory;
 import pcgen.util.enumeration.Load;
 import pcgen.util.enumeration.VisionType;
@@ -68,37 +71,37 @@ import pcgen.util.enumeration.VisionType;
 public final class Globals
 {
 	/** These are changed during normal operation */
-	private static final List<PlayerCharacter> pcList = new ArrayList<>();
+	private static final List<PlayerCharacter> PC_LIST = new ArrayList<>();
 
 	/** NOTE: The defaultPath is duplicated in LstSystemLoader. */
-	private static final String defaultPcgPath = getUserFilesPath() + File.separator + "characters"; //$NON-NLS-1$
+	private static final String DEFAULT_PCG_PATH = getUserFilesPath() + File.separator + "characters"; //$NON-NLS-1$
 
-	private static final List<String> custColumnWidth = new ArrayList<>();
+	private static final List<String> CUST_COLUMN_WIDTH = new ArrayList<>();
 	private static SourceFormat sourceDisplay = SourceFormat.LONG;
 	private static int selectedPaper = -1;
 
 	/** we need maps for efficient lookups */
-	private static final Map<URI, Campaign> campaignMap = new HashMap<>();
-	private static final Map<String, Campaign> campaignNameMap = new HashMap<>();
-	private static final Map<String, String> eqSlotMap = new HashMap<>();
+	private static final Map<URI, Campaign> CAMPAIGN_MAP = new HashMap<>();
+	private static final Map<String, Campaign> CAMPAIGN_NAME_MAP = new HashMap<>();
+	private static final Map<String, String> EQ_SLOT_MAP = new HashMap<>();
 
 	/** We use lists for efficient iteration */
-	private static final List<Campaign> campaignList = new ArrayList<>(85);
+	private static final List<Campaign> CAMPAIGN_LIST = new ArrayList<>(85);
 
 	// end of filter creation sets
 	private static JFrame rootFrame;
-	private static final StringBuilder section15 = new StringBuilder(30000);
+	private static final StringBuilder SECTION_15 = new StringBuilder(30000);
 
 	/** whether or not the GUI is used (false for command line) */
 	private static boolean useGUI = true;
 
 	/** default location for options.ini on a Mac */
-	static final String defaultMacOptionsPath = System.getProperty("user.home") + "/Library/Preferences/pcgen";
+	static final String DEFAULT_MAC_OPTIONS_PATH = System.getProperty("user.home") + "/Library/Preferences/pcgen";
 
-	private static final Comparator<CDOMObject> pObjectComp =
+	private static final Comparator<CDOMObject> P_OBJECT_COMP =
 			(o1, o2) -> o1.getKeyName().compareToIgnoreCase(o2.getKeyName());
 
-	public static final Comparator<CDOMObject> pObjectNameComp = (o1, o2) -> {
+	public static final Comparator<CDOMObject> P_OBJECT_NAME_COMP = (o1, o2) -> {
 		final Collator collator = Collator.getInstance();
 
 		// Check sort keys first
@@ -145,7 +148,7 @@ public final class Globals
 	 */
 	public static Campaign getCampaignByURI(final URI aName, final boolean complainOnError)
 	{
-		final Campaign campaign = campaignMap.get(aName);
+		final Campaign campaign = CAMPAIGN_MAP.get(aName);
 
 		if ((campaign == null) && complainOnError)
 		{
@@ -161,7 +164,7 @@ public final class Globals
 	 */
 	public static List<Campaign> getCampaignList()
 	{
-		return campaignList;
+		return CAMPAIGN_LIST;
 	}
 
 	/**
@@ -188,7 +191,7 @@ public final class Globals
 	 */
 	public static Campaign getCampaignKeyedSilently(final String aKey)
 	{
-		for (final Campaign campaign : campaignList)
+		for (final Campaign campaign : CAMPAIGN_LIST)
 		{
 			if (campaign.getKeyName().equalsIgnoreCase(aKey))
 			{
@@ -303,7 +306,7 @@ public final class Globals
 	 */
 	public static void setEquipSlotTypeCount(final String aString, final String aNum)
 	{
-		eqSlotMap.put(aString, aNum);
+		EQ_SLOT_MAP.put(aString, aNum);
 	}
 
 	/**
@@ -315,22 +318,13 @@ public final class Globals
 	 */
 	public static int getEquipSlotTypeCount(final String aType)
 	{
-		final String aNum = eqSlotMap.get(aType);
+		final String aNum = EQ_SLOT_MAP.get(aType);
 
 		if (aNum != null)
 		{
 			return Integer.parseInt(aNum);
 		}
 		return 0;
-	}
-
-	/**
-	 * Get game mode align text
-	 * @return game mode align text
-	 */
-	public static String getGameModeAlignmentText()
-	{
-		return SettingsHandler.getGame().getAlignmentText();
 	}
 
 	/**
@@ -377,7 +371,7 @@ public final class Globals
 	 */
 	public static List<PlayerCharacter> getPCList()
 	{
-		return pcList;
+		return PC_LIST;
 	}
 
 	/**
@@ -420,7 +414,7 @@ public final class Globals
 	{
 		List<PaperInfo> items = new ArrayList<>(SettingsHandler.getGame().getModeContext().getReferenceContext()
 			.getConstructedCDOMObjects(PaperInfo.class));
-		items.sort(SortKeyComparator.getInstance());
+		items.sort(Comparator.comparing(SortKeyRequired::getSortKey));
 		return items;
 	}
 
@@ -452,7 +446,7 @@ public final class Globals
 	 */
 	public static StringBuilder getSection15()
 	{
-		return section15;
+		return SECTION_15;
 	}
 
 	/**
@@ -509,19 +503,19 @@ public final class Globals
 	 */
 	public static void addCampaign(final Campaign campaign)
 	{
-		campaignMap.put(campaign.getSourceURI(), campaign);
-		campaignList.add(campaign);
-		final Campaign oldCampaign = campaignNameMap.put(campaign.getName(), campaign);
+		CAMPAIGN_MAP.put(campaign.getSourceURI(), campaign);
+		CAMPAIGN_LIST.add(campaign);
+		final Campaign oldCampaign = CAMPAIGN_NAME_MAP.put(campaign.getKeyName(), campaign);
 		if (oldCampaign != null)
 		{
 			if (oldCampaign.getSourceURI().toString().equalsIgnoreCase(campaign.getSourceURI().toString()))
 			{
-				Logging.errorPrint("The campaign (" + campaign.getName() + ") was referenced with the incorrect case: "
+				Logging.errorPrint("The campaign (" + campaign.getKeyName() + ") was referenced with the incorrect case: "
 					+ oldCampaign.getSourceURI() + " vs " + campaign.getSourceURI());
 			}
 			else
 			{
-				Logging.errorPrint("Loaded Campaigns with matching names (" + campaign.getName()
+				Logging.errorPrint("Loaded Campaigns with matching names (" + campaign.getKeyName()
 					+ ") at different Locations: " + oldCampaign.getSourceURI() + " " + campaign.getSourceURI());
 			}
 		}
@@ -648,8 +642,8 @@ public final class Globals
 	public static void clearCampaignsForRefresh()
 	{
 		emptyLists();
-		campaignMap.clear();
-		campaignList.clear();
+		CAMPAIGN_MAP.clear();
+		CAMPAIGN_LIST.clear();
 	}
 
 	/**
@@ -897,7 +891,7 @@ public final class Globals
 	 */
 	static List<? extends CDOMObject> sortPObjectList(final List<? extends CDOMObject> aList)
 	{
-		aList.sort(pObjectComp);
+		aList.sort(P_OBJECT_COMP);
 
 		return aList;
 	}
@@ -911,7 +905,7 @@ public final class Globals
 	 */
 	public static <T extends CDOMObject> List<T> sortPObjectListByName(final List<T> aList)
 	{
-		aList.sort(pObjectNameComp);
+		aList.sort(P_OBJECT_NAME_COMP);
 
 		return aList;
 	}
@@ -989,12 +983,12 @@ public final class Globals
 
 	static List<String> getCustColumnWidth()
 	{
-		return custColumnWidth;
+		return CUST_COLUMN_WIDTH;
 	}
 
 	static String getDefaultPcgPath()
 	{
-		return expandRelativePath(defaultPcgPath);
+		return expandRelativePath(DEFAULT_PCG_PATH);
 	}
 
 	/**
@@ -1177,8 +1171,8 @@ public final class Globals
 
 	static void initCustColumnWidth(final List<String> l)
 	{
-		custColumnWidth.clear();
-		custColumnWidth.addAll(l);
+		CUST_COLUMN_WIDTH.clear();
+		CUST_COLUMN_WIDTH.addAll(l);
 	}
 
 	/**
@@ -1253,12 +1247,34 @@ public final class Globals
 		return SettingsHandler.getGame().getContext();
 	}
 
-	private static final LoadContext globalContext = new RuntimeLoadContext(
+	private static final LoadContext GLOBAL_CONTEXT = new RuntimeLoadContext(
 		RuntimeReferenceContext.createRuntimeReferenceContext(), new ConsolidatedListCommitStrategy());
 
 	public static LoadContext getGlobalContext()
 	{
-		return globalContext;
+		return GLOBAL_CONTEXT;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> getSortedList(Object[] available,
+		FormatManager<T> formatManager)
+	{
+		List<T> list = new ArrayList<>();
+		Arrays.stream(available).forEach(o -> list.add((T) o));
+		Class<T> underlying = formatManager.getManagedClass();
+		if (SortKeyAware.class.isAssignableFrom(underlying))
+		{
+			((List<SortKeyAware>) list).sort(SortKeyAware.SORT_KEY_COMPARATOR);
+		}
+		else if (PObject.class.isAssignableFrom(underlying))
+		{
+			((List<PObject>) list).sort(P_OBJECT_NAME_COMP);
+		}
+		else if (Comparable.class.isAssignableFrom(underlying))
+		{
+			list.sort(null);
+		}
+		return list;
 	}
 
 }

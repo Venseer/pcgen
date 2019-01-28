@@ -51,7 +51,7 @@ import pcgen.system.LanguageBundle;
 @SuppressWarnings("serial")
 public class CopySettingsPanel extends PCGenPrefsPanel
 {
-	private static final String in_copy_settings = LanguageBundle.getString("in_Prefs_copy");
+	private static final String IN_COPY_SETTINGS = LanguageBundle.getString("in_Prefs_copy");
 
 	private final JComboBoxEx gameModeSelect = new JComboBoxEx<>();
 	private final JButton copyButton = new JButton(LanguageBundle.getString("in_copy"));
@@ -67,7 +67,7 @@ public class CopySettingsPanel extends PCGenPrefsPanel
 		GridBagConstraints c = new GridBagConstraints();
 		JLabel label;
 		Border etched = null;
-		TitledBorder title1 = BorderFactory.createTitledBorder(etched, in_copy_settings);
+		TitledBorder title1 = BorderFactory.createTitledBorder(etched, IN_COPY_SETTINGS);
 
 		title1.setTitleJustification(TitledBorder.LEFT);
 		this.setBorder(title1);
@@ -111,27 +111,18 @@ public class CopySettingsPanel extends PCGenPrefsPanel
 		this.add(label);
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#getTitle()
-	 */
 	@Override
 	public String getTitle()
 	{
-		return in_copy_settings;
+		return IN_COPY_SETTINGS;
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#setOptionsBasedOnControls()
-	 */
 	@Override
 	public void setOptionsBasedOnControls()
 	{
 		// Do nothing
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#applyOptionValuesToControls()
-	 */
 	@Override
 	public void applyOptionValuesToControls()
 	{
@@ -155,9 +146,6 @@ public class CopySettingsPanel extends PCGenPrefsPanel
 	private final class CopyButtonListener implements ActionListener
 	{
 
-		/**
-		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-		 */
 		@Override
 		public void actionPerformed(ActionEvent actionEvent)
 		{

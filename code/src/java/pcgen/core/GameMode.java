@@ -18,7 +18,6 @@
 package pcgen.core;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,8 +27,7 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import org.apache.commons.lang3.StringUtils;
+import java.util.stream.Stream;
 
 import pcgen.base.util.HashMapToList;
 import pcgen.cdom.base.CDOMReference;
@@ -39,12 +37,10 @@ import pcgen.cdom.base.MasterListInterface;
 import pcgen.cdom.content.ACControl;
 import pcgen.cdom.content.RollMethod;
 import pcgen.cdom.content.TabInfo;
-import pcgen.cdom.reference.CDOMSingleRef;
 import pcgen.cdom.reference.ReferenceManufacturer;
 import pcgen.cdom.reference.TransparentReference;
 import pcgen.core.character.WieldCategory;
 import pcgen.core.system.LoadInfo;
-import pcgen.facade.core.GameModeFacade;
 import pcgen.rules.context.AbstractReferenceContext;
 import pcgen.rules.context.ConsolidatedListCommitStrategy;
 import pcgen.rules.context.GameReferenceContext;
@@ -54,14 +50,15 @@ import pcgen.rules.context.RuntimeReferenceContext;
 import pcgen.rules.context.TrackingReferenceContext;
 import pcgen.system.PCGenSettings;
 import pcgen.system.PropertyContext;
-import pcgen.util.ComparableComparator;
 import pcgen.util.Logging;
 import pcgen.util.enumeration.Tab;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Handles game modes.
  */
-public final class GameMode implements Comparable<Object>, GameModeFacade
+public final class GameMode implements Comparable<Object>
 {
 	private static PropertyContext prefsContext =
 			PCGenSettings.getInstance().createChildContext("gameMode"); //$NON-NLS-1$
@@ -80,34 +77,19 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	private HashMapToList<String, ACControl> ACTypeRemoveMap = new HashMapToList<>();
 	private Map<String, String> plusCalcs;
 	private Map<String, String> spellRangeMap = new HashMap<>();
-	private String acAbbrev = "";
 	private String acName = "";
-	private String alignmentName = "";
-	private String althpAbbrev = "";
-	private String althpName = "";
 	private String babAbbrev = null;
-	private String currencyUnit = "";
 	private String currencyUnitAbbrev = "";
 	private String damageResistance = "";
 	private String defaultSpellBook = "Known Spells";
 	private String defaultUnitSet = Constants.STANDARD_UNITSET_NAME;
 	private UnitSet selectedUnitSet = null;
 	private String displayName = "";
-	private String displayVariable2Name = "";
-	private String displayVariable2Text = "";
-	private String displayVariable3Name = "";
-	private String displayVariable3Text = "";
-	private String displayVariableName = "";
-	private String displayVariableText = "";
 	private final String folderName;
-	private String hpAbbrev = "";
-	private String hpName = "";
 	private String levelUpMessage = "";
-	private String menuToolTip = "";
 	private String name = "";
 	private String spellBaseDC = "0";
 	private String spellBaseConcentration = "";
-	private String wcStepsFormula = "";
 	private String weaponCategories = "";
 	private String weaponTypes = "";
 	private String weaponReachFormula = "";
@@ -116,15 +98,11 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	private String crThreshold = null;
 	private String rankModFormula = "";
 	private String addWithMetamagic = "";
-	private boolean allowAutoResize = false;
 	private boolean bonusStatAllowsStack = false;
-	private boolean showClassDefense;
 	private int babAttCyc = 5; //6
 	private int babMaxAtt = Integer.MAX_VALUE; //4
-	private int babMaxLvl = Integer.MAX_VALUE; //20
 	private int babMinVal = 1;
 	private int maxNonEpicLevel = Integer.MAX_VALUE;
-	private int checksMaxLvl = Integer.MAX_VALUE; //20
 	private int displayOrder = Integer.MAX_VALUE;
 
 	private int skillCosts_Class = 1;
@@ -186,9 +164,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	/** The BioSet used for age calculations */
 	private BioSet bioSet = new BioSet();
 
-	/** SHOWTAB compatibility */
-	private Map<CDOMSingleRef<TabInfo>, Boolean> visibleTabs;
-
 	private Map<String, String> equipTypeIconMap = new HashMap<>();
 
 	/** Priority of the equipment types for icon use. */
@@ -196,11 +171,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 
 	/** A container for feat settings for this game mode. */
 	private AbilityCategory featTemplate;
-
-	/**
-	 * Indicates that the GameMode uses Deity and Domain
-	 */
-	private boolean hasDeityDomain = true;
 
 	/**
 	 * Creates a new instance of GameMode.
@@ -236,15 +206,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		rollMethod = gamemodePrefsContext.getInt("rollMethod"); //$NON-NLS-1$
 		allStatsValue = gamemodePrefsContext.initInt("allStatsValue", 10); //$NON-NLS-1$
 		purchaseMethodName = gamemodePrefsContext.getProperty("purchaseMethodName"); //$NON-NLS-1$
-	}
-
-	/**
-	 * Set the AC Abbreviation.
-	 * @param aString
-	 */
-	public void setACAbbrev(final String aString)
-	{
-		acAbbrev = aString;
 	}
 
 	/**
@@ -290,32 +251,12 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		{
 			return acType;
 		}
-		for (String acKey : ACTypeAddMap.getKeySet())
-		{
-			if (acKey.equalsIgnoreCase(acType))
-			{
-				return acKey;
-			}
-		}
-		for (String acKey : ACTypeRemoveMap.getKeySet())
-		{
-			if (acKey.equalsIgnoreCase(acType))
-			{
-				return acKey;
-			}
-		}
-
-		return acType;
+		return Stream.concat(ACTypeAddMap.getKeySet().stream(), ACTypeRemoveMap.getKeySet().stream()).
+				filter(acKey -> acKey.equalsIgnoreCase(acType))
+		      .findFirst()
+		      .orElse(acType);
 	}
 
-	/**
-	 * Set Alignment Text.
-	 * @param aString
-	 */
-	public void setAlignmentText(final String aString)
-	{
-		alignmentName = aString;
-	}
 
 	/**
 	 * Adds an Allowed Game Mode
@@ -328,42 +269,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		}
 
 		allowedModes.add(modeName);
-	}
-
-	/**
-	 * Set the alternative HP Abbreviation.
-	 * @param aString
-	 */
-	public void setAltHPAbbrev(final String aString)
-	{
-		althpAbbrev = aString;
-	}
-
-	/**
-	 * Set the alternative HP Text.
-	 * @param aString
-	 */
-	public void setAltHPText(final String aString)
-	{
-		althpName = aString;
-	}
-
-	/**
-	 * Set flag to allow auto resizing or not.
-	 * @param allow
-	 */
-	public void setAllowAutoResize(final boolean allow)
-	{
-		allowAutoResize = allow;
-	}
-
-	/**
-	 * Get the allow auto resize flag.
-	 * @return true if allowed to auto resize
-	 */
-	public boolean getAllowAutoResize()
-	{
-		return allowAutoResize;
 	}
 
 	/**
@@ -412,24 +317,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	}
 
 	/**
-	 * Set Max Level check.
-	 * @param arg
-	 */
-	public void setChecksMaxLvl(final int arg)
-	{
-		checksMaxLvl = arg;
-	}
-
-	/**
-	 * Get max level check.
-	 * @return max level check
-	 */
-	int getChecksMaxLvl()
-	{
-		return checksMaxLvl;
-	}
-
-	/**
 	 * Get the class type by name.
 	 * @param aClassKey
 	 * @return ClassType
@@ -441,15 +328,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 			return null;
 		}
 		return getModeContext().getReferenceContext().silentlyGetConstructedCDOMObject(ClassType.class, aClassKey);
-	}
-
-	/**
-	 * Set the Currency Unit.
-	 * @param aString
-	 */
-	public void setCurrencyUnit(final String aString)
-	{
-		currencyUnit = aString;
 	}
 
 	/**
@@ -492,7 +370,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 * Get the display name of the game mode.
 	 * @return displayName
 	 */
-	@Override
 	public String getDisplayName()
 	{
 		return displayName;
@@ -529,24 +406,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	public String getFolderName()
 	{
 		return folderName;
-	}
-
-	/**
-	 * Set the HP Abbreviation.
-	 * @param aString
-	 */
-	public void setHPAbbrev(final String aString)
-	{
-		hpAbbrev = aString;
-	}
-
-	/**
-	 * Set the HP Text.
-	 * @param aString
-	 */
-	public void setHPText(final String aString)
-	{
-		hpName = aString;
 	}
 
 	/**
@@ -600,20 +459,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	}
 
 	/**
-	 * Get the menu tool tip.
-	 * @return menu tool tip
-	 */
-	public String getMenuToolTip()
-	{
-		if (menuToolTip == null)
-		{
-			return "";
-		}
-
-		return menuToolTip;
-	}
-
-	/**
 	 * Set the game mode name.
 	 * @param modeName The MENUENTRY value.
 	 */
@@ -623,19 +468,9 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	}
 
 	/**
-	 * Set the game mode tool tip.
-	 * @param aString
-	 */
-	public void setModeToolTip(final String aString)
-	{
-		menuToolTip = aString;
-	}
-
-	/**
 	 * Get the game mode name.
 	 * @return game mode name
 	 */
-	@Override
 	public String getName()
 	{
 		return name;
@@ -684,15 +519,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	public int getShortRangeDistance()
 	{
 		return shortRangeDistance;
-	}
-
-	/**
-	 * Set the show class defense parameter.
-	 * @param argShowDef
-	 */
-	public void setShowClassDefense(final boolean argShowDef)
-	{
-		showClassDefense = argShowDef;
 	}
 
 	/**
@@ -809,96 +635,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	}
 
 	/**
-	 * Set the max BAB level.
-	 * @param arg
-	 */
-	public void setBabMaxLvl(final int arg)
-	{
-		babMaxLvl = arg;
-	}
-
-	/**
-	 * Get the max BAB level.
-	 * @return the max BAB level
-	 */
-	public int getBabMaxLvl()
-	{
-		return babMaxLvl;
-	}
-
-	/**
-	 * Set a 2nd variable display name.
-	 * @param aString
-	 */
-	public void setVariableDisplay2Name(final String aString)
-	{
-		displayVariable2Name = aString;
-	}
-
-	/**
-	 * Set a 2nd variable display text.
-	 * @param aString
-	 */
-	public void setVariableDisplay2Text(final String aString)
-	{
-		displayVariable2Text = aString;
-	}
-
-	/**
-	 * Set a 3rd variable display name.
-	 * @param aString
-	 */
-	public void setVariableDisplay3Name(final String aString)
-	{
-		displayVariable3Name = aString;
-	}
-
-	/**
-	 * Set a 3rd variable display text.
-	 * @param aString
-	 */
-	public void setVariableDisplay3Text(final String aString)
-	{
-		displayVariable3Text = aString;
-	}
-
-	/**
-	 * Set a variable display name.
-	 * @param aString
-	 */
-	public void setVariableDisplayName(final String aString)
-	{
-		displayVariableName = aString;
-	}
-
-	/**
-	 * Set a 2nd variable display text.
-	 * @param aString
-	 */
-	public void setVariableDisplayText(final String aString)
-	{
-		displayVariableText = aString;
-	}
-
-	/**
-	 * Formula used to compute Wield Category steps.
-	 * @param aString
-	 */
-	public void setWCStepsFormula(final String aString)
-	{
-		wcStepsFormula = aString;
-	}
-
-	/**
-	 * Get the formula used to compute Wield Category steps.
-	 * @return formula used to compute Wield Category steps
-	 */
-	public String getWCStepsFormula()
-	{
-		return wcStepsFormula;
-	}
-
-	/**
 	 * Get the weapon categories.
 	 * @return the weapon categories
 	 */
@@ -942,7 +678,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	public Map<Integer, String> getCRSteps()
 	{
-		return crStepsMap;
+		return Collections.unmodifiableMap(crStepsMap);
 	}
 
 	/**
@@ -953,14 +689,12 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	{
 		if (cr.startsWith("1/"))
 		{
-			for (Map.Entry<Integer, String> entry : crStepsMap.entrySet())
-			{
-				if (entry.getValue().equals(cr))
-				{
-					return entry.getKey();
-				}
-			}
-			return null;
+			return crStepsMap.entrySet()
+			                 .stream()
+			                 .filter(entry -> entry.getValue().equals(cr))
+			                 .findFirst()
+			                 .map(Map.Entry::getKey)
+			                 .orElse(null);
 		}
 		return Integer.parseInt(cr);
 	}
@@ -1138,29 +872,12 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	}
 
 	/**
-	 * Set the acAbbrev field.
-	 */
-	String getACAbbrev()
-	{
-		return acAbbrev;
-	}
-
-	/**
 	 * Answer the information about AC.
 	 * @return AC text
 	 */
 	public String getACText()
 	{
 		return acName;
-	}
-
-	/**
-	 * Answer with the alignment.
-	 * @return alignment name
-	 */
-	public String getAlignmentText()
-	{
-		return alignmentName;
 	}
 
 	public List<String> getAllowedModes()
@@ -1174,20 +891,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		}
 
 		return allowedModes;
-	}
-
-	String getAltHPAbbrev()
-	{
-		return althpAbbrev;
-	}
-
-	/**
-	 * Wound Points.
-	 * @return alt hp name
-	 */
-	String getAltHPText()
-	{
-		return althpName;
 	}
 
 	/**
@@ -1212,7 +915,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 * Currency abbreviation.
 	 * @return currency unit abbreviation
 	 */
-	@Override
 	public String getCurrencyDisplay()
 	{
 		return currencyUnitAbbrev;
@@ -1250,7 +952,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 *
 	 * @return the default data set list
 	 */
-	@Override
 	public List<String> getDefaultDataSetList()
 	{
 		return defaultDataSetList;
@@ -1265,76 +966,14 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return displayOrder;
 	}
 
-	/**
-	 * HP.
-	 * @return HP abbreviation
-	 */
-	String getHPAbbrev()
-	{
-		return hpAbbrev;
-	}
-
-	String getHPText()
-	{
-		return hpName;
-	}
-
-	/**
-	 * Answer the unit of currency.
-	 * @return currency unit
-	 */
-	String getLongCurrencyDisplay()
-	{
-		return currencyUnit;
-	}
-
 	public String getRankModFormula()
 	{
 		return rankModFormula;
 	}
 
-	boolean getShowClassDefense()
-	{
-		return showClassDefense;
-	}
-
 	List<String> getSkillMultiplierLevels()
 	{
 		return skillMultiplierLevels;
-	}
-
-	String getVariableDisplay2Name()
-	{
-		return displayVariable2Name;
-	}
-
-	String getVariableDisplay2Text()
-	{
-		return displayVariable2Text;
-	}
-
-	String getVariableDisplay3Name()
-	{
-		return displayVariable3Name;
-	}
-
-	String getVariableDisplay3Text()
-	{
-		return displayVariable3Text;
-	}
-
-	String getVariableDisplayName()
-	{
-		return displayVariableName;
-	}
-
-	/**
-	 * Variable Display.
-	 * @return variable display text
-	 */
-	String getVariableDisplayText()
-	{
-		return displayVariableText;
 	}
 
 	/**
@@ -1463,7 +1102,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 * Get add with meta magic message.
 	 * @return add with meta magic message
 	 */
-	@Override
 	public String getAddWithMetamagicMessage()
 	{
 		return addWithMetamagic;
@@ -1538,8 +1176,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		if (pointBuyStatCosts == null)
 		{
 			// Sort NUMERICALLY, not alphabetically!
-			// CONSIDER Huh? The natural order of Integer IS numerically... - thpr 10/20/06
-			pointBuyStatCosts = new TreeMap<>(new ComparableComparator<>());
+			pointBuyStatCosts = new TreeMap<>();
 		}
 		abilityScoreCost = null;
 		pointBuyStatCosts.put(pbc.getStatValue(), pbc);
@@ -1964,8 +1601,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		if (statDisplayText == null)
 		{
 			// Sort NUMERICALLY, not alphabetically!
-			// CONSIDER Huh? The natural order of Integer IS numerically... - thpr 10/20/06
-			statDisplayText = new TreeMap<>(new ComparableComparator<>());
+			statDisplayText = new TreeMap<>();
 		}
 		statDisplayText.put(statValue, statText);
 	}
@@ -1993,7 +1629,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 				final int firstKey = statDisplayText.firstKey();
 				if (statValue < firstKey)
 				{
-					statText = "???" + Integer.toString(statValue) + "???";
+					statText = "???" + statValue + "???";
 				}
 				else
 				{
@@ -2013,7 +1649,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	public boolean hasSkillRankDisplayText()
 	{
-		return (skillRankDisplayText == null) ? false : true;
+		return skillRankDisplayText != null;
 	}
 
 	/**
@@ -2026,8 +1662,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		if (skillRankDisplayText == null)
 		{
 			// Sort NUMERICALLY, not alphabetically!
-			// CONSIDER Huh? The natural order of Integer IS numerically... - thpr 10/20/06
-			skillRankDisplayText = new TreeMap<>(new ComparableComparator<>());
+			skillRankDisplayText = new TreeMap<>();
 		}
 		skillRankDisplayText.put(rankValue, rankText);
 	}
@@ -2055,7 +1690,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 				final int firstKey = skillRankDisplayText.firstKey();
 				if (rankValue < firstKey)
 				{
-					rankText = "???" + Integer.toString(rankValue) + "???";
+					rankText = "???" + rankValue + "???";
 				}
 				else
 				{
@@ -2150,11 +1785,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	public void setPreviewDir(final String aDir)
 	{
 		thePreviewDir = aDir;
-	}
-
-	private String getPreviewDir()
-	{
-		return thePreviewDir;
 	}
 
 	public void setDefaultPreviewSheet(final String aSheet)
@@ -2286,7 +1916,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	public List<String> getMonsterRoleDefaultList()
 	{
-		return new ArrayList<>(Arrays.asList(monsterRoleDefault));
+		return new ArrayList<>(Collections.singletonList(monsterRoleDefault));
 	}
 
 	/**
@@ -2324,10 +1954,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	public void resolveInto(AbstractReferenceContext referenceContext)
 	{
-		for (ReferenceManufacturer<?> rm : gameRefContext.getAllManufacturers())
-		{
-			resolveReferenceManufacturer(referenceContext, rm);
-		}
+		gameRefContext.getAllManufacturers().forEach(rm -> resolveReferenceManufacturer(referenceContext, rm));
 	}
 
 	private AbstractReferenceContext getRefContext()
@@ -2382,7 +2009,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	public String getDefaultXPTableName()
 	{
-		if (defaultXPTableName == null || defaultXPTableName.equals("") || !xpTableNames.contains(defaultXPTableName))
+		if (defaultXPTableName == null || defaultXPTableName.isEmpty() || !xpTableNames.contains(defaultXPTableName))
 		{
 			if (xpTableNames.isEmpty())
 			{
@@ -2430,7 +2057,7 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 */
 	public String getDefaultCharacterType()
 	{
-		if (defaultCharacterType == null || defaultCharacterType.equals("")
+		if (defaultCharacterType == null || defaultCharacterType.isEmpty()
 			|| !characterTypeList.contains(defaultCharacterType))
 		{
 			if (characterTypeList.isEmpty())
@@ -2511,54 +2138,22 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 *
 	 * @return the default source title
 	 */
-	@Override
 	public String getDefaultSourceTitle()
 	{
 		return defaultSourceTitle;
 	}
 
-	@Override
 	public String getTabName(Tab tab)
 	{
 		TabInfo ti = getContext().getReferenceContext().silentlyGetConstructedCDOMObject(TabInfo.class, tab.toString());
 		return ti.getResolvedName();
 	}
 
-	@Override
 	public boolean getTabShown(Tab tab)
 	{
 		TabInfo ti = getContext().getReferenceContext().silentlyGetConstructedCDOMObject(TabInfo.class, tab.toString());
 		return ti.isVisible();
 	}
-
-	public void setTabVisible(CDOMSingleRef<TabInfo> ref, Boolean set)
-	{
-		if (visibleTabs == null)
-		{
-			visibleTabs = new HashMap<>();
-		}
-		visibleTabs.put(ref, set);
-	}
-
-	public Boolean getTabVisibility(TabInfo ti)
-	{
-		if (visibleTabs == null)
-		{
-			return null;
-		}
-		for (Map.Entry<CDOMSingleRef<TabInfo>, Boolean> me : visibleTabs.entrySet())
-		{
-			if (ti.equals(me.getKey().get()))
-			{
-				return me.getValue();
-			}
-		}
-		return null;
-	}
-
-	/*
-	 * End SHOWTAB compatibility
-	 */
 
 	public LoadInfo getLoadInfo()
 	{
@@ -2569,7 +2164,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 *
 	 * @return the file name of the InfoSheet relative to the base pcgen directory
 	 */
-	@Override
 	public String getInfoSheet()
 	{
 		return theInfoSheet;
@@ -2588,7 +2182,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 *
 	 * @return the file name of the skill InfoSheet relative to the base pcgen directory
 	 */
-	@Override
 	public String getInfoSheetSkill()
 	{
 		return theInfoSheetSkill;
@@ -2616,7 +2209,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 *
 	 * @return the directory for output sheets for the current game mode
 	 */
-	@Override
 	public String getOutputSheetDirectory()
 	{
 		return outputSheetDirectory;
@@ -2635,7 +2227,6 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	 *
 	 * @return the directory for output sheets for the current game mode
 	 */
-	@Override
 	public String getOutputSheetDefault(String type)
 	{
 		return outputSheetDefaultMap.get(type);
@@ -2675,25 +2266,21 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 		return priority == null ? 0 : priority;
 	}
 
-	@Override
 	public String getCharSheetDir()
 	{
-		return getPreviewDir();
+		return thePreviewDir;
 	}
 
-	@Override
 	public String getDefaultCharSheet()
 	{
 		return getDefaultPreviewSheet();
 	}
 
-	@Override
 	public String getHeightUnit()
 	{
 		return "ftin".equals(getUnitSet().getHeightUnit()) ? "inches" : getUnitSet().getHeightUnit();
 	}
 
-	@Override
 	public String getWeightUnit()
 	{
 		return getUnitSet().getWeightUnit();
@@ -2717,26 +2304,5 @@ public final class GameMode implements Comparable<Object>, GameModeFacade
 	public int getMaxNonEpicLevel()
 	{
 		return maxNonEpicLevel;
-	}
-
-	/**
-	 * Indicates if this GameMode uses Deity and Domain objects.
-	 * 
-	 * @param usesDeityDomain
-	 *            The value indicating whether this GameMode uses Deity and Domain objects
-	 */
-	public void hasDeityDomain(boolean usesDeityDomain)
-	{
-		hasDeityDomain = usesDeityDomain;
-	}
-
-	/**
-	 * Returns true if this GameMode uses Deity and Domain objects.
-	 * 
-	 * @return true if this GameMode uses Deity and Domain objects; false otherwise
-	 */
-	public boolean hasDeityDomain()
-	{
-		return hasDeityDomain;
 	}
 }

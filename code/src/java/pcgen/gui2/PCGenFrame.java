@@ -34,17 +34,17 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Observer;
+import java.util.Optional;
 import java.util.logging.LogRecord;
 
 import javax.swing.Action;
@@ -68,24 +68,17 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.commons.lang3.StringUtils;
-import org.lobobrowser.html.HtmlRendererContext;
-import org.lobobrowser.html.gui.HtmlPanel;
-import org.lobobrowser.html.test.SimpleHtmlRendererContext;
-import org.lobobrowser.html.test.SimpleUserAgentContext;
-
 import pcgen.cdom.base.Constants;
-import pcgen.cdom.content.Sponsor;
+import pcgen.core.Campaign;
+import pcgen.core.GameMode;
 import pcgen.core.Globals;
 import pcgen.core.utils.ShowMessageDelegate;
-import pcgen.facade.core.CampaignFacade;
 import pcgen.facade.core.CharacterFacade;
 import pcgen.facade.core.CharacterStubFacade;
 import pcgen.facade.core.ChooserFacade;
 import pcgen.facade.core.CompanionFacade;
 import pcgen.facade.core.DataSetFacade;
 import pcgen.facade.core.EquipmentBuilderFacade;
-import pcgen.facade.core.GameModeFacade;
 import pcgen.facade.core.PartyFacade;
 import pcgen.facade.core.SourceSelectionFacade;
 import pcgen.facade.core.SpellBuilderFacade;
@@ -119,8 +112,14 @@ import pcgen.system.PCGenPropBundle;
 import pcgen.system.PCGenSettings;
 import pcgen.system.PropertyContext;
 import pcgen.util.Logging;
-import pcgen.util.chooser.ChoiceHandler;
 import pcgen.util.chooser.ChooserFactory;
+import pcgen.util.chooser.RandomChooser;
+
+import org.apache.commons.lang3.StringUtils;
+import org.lobobrowser.html.HtmlRendererContext;
+import org.lobobrowser.html.gui.HtmlPanel;
+import org.lobobrowser.html.test.SimpleHtmlRendererContext;
+import org.lobobrowser.html.test.SimpleUserAgentContext;
 
 /**
  * The main window for PCGen. In addition this class is responsible for providing 
@@ -132,6 +131,12 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 	private final PCGenActionMap actionMap;
 	private final CharacterTabs characterTabs;
 	private final PCGenStatusBar statusBar;
+
+	/**
+	 * The context indicating what items are currently loaded/being processed in the UI
+	 */
+	private final UIContext uiContext;
+
 	private final DefaultReferenceFacade<SourceSelectionFacade> currentSourceSelection;
 	private final DefaultReferenceFacade<CharacterFacade> currentCharacterRef;
 	private final DefaultReferenceFacade<DataSetFacade> currentDataSetRef;
@@ -143,13 +148,14 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 	private String section15 = null;
 	private String lastCharacterPath = null;
 
-	public PCGenFrame()
+	public PCGenFrame(UIContext uiContext)
 	{
+		this.uiContext = Objects.requireNonNull(uiContext);
 		Globals.setRootFrame(this);
-		this.currentSourceSelection = new DefaultReferenceFacade<>();
+		this.currentSourceSelection = uiContext.getCurrentSourceSelectionRef();
 		this.currentCharacterRef = new DefaultReferenceFacade<>();
 		this.currentDataSetRef = new DefaultReferenceFacade<>();
-		this.actionMap = new PCGenActionMap(this);
+		this.actionMap = new PCGenActionMap(this, uiContext);
 		this.characterTabs = new CharacterTabs(this);
 		this.statusBar = new PCGenStatusBar(this);
 		this.filenameListener = new FilenameListener();
@@ -170,8 +176,8 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 		root.setActionMap(actionMap);
 		root.setInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, createInputMap(actionMap));
 
-		characterTabs.add(new InfoGuidePane(this));
-		setJMenuBar(new PCGenMenuBar(this));
+		characterTabs.add(new InfoGuidePane(this, uiContext));
+		setJMenuBar(new PCGenMenuBar(this, uiContext));
 		add(new PCGenToolBar(this), BorderLayout.NORTH);
 		add(characterTabs, BorderLayout.CENTER);
 		add(statusBar, BorderLayout.SOUTH);
@@ -352,10 +358,10 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 				{
 					return false;
 				}
-				GameModeFacade gameMode = null;
-				for (Iterator<GameModeFacade> iterator = FacadeFactory.getGameModes().iterator(); iterator.hasNext();)
+				GameMode gameMode = null;
+				for (Iterator<GameMode> iterator = FacadeFactory.getGameModes().iterator(); iterator.hasNext();)
 				{
-					GameModeFacade facade = iterator.next();
+					GameMode facade = iterator.next();
 					if (gameModeName.equals(facade.toString()))
 					{
 						gameMode = facade;
@@ -368,11 +374,11 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 					return false;
 				}
 
-				List<CampaignFacade> campaigns = new ArrayList<>();
+				List<Campaign> campaigns = new ArrayList<>();
 				String[] sourceNames = sourcesNameString.split("\\|"); //$NON-NLS-1$
-				for (Iterator<CampaignFacade> iterator = FacadeFactory.getCampaigns().iterator(); iterator.hasNext();)
+				for (Iterator<Campaign> iterator = FacadeFactory.getCampaigns().iterator(); iterator.hasNext();)
 				{
-					CampaignFacade camp = iterator.next();
+					Campaign camp = iterator.next();
 					for (String name : sourceNames)
 					{
 						if (name.equals(camp.toString()))
@@ -532,14 +538,6 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 	}
 
 	/**
-	 * @return A reference to the currently loaded sources.
-	 */
-	public ReferenceFacade<SourceSelectionFacade> getCurrentSourceSelectionRef()
-	{
-		return currentSourceSelection;
-	}
-
-	/**
 	 *
 	 * @return a reference to the selected character
 	 */
@@ -622,20 +620,20 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 		{
 			return false;
 		}
-		//we use reference equality since GameModeFacades come from a fixed database
+		//we use reference equality since GameModes come from a fixed database
 		if (source1.getGameMode().get() != source2.getGameMode().get())
 		{
 			return false;
 		}
-		ListFacade<CampaignFacade> campaigns1 = source1.getCampaigns();
-		ListFacade<CampaignFacade> campaigns2 = source2.getCampaigns();
+		ListFacade<Campaign> campaigns1 = source1.getCampaigns();
+		ListFacade<Campaign> campaigns2 = source2.getCampaigns();
 		if (campaigns1.getSize() != campaigns2.getSize())
 		{
 			return false;
 		}
-		for (CampaignFacade campaignFacade : campaigns1)
+		for (Campaign campaign : campaigns1)
 		{
-			if (!campaigns2.containsElement(campaignFacade))
+			if (!campaigns2.containsElement(campaign))
 			{
 				return false;
 			}
@@ -653,7 +651,7 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 		{
 			return false;
 		}
-		//we use reference equality since GameModeFacades come from a fixed database
+		//we use reference equality since GameModes come from a fixed database
 		if (source1.getGameMode().get() != source2.getGameMode().get())
 		{
 			return false;
@@ -1238,7 +1236,7 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 		campList.append("<UL>");
 		int count = 1;
 		final int maxListLen = 6;
-		for (CampaignFacade facade : sources.getCampaigns())
+		for (Campaign facade : sources.getCampaigns())
 		{
 			campList.append("<li>");
 			if (count >= maxListLen && sources.getCampaigns().getSize() > maxListLen)
@@ -1459,7 +1457,7 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 	{
 		if (sourceSelectionDialog == null)
 		{
-			sourceSelectionDialog = new SourceSelectionDialog(this);
+			sourceSelectionDialog = new SourceSelectionDialog(this, uiContext);
 		}
 		Utility.setComponentRelativeLocation(this, sourceSelectionDialog);
 		sourceSelectionDialog.setVisible(true);
@@ -1645,10 +1643,10 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 	public boolean showGeneralChooser(ChooserFacade chooserFacade)
 	{
 		// Check for an override of the chooser to be used 
-		ChoiceHandler choiceHandler = ChooserFactory.getChoiceHandler();
-		if (choiceHandler != null)
+		Optional<RandomChooser> choiceHandler = ChooserFactory.getChoiceHandler();
+		if (choiceHandler.isPresent())
 		{
-			return choiceHandler.makeChoice(chooserFacade);
+			return choiceHandler.get().makeChoice(chooserFacade);
 		}
 
 		if (chooserFacade.isPreferRadioSelection() && chooserFacade.getAvailableList().getSize() <= 20
@@ -1717,7 +1715,7 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 				currentSourceSelection.set(sources);
 
 				StringBuilder sourceString = new StringBuilder(100);
-				ListFacade<CampaignFacade> campaigns = sources.getCampaigns();
+				ListFacade<Campaign> campaigns = sources.getCampaigns();
 				for (int i = 0; i < campaigns.getSize(); i++)
 				{
 					if (i > 0)
@@ -1764,10 +1762,6 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 			if (loader.hasMatureCampaign() && context.initBoolean(PCGenSettings.OPTION_SHOW_MATURE_ON_LOAD, true))
 			{
 				showMatureDialog(loader.getMatureInfo());
-			}
-			if (context.initBoolean(PCGenSettings.OPTION_SHOW_SPONSORS_ON_LOAD, true))
-			{
-				showSponsorsDialog();
 			}
 		}
 
@@ -1874,75 +1868,6 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 		aFrame.setVisible(true);
 	}
 
-	public void showSponsorsDialog()
-	{
-		Collection<Sponsor> sponsors =
-				Globals.getGlobalContext().getReferenceContext().getConstructedCDOMObjects(Sponsor.class);
-
-		if (sponsors.size() <= 1)
-		{
-			return;
-		}
-
-		String title = LanguageBundle.getString("in_sponsorTitle"); //$NON-NLS-1$
-
-		final JDialog aFrame = new JDialog(this, title, true);
-		final JButton jClose = new JButton(LanguageBundle.getString("in_close")); //$NON-NLS-1$
-		jClose.setMnemonic(LanguageBundle.getMnemonic("in_mn_close")); //$NON-NLS-1$
-		final JPanel jPanel = new JPanel();
-		final JCheckBox jCheckBox = new JCheckBox(LanguageBundle.getString("in_licShowOnLoad")); //$NON-NLS-1$
-		jPanel.add(jCheckBox);
-		final PropertyContext context = PCGenSettings.OPTIONS_CONTEXT;
-		jCheckBox.setSelected(context.getBoolean(PCGenSettings.OPTION_SHOW_SPONSORS_ON_LOAD));
-		jCheckBox.addItemListener(
-			evt -> context.setBoolean(PCGenSettings.OPTION_SHOW_SPONSORS_ON_LOAD, jCheckBox.isSelected()));
-		jPanel.add(jClose);
-		jClose.addActionListener(evt -> aFrame.dispose());
-
-		StringBuilder sb = new StringBuilder(500);
-
-		sb.append("<html>");
-		for (Sponsor sponsor : sponsors)
-		{
-			if (!"PCGEN".equals(sponsor.getKeyName()))
-			{
-				continue;
-			}
-			sb.append("<img src='").append(sponsor.getBannerImage()).append("'><br>");
-		}
-
-		String s = "";
-		if (sponsors.size() > 2)
-		{
-			s = "s";
-		}
-		sb.append("<H2><CENTER>").append(LanguageBundle.getString("in_sponsorThanks")).append(s) //$NON-NLS-2$
-			.append(":</CENTER></h2>");
-		int size = 172;
-		for (Sponsor sponsor : sponsors)
-		{
-			if ("PCGEN".equals(sponsor.getKeyName()))
-			{
-				continue;
-			}
-
-			size += 70;
-			sb.append("<img src='").append(sponsor.getBannerImage()).append("'><br>");
-		}
-		sb.append("</html>");
-
-		HtmlPanel htmlPanel = new HtmlPanel();
-		HtmlRendererContext theRendererContext = new SimpleHtmlRendererContext(htmlPanel, new SimpleUserAgentContext());
-		htmlPanel.setHtml(sb.toString(), "", theRendererContext);
-
-		aFrame.getContentPane().setLayout(new BorderLayout());
-		aFrame.getContentPane().add(htmlPanel, BorderLayout.CENTER);
-		aFrame.getContentPane().add(jPanel, BorderLayout.SOUTH);
-		aFrame.setSize(new Dimension(505, size));
-		Utility.setComponentRelativeLocation(this, aFrame);
-		aFrame.setVisible(true);
-	}
-
 	public void showAboutDialog()
 	{
 		new AboutDialog(this).setVisible(true);
@@ -1970,33 +1895,14 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 
 	private static String readTextFromFile(String fileName)
 	{
-		String aString;
-		final File aFile = new File(fileName);
-
-		if (!aFile.exists())
-		{
-			Logging.errorPrint("Could not find license at " + fileName);
-			aString = LanguageBundle.getString("in_licNoInfo"); //$NON-NLS-1$
-
-			return aString;
-		}
-
 		try
 		{
-			BufferedReader theReader = new BufferedReader(new InputStreamReader(new FileInputStream(aFile), "UTF-8"));
-			final int length = (int) aFile.length();
-			final char[] inputLine = new char[length];
-			theReader.read(inputLine, 0, length);
-			theReader.close();
-			aString = new String(inputLine);
-		}
-		catch (IOException e)
+			return Files.readString(Paths.get(fileName));
+		} catch (IOException e)
 		{
 			Logging.errorPrint("Could not read license at " + fileName, e);
-			aString = "No license information found";
+			return LanguageBundle.getString("in_licNoInfo"); //$NON-NLS-1$
 		}
-
-		return aString;
 	}
 
 	/**
@@ -2005,10 +1911,6 @@ public final class PCGenFrame extends JFrame implements UIDelegate
 	 */
 	private class FilenameListener implements ReferenceListener<File>
 	{
-		/**
-		 * @see pcgen.facade.util.event.ReferenceListener#referenceChanged(ReferenceEvent)
-		 */
-
 		@Override
 		public void referenceChanged(ReferenceEvent<File> e)
 		{

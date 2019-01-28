@@ -18,6 +18,7 @@
 package pcgen.cdom.base;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import pcgen.base.formula.Formula;
 import pcgen.base.formula.base.DependencyManager;
@@ -128,10 +129,7 @@ public final class FormulaFactory
 		 */
 		private NumberFormula(Number intValue)
 		{
-			if (intValue == null)
-			{
-				throw new IllegalArgumentException("Cannot create an NumberFormula with a null Number");
-			}
+			Objects.requireNonNull(intValue, "Cannot create an NumberFormula with a null Number");
 			number = intValue;
 		}
 
@@ -258,7 +256,7 @@ public final class FormulaFactory
 		@Override
 		public String toString()
 		{
-			return value.toString();
+			return formatManager.unconvert(value);
 		}
 
 		/**
@@ -278,7 +276,8 @@ public final class FormulaFactory
 		@Override
 		public boolean equals(Object obj)
 		{
-			return (obj instanceof SimpleFormula) && ((SimpleFormula<?>) obj).value.equals(value);
+			return (obj instanceof SimpleFormula)
+				&& Objects.deepEquals(((SimpleFormula<?>) obj).value, value);
 		}
 
 		@Override
@@ -372,6 +371,7 @@ public final class FormulaFactory
 	{
 		NEPFormula<T> formula = getNEPFormulaFor(formatManager, expression);
 		FormulaSemantics semantics = managerFactory.generateFormulaSemantics(formulaManager, varScope);
+		semantics = semantics.getWith(FormulaSemantics.INPUT_FORMAT, Optional.of(formatManager));
 		try
 		{
 			formula.isValid(semantics);

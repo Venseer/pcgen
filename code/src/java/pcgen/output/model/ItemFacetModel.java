@@ -19,17 +19,19 @@ package pcgen.output.model;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Objects;
 
-import freemarker.template.TemplateHashModel;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import freemarker.template.TemplateScalarModel;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.Constants;
 import pcgen.cdom.base.ItemFacet;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.facet.FacetLibrary;
 import pcgen.cdom.facet.ObjectWrapperFacet;
+
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
+import freemarker.template.TemplateScalarModel;
 
 /**
  * An ItemFacetModel wraps a ItemFacet and serves as a TemplateHashModel for
@@ -78,21 +80,12 @@ public class ItemFacetModel<T> implements TemplateHashModel, TemplateScalarModel
 	 */
 	public ItemFacetModel(CharID id, ItemFacet<CharID, T> facet)
 	{
-		if (id == null)
-		{
-			throw new IllegalArgumentException("CharID may not be null");
-		}
-		if (facet == null)
-		{
-			throw new IllegalArgumentException("SetFacet may not be null");
-		}
+		Objects.requireNonNull(id, "CharID may not be null");
+		Objects.requireNonNull(facet, "SetFacet may not be null");
 		this.id = id;
 		this.facet = facet;
 	}
 
-	/**
-	 * @see freemarker.template.TemplateHashModel#get(java.lang.String)
-	 */
 	@Override
 	public TemplateModel get(String arg0) throws TemplateModelException
 	{
@@ -119,18 +112,12 @@ public class ItemFacetModel<T> implements TemplateHashModel, TemplateScalarModel
 		return cache;
 	}
 
-	/**
-	 * @see freemarker.template.TemplateHashModel#isEmpty()
-	 */
 	@Override
 	public boolean isEmpty() throws TemplateModelException
 	{
 		return (facet.get(id) == null) || getInternalHashModel().isEmpty();
 	}
 
-	/**
-	 * @see freemarker.template.TemplateScalarModel#getAsString()
-	 */
 	@Override
 	public String getAsString() throws TemplateModelException
 	{
@@ -146,9 +133,6 @@ public class ItemFacetModel<T> implements TemplateHashModel, TemplateScalarModel
 		return obj.toString();
 	}
 
-	/**
-	 * @see java.lang.Iterable#iterator()
-	 */
 	@Override
 	public Iterator<T> iterator()
 	{

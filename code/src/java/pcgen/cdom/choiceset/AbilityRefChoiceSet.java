@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -99,24 +100,15 @@ public class AbilityRefChoiceSet implements PrimitiveChoiceSet<CNAbilitySelectio
 	public AbilityRefChoiceSet(CDOMSingleRef<AbilityCategory> cat,
 		Collection<? extends CDOMReference<Ability>> arCollection, Nature nat)
 	{
-		if (arCollection == null)
-		{
-			throw new IllegalArgumentException("Choice Collection cannot be null");
-		}
+		Objects.requireNonNull(arCollection, "Choice Collection cannot be null");
 		if (arCollection.isEmpty())
 		{
 			throw new IllegalArgumentException("Choice Collection cannot be empty");
 		}
 		abilityRefSet = new HashSet<>(arCollection);
-		if (nat == null)
-		{
-			throw new IllegalArgumentException("Choice Nature cannot be null");
-		}
+		Objects.requireNonNull(nat, "Choice Nature cannot be null");
 		nature = nat;
-		if (cat == null)
-		{
-			throw new IllegalArgumentException("Choice Category cannot be null");
-		}
+		Objects.requireNonNull(cat, "Choice Category cannot be null");
 		category = cat;
 	}
 
@@ -293,24 +285,12 @@ public class AbilityRefChoiceSet implements PrimitiveChoiceSet<CNAbilitySelectio
 		return availableList;
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this AbilityRefChoiceSet
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return abilityRefSet.size();
 	}
 
-	/**
-	 * Returns true if this AbilityRefChoiceSet is equal to the given Object.
-	 * Equality is defined as being another AbilityRefChoiceSet object with
-	 * equal underlying contents.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{

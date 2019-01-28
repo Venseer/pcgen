@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -83,10 +84,7 @@ public class SpellReferenceChoiceSet implements PrimitiveChoiceSet<CDOMListObjec
 	 */
 	public SpellReferenceChoiceSet(Collection<CDOMReference<? extends CDOMListObject<Spell>>> listRefCollection)
 	{
-		if (listRefCollection == null)
-		{
-			throw new IllegalArgumentException("Choice Collection cannot be null");
-		}
+		Objects.requireNonNull(listRefCollection, "Choice Collection cannot be null");
 		if (listRefCollection.isEmpty())
 		{
 			throw new IllegalArgumentException("Choice Collection cannot be empty");
@@ -193,25 +191,12 @@ public class SpellReferenceChoiceSet implements PrimitiveChoiceSet<CDOMListObjec
 		return returnSet;
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this
-	 * SpellReferenceChoiceSet
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return set.size();
 	}
 
-	/**
-	 * Returns true if this SpellReferenceChoiceSet is equal to the given
-	 * Object. Equality is defined as being another SpellReferenceChoiceSet
-	 * object with equal underlying contents.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{

@@ -23,13 +23,13 @@ import java.util.Stack;
 import java.util.Vector;
 import java.util.stream.IntStream;
 
+import pcgen.base.util.RandomUtil;
+import pcgen.util.Logging;
+
 import org.nfunk.jep.JEP;
 import org.nfunk.jep.ParseException;
 import org.nfunk.jep.function.List;
 import org.nfunk.jep.function.PostfixMathCommand;
-
-import pcgen.base.util.RandomUtil;
-import pcgen.util.Logging;
 
 public final class RollingMethods
 {
@@ -241,8 +241,6 @@ public final class RollingMethods
 		 * to the operator as a stack, pops off the two it needs, does type checking,
 		 * rolls the dice on the randomizer, and pushes the result back onto the stack.
 		 * Logging is performed if it is turned on.</p>
-		 * 
-		 * @see org.nfunk.jep.function.PostfixMathCommandI#run(java.util.Stack)
 		 */
 		@Override
 		public void run(final Stack stack) throws ParseException

@@ -17,6 +17,8 @@
  */
 package pcgen.cdom.processor;
 
+import java.util.Objects;
+
 import pcgen.cdom.content.HitDie;
 import pcgen.cdom.content.Processor;
 
@@ -45,10 +47,7 @@ public class HitDieLock implements Processor<HitDie>
 	 */
 	public HitDieLock(HitDie die)
 	{
-		if (die == null)
-		{
-			throw new IllegalArgumentException("Die for HitDieLock cannot be null");
-		}
+		Objects.requireNonNull(die, "Die for HitDieLock cannot be null");
 		hitDie = die;
 	}
 
@@ -94,24 +93,12 @@ public class HitDieLock implements Processor<HitDie>
 		return HitDie.class;
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this HitDieLock
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return hitDie.hashCode();
 	}
 
-	/**
-	 * Returns true if this HitDieLock is equal to the given Object. Equality is
-	 * defined as being another HitDieLock object with HitDie to which it is
-	 * "locked".
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{

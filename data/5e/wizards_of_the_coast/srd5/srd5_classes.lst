@@ -1,5 +1,6 @@
+#  Fri Nov 16 19:52:40 2018 -- reformated by PCGen PrettyLST v6.08.00
 # CVS $Revision: $ $Author: $ -- Wed Feb  3 13:47:16 2016 -- reformated by PCGen PrettyLST v6.06.00
-SOURCELONG:System Reference Document 5.0	SOURCESHORT:SRD5	SOURCEWEB:http://dnd.wizards.com/articles/features/systems-reference-document-srd	SOURCEDATE:2016-01
+SOURCELONG:System Reference Document	SOURCESHORT:SRD5	SOURCEWEB:http://dnd.wizards.com/articles/features/systems-reference-document-srd	SOURCEDATE:2016-01
 # Original Entry: See contributors listed in PCC file.
 
 
@@ -311,25 +312,25 @@ CLASS:Ranger	SPELLSTAT:WIS	MEMORIZE:NO	BONUS:CASTERLEVEL|Ranger|CL
 18	ABILITY:Ranger Class Feature|AUTOMATIC|Ranger ~ Feral Senses
 20	ABILITY:Ranger Class Feature|AUTOMATIC|Ranger ~ Foe Slayer
 ###Block
-2	CAST:0,1
-3	CAST:0,1
-4	CAST:0,1
-5	CAST:0,1,0
-6	CAST:0,1,0
-7	CAST:0,1,0
-8	CAST:0,1,0
-9	CAST:0,1,0,0
-10	CAST:0,1,0,0
-11	CAST:0,1,0,0
-12	CAST:0,1,0,0
-13	CAST:0,1,0,0,0
-14	CAST:0,1,0,0,0
-15	CAST:0,1,0,0,0
-16	CAST:0,1,0,0,0
-17	CAST:0,1,0,0,0,0
-18	CAST:0,1,0,0,0,0
-19	CAST:0,1,0,0,0,0
-20	CAST:0,1,0,0,0,0
+2	CAST:0,2
+3	CAST:0,3
+4	CAST:0,3
+5	CAST:0,4,2
+6	CAST:0,4,2
+7	CAST:0,4,3
+8	CAST:0,4,3
+9	CAST:0,4,3,2
+10	CAST:0,4,3,2
+11	CAST:0,4,3,3
+12	CAST:0,4,3,3
+13	CAST:0,4,3,3,1
+14	CAST:0,4,3,3,1
+15	CAST:0,4,3,3,2
+16	CAST:0,4,3,3,2
+17	CAST:0,4,3,3,3,1
+18	CAST:0,4,3,3,3,1
+19	CAST:0,4,3,3,3,2
+20	CAST:0,4,3,3,3,2
 ###Block
 2	KNOWN:0,2
 3	KNOWN:0,3
@@ -574,7 +575,9 @@ CLASS:Wizard	SPELLSTAT:INT	MEMORIZE:YES	BONUS:CASTERLEVEL|Wizard|CL
 20	CAST:99,WizardCast1,WizardCast2,WizardCast3,WizardCast4,WizardCast5,WizardCast6,WizardCast7,WizardCast8,WizardCast9
 
 
-CLASS:Warlock Book of Shadows	TYPE:Other	FACT:SpellType|Arcane	VISIBLE:NO
+# Class Name			Type		Visible	FACT
+CLASS:Warlock Book of Shadows	TYPE:Other	VISIBLE:NO	FACT:SpellType|Arcane
+# Class Name			Spell Stat		Memorize		Caster level
 CLASS:Warlock Book of Shadows	SPELLSTAT:CHA	MEMORIZE:YES	BONUS:CASTERLEVEL|Warlock Book of Shadows|WarlockLVL|PREABILITY:1,CATEGORY=Special Ability,Eldritch Invocation ~ Book of Ancient Secrets
 1:REPEATLEVEL:1	CAST:0,1
-	
+

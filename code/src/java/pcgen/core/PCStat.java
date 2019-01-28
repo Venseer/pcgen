@@ -17,21 +17,16 @@
  */
 package pcgen.core;
 
+import java.util.Optional;
+
 import pcgen.base.formula.base.VarScoped;
 import pcgen.cdom.base.NonInteractive;
 import pcgen.cdom.base.SortKeyRequired;
-import pcgen.cdom.enumeration.IntegerKey;
 import pcgen.cdom.enumeration.StringKey;
-import pcgen.facade.core.StatFacade;
 
-public final class PCStat extends PObject implements StatFacade, NonInteractive, SortKeyRequired, VarScoped
+public final class PCStat extends PObject
+		implements NonInteractive, SortKeyRequired, VarScoped
 {
-	@Override
-	public int getMinValue()
-	{
-		return getSafe(IntegerKey.MIN_VALUE);
-	}
-
 	/*
 	 * This is what the UI displays for the CHOOSE:PCSTAT.
 	 */
@@ -42,15 +37,9 @@ public final class PCStat extends PObject implements StatFacade, NonInteractive,
 	}
 
 	@Override
-	public String getName()
+	public Optional<String> getLocalScopeName()
 	{
-		return getDisplayName();
-	}
-
-	@Override
-	public String getLocalScopeName()
-	{
-		return "PC.STAT";
+		return Optional.of("PC.STAT");
 	}
 
 	@Override

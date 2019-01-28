@@ -17,9 +17,12 @@
  */
 package pcgen.output.model;
 
+import java.util.Objects;
+
+import pcgen.core.AgeSet;
+
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateScalarModel;
-import pcgen.core.AgeSet;
 
 /**
  * A AgeSetModel is a TemplateHashModel that wraps a AgeSet object
@@ -40,17 +43,14 @@ public class AgeSetModel implements TemplateScalarModel
 	 */
 	public AgeSetModel(AgeSet as)
 	{
-		if (as == null)
-		{
-			throw new IllegalArgumentException("AgeSet cannot be null");
-		}
+		Objects.requireNonNull(as, "AgeSet cannot be null");
 		this.set = as;
 	}
 
 	@Override
 	public String getAsString() throws TemplateModelException
 	{
-		return set.getName();
+		return set.getKeyName();
 	}
 
 }

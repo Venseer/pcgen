@@ -30,7 +30,7 @@ import pcgen.core.bonus.MultiTagBonusObj;
 
 public final class MonNonSkillHD extends MultiTagBonusObj
 {
-	private static final String[] bonusTags = {"NUMBER", "LOCKNUMBER"};
+	private static final String[] BONUS_TAGS = {"NUMBER", "LOCKNUMBER"};
 
 	/**
 	 * Return the bonus tag handled by this class.
@@ -45,23 +45,21 @@ public final class MonNonSkillHD extends MultiTagBonusObj
 	/**
 	 * Get by index, an monster non-skill hit die attribute that may be bonused.
 	 * @param tagNumber the index of the monster non-skill hit die attribute.
-	 * @see pcgen.core.bonus.MultiTagBonusObj#getBonusTag(int)
 	 * @return The monster non-skill hit die attribute.
 	 */
 	@Override
 	protected String getBonusTag(final int tagNumber)
 	{
-		return bonusTags[tagNumber];
+		return BONUS_TAGS[tagNumber];
 	}
 
 	/**
 	 * Get the number of monster non-skill hit die attributes that may be bonused.
-	 * @see pcgen.core.bonus.MultiTagBonusObj#getBonusTag(int)
 	 * @return The number of monster non-skill hit die attributes.
 	 */
 	@Override
 	protected int getBonusTagLength()
 	{
-		return bonusTags.length;
+		return BONUS_TAGS.length;
 	}
 }

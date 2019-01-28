@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang3.StringUtils;
-
 import pcgen.core.SettingsHandler;
 import pcgen.gui2.UIPropertyContext;
 import pcgen.persistence.lst.LstFileLoader;
@@ -38,12 +36,14 @@ import pcgen.system.ConfigurationSettings;
 import pcgen.system.LanguageBundle;
 import pcgen.util.Logging;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * The singleton class {@code TipOfTheDayHandler} manages the list of tips.
  */
 public final class TipOfTheDayHandler
 {
-	private static final UIPropertyContext propertyContext = UIPropertyContext.createContext("TipOfTheDay");
+	private static final UIPropertyContext PROPERTY_CONTEXT = UIPropertyContext.createContext("TipOfTheDay");
 
 	private static TipOfTheDayHandler INSTANCE = null;
 
@@ -55,7 +55,7 @@ public final class TipOfTheDayHandler
 	 */
 	private TipOfTheDayHandler()
 	{
-		lastNumber = propertyContext.initInt("lastTip", -1);
+		lastNumber = PROPERTY_CONTEXT.initInt("lastTip", -1);
 	}
 
 	public static synchronized TipOfTheDayHandler getInstance()
@@ -152,7 +152,7 @@ public final class TipOfTheDayHandler
 			{
 				lastNumber = 0;
 			}
-			propertyContext.setInt("lastTip", lastNumber);
+			PROPERTY_CONTEXT.setInt("lastTip", lastNumber);
 
 			return tipList.get(lastNumber);
 		}
@@ -168,7 +168,7 @@ public final class TipOfTheDayHandler
 			{
 				lastNumber = tipList.size() - 1;
 			}
-			propertyContext.setInt("lastTip", lastNumber);
+			PROPERTY_CONTEXT.setInt("lastTip", lastNumber);
 
 			return tipList.get(lastNumber);
 		}

@@ -21,19 +21,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import pcgen.AbstractCharacterTestCase;
-import pcgen.cdom.content.fact.FactDefinition;
-import pcgen.persistence.SourceFileLoader;
 import pcgen.persistence.lst.CampaignSourceEntry;
 import pcgen.persistence.lst.GenericLoader;
 import pcgen.persistence.lst.PCClassLoader;
 import pcgen.persistence.lst.SimpleLoader;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.TestHelper;
-import plugin.lsttokens.testsupport.BuildUtilities;
+
 import util.TestURI;
 
 /**
- * The Class <code>ChallengeRatingPathfinderTest</code> checks the calculation
+ * The Class {@code ChallengeRatingPathfinderTest} checks the calculation
  * of challenge ratings for the Pathfinder RPG game mode
  *
  * <br/>
@@ -58,21 +56,12 @@ public class ChallengeRatingPathfinderTest extends AbstractCharacterTestCase
 	private PCClass pcClass2;
 	private PCClass npcClass;
 	private PCClass npcClass2;
-	private PCClass monsterClass;
 	private PCClass companionClass;
 
-	/**
-	 * Run the test
-	 * @param args don't need args apparently
-	 */
-	public static void main(final String[] args)
-	{
-		junit.textui.TestRunner.run(ChallengeRatingPathfinderTest.class);
-	}
-
 	@Override
-	protected void additionalSetUp() throws Exception
+	public void setUp() throws Exception
 	{
+		super.setUp();
 		GameMode gameMode = SettingsHandler.getGame();
 		gameMode.addCRstep(0, "1/2");
 		gameMode.addCRstep(-1, "1/3");
@@ -95,9 +84,6 @@ public class ChallengeRatingPathfinderTest extends AbstractCharacterTestCase
 			TestURI.getURI());
 		
 		LoadContext context = Globals.getContext();
-
-		BuildUtilities.createFact(context, "ClassType", PCClass.class);
-		SourceFileLoader.processFactDefinitions(context);
 
 		CampaignSourceEntry source = TestHelper.createSource(getClass());
 		GenericLoader<Race> raceLoader = new GenericLoader<>(Race.class);
@@ -123,7 +109,7 @@ public class ChallengeRatingPathfinderTest extends AbstractCharacterTestCase
 		raceLoader.parseLine(context, null, dryadLine, source);
 		dryadRace = context.getReferenceContext().silentlyGetConstructedCDOMObject(Race.class, "Dryad");
 
-		final String companionLine = "TestCompanion MONSTERCLASS:TestCompanionClass:4";
+		final String companionLine = "TestCompanion	MONSTERCLASS:TestCompanionClass:4";
 		raceLoader.parseLine(context, null, companionLine, source);
 		companionRace = context.getReferenceContext().silentlyGetConstructedCDOMObject(Race.class, "TestCompanion");
 
@@ -149,37 +135,23 @@ public class ChallengeRatingPathfinderTest extends AbstractCharacterTestCase
 		
 		final String pcClassLine = "CLASS:TestPCClass	TYPE:PC		ROLE:Combat";
 		pcClass = classLoader.parseLine(context, null, pcClassLine, source);
-		context.getReferenceContext().importObject(pcClass);
 		
 		final String pcClassLine2 = "CLASS:TestPCClass2	TYPE:PC		ROLE:Druid";
 		pcClass2 = classLoader.parseLine(context, null, pcClassLine2, source);
-		context.getReferenceContext().importObject(pcClass2);
 		
-		final String npcClassLine = "CLASS:TestNPCClass2	TYPE:NPC";
+		final String npcClassLine = "CLASS:TestNPCClass	TYPE:NPC";
 		npcClass = classLoader.parseLine(context, null, npcClassLine, source);
-		context.getReferenceContext().importObject(npcClass);
 
 		final String npcClassLine2 = "CLASS:TestNPCClass2	TYPE:NPC";
 		npcClass2 = classLoader.parseLine(context, null, npcClassLine2, source);
-		context.getReferenceContext().importObject(npcClass2);
 
 		final String monsterClassLine = "CLASS:TestMonsterClass	HD:8	CLASSTYPE:Monster";
-		monsterClass = classLoader.parseLine(context, null, monsterClassLine, source);
-		context.getReferenceContext().importObject(monsterClass);
+		classLoader.parseLine(context, null, monsterClassLine, source);
 
 		final String companionClassLine = "CLASS:TestCompanionClass	HD:8	CLASSTYPE:Companion";
 		companionClass = classLoader.parseLine(context, null, companionClassLine, source);
-		context.getReferenceContext().importObject(companionClass);
 
-		context.commit();
-		BuildUtilities.createFact(context, "ClassType", PCClass.class);
-		FactDefinition<?, String> fd =
-				BuildUtilities.createFact(context, "SpellType", PCClass.class);
-		fd.setSelectable(true);
-
-		SourceFileLoader.processFactDefinitions(context);
-		context.getReferenceContext().buildDerivedObjects();
-		context.resolveDeferredTokens();
+		finishLoad();
 	}
 
 	/**
@@ -487,5 +459,11 @@ public class ChallengeRatingPathfinderTest extends AbstractCharacterTestCase
 		PlayerCharacter pc = getCharacter();
 		pc.setRace(centipedeRace);
 		assertEquals(SettingsHandler.getGame().getCRInteger("1/8"), pc.getDisplay().calcCR(), 0.0);
+	}
+
+	@Override
+	protected void defaultSetupEnd()
+	{
+		//Nothing, we will trigger ourselves
 	}
 }

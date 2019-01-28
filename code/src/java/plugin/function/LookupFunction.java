@@ -142,7 +142,7 @@ public class LookupFunction implements FormulaFunction
 				throw new SemanticsFailureException("Parse Error: Invalid lookup type: " + lookupTypeName);
 			}
 		}
-		return cf.getComponentManager();
+		return cf.getComponentManager().get();
 	}
 
 	@Override
@@ -171,7 +171,7 @@ public class LookupFunction implements FormulaFunction
 			System.out.println("Lookup called on invalid column: '" + columnName + "' is not present on table '"
 				+ dataTable.getName() + "' assuming default for " + fmt.getIdentifierType());
 			FormulaManager fm = manager.get(EvaluationManager.FMANAGER);
-			return fm.getDefault(fmt.getManagedClass());
+			return fm.getDefault(fmt);
 		}
 		String lookupRule = "EXACT";
 		if (args.length == 4)
@@ -187,13 +187,13 @@ public class LookupFunction implements FormulaFunction
 				"Lookup called on invalid item: '" + lookupValue + "' is not present in the first row of table '"
 					+ dataTable.getName() + "' assuming default for " + fmt.getIdentifierType());
 			FormulaManager fm = manager.get(EvaluationManager.FMANAGER);
-			return fm.getDefault(fmt.getManagedClass());
+			return fm.getDefault(fmt);
 		}
 		return dataTable.lookup(lookupType, lookupValue, columnName);
 	}
 
 	@Override
-	public FormatManager<?> getDependencies(DependencyVisitor visitor, DependencyManager manager, Node[] args)
+	public Optional<FormatManager<?>> getDependencies(DependencyVisitor visitor, DependencyManager manager, Node[] args)
 	{
 		LoadContext context = manager.get(ManagerKey.CONTEXT);
 		AbstractReferenceContext refContext = context.getReferenceContext();

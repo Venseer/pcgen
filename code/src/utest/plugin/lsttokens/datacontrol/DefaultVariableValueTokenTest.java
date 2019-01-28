@@ -17,22 +17,31 @@
  */
 package plugin.lsttokens.datacontrol;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
-import org.junit.Test;
-
 import pcgen.cdom.content.DefaultVarValue;
 import pcgen.persistence.PersistenceLayerException;
+import pcgen.rules.context.LoadContext;
 import pcgen.rules.persistence.CDOMLoader;
 import pcgen.rules.persistence.token.CDOMPrimaryToken;
 import pcgen.rules.persistence.token.ParseResult;
 import plugin.lsttokens.testsupport.AbstractTokenTestCase;
+import plugin.lsttokens.testsupport.BuildUtilities;
 import plugin.lsttokens.testsupport.CDOMTokenLoader;
 import plugin.lsttokens.testsupport.ConsolidationRule;
 import plugin.lsttokens.testsupport.TokenRegistration;
 import plugin.modifier.number.SetModifierFactory;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 public class DefaultVariableValueTokenTest extends
 		AbstractTokenTestCase<DefaultVarValue>
 {
@@ -48,6 +57,7 @@ public class DefaultVariableValueTokenTest extends
 	private static CDOMTokenLoader<DefaultVarValue> loader =
 			new CDOMTokenLoader<>();
 
+	@BeforeEach
 	@Override
 	public void setUp() throws PersistenceLayerException, URISyntaxException
 	{
@@ -184,4 +194,12 @@ public class DefaultVariableValueTokenTest extends
 		return ConsolidationRule.OVERWRITE;
 	}
 
+	@Override
+	protected void additionalSetup(LoadContext context)
+	{
+		URI testURI = testCampaign.getURI();
+		context.setSourceURI(testURI);
+		context.setExtractURI(testURI);
+		context.getReferenceContext().importObject(BuildUtilities.getFeatCat());
+	}
 }

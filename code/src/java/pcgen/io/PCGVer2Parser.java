@@ -34,8 +34,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang3.StringUtils;
-
 import pcgen.base.util.HashMapToList;
 import pcgen.cdom.base.AssociatedPrereqObject;
 import pcgen.cdom.base.CDOMObject;
@@ -136,7 +134,8 @@ import pcgen.io.migration.EquipmentMigration;
 import pcgen.io.migration.RaceMigration;
 import pcgen.io.migration.SourceMigration;
 import pcgen.io.migration.SpellMigration;
-import pcgen.output.channel.ChannelCompatibility;
+import pcgen.output.channel.compat.AlignmentCompat;
+import pcgen.output.channel.compat.HandedCompat;
 import pcgen.rules.context.AbstractReferenceContext;
 import pcgen.rules.context.LoadContext;
 import pcgen.system.FacadeFactory;
@@ -144,6 +143,8 @@ import pcgen.system.LanguageBundle;
 import pcgen.system.PCGenSettings;
 import pcgen.util.Logging;
 import pcgen.util.enumeration.ProhibitedSpellType;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@code PCGVer2Parser}
@@ -341,7 +342,7 @@ final class PCGVer2Parser implements PCGParser
 		//tName = PC
 		String sourceStr = sName.substring(IOConstants.TAG_TEMPBONUS.length() + 1);
 		String targetStr = tName.substring(IOConstants.TAG_TEMPBONUSTARGET.length() + 1);
-		Object oSource = null;
+		CDOMObject oSource = null;
 
 		if (sourceStr.startsWith(IOConstants.TAG_FEAT + '='))
 		{
@@ -408,7 +409,7 @@ final class PCGVer2Parser implements PCGParser
 
 		if (oSource != null)
 		{
-			sourceStr = ((CDOMObject) oSource).getKeyName();
+			sourceStr = oSource.getKeyName();
 		}
 
 		if (targetStr.equals(IOConstants.TAG_PC))
@@ -417,8 +418,8 @@ final class PCGVer2Parser implements PCGParser
 		}
 		else
 		{
-			Object oTarget = thePC.getEquipmentNamed(targetStr);
-			targetStr = ((CDOMObject) oTarget).getDisplayName();
+			CDOMObject oTarget = thePC.getEquipmentNamed(targetStr);
+			targetStr = oTarget.getDisplayName();
 		}
 
 		return thePC.getTempBonusMap(sourceStr, targetStr);
@@ -454,17 +455,6 @@ final class PCGVer2Parser implements PCGParser
 		cache.put(s.substring(0, s.indexOf(':')), s);
 	}
 
-	private void checkSkillPools()
-	{
-		int skillPoints = 0;
-
-		for (final PCClass pcClass : thePC.getClassSet())
-		{
-			skillPoints += pcClass.getSkillPool(thePC);
-		}
-
-		thePC.setDirty(true);
-	}
 
 	private void checkStats() throws PCGParseException
 	{
@@ -529,7 +519,7 @@ final class PCGVer2Parser implements PCGParser
 					Constants.APPLICATION_NAME, MessageType.INFORMATION);
 				align = getNoAlignment();
 			}
-			ChannelCompatibility.setCurrentAlignment(thePC.getCharID(), align);
+			AlignmentCompat.setCurrentAlignment(thePC.getCharID(), align);
 
 			return;
 		}
@@ -836,8 +826,7 @@ final class PCGVer2Parser implements PCGParser
 			{
 				parseClassLine(line);
 			}
-
-			checkSkillPools();
+			thePC.setDirty(true);
 		}
 
 		final List<PCLevelInfo> pcLevelInfoList = new ArrayList<>(thePC.getLevelInfo());
@@ -1182,8 +1171,8 @@ final class PCGVer2Parser implements PCGParser
 		 * HEIGHT:75
 		 * WEIGHT:198
 		 * AGE:17
-		 * GENDER:enum name @see Gender
-		 * HANDED:enum name @see Handed
+		 * GENDER:enum name
+		 * HANDED:enum name
 		 * SKIN:text
 		 * EYECOLOR:text
 		 * HAIRCOLOR:text
@@ -2948,21 +2937,21 @@ final class PCGVer2Parser implements PCGParser
 
 	private void parseHandedLine(final String line)
 	{
-		String handed = EntityEncoder.decode(line.substring(IOConstants.TAG_HANDED.length() + 1));
-		Handed h;
+		String handedString = EntityEncoder.decode(line.substring(IOConstants.TAG_HANDED.length() + 1));
+		Handed handed;
 		try
 		{
-			h = Handed.getHandedByName(handed);
+			handed = HandedCompat.HANDED_MANAGER.convert(handedString);
 		}
 		catch (IllegalArgumentException e)
 		{
-			h = Handed.getDefaultValue();
+			handed = HandedCompat.getDefaultHanded();
 			final String msg = LanguageBundle.getFormattedString("Warnings.PCGenParser.IllegalHandedness", //$NON-NLS-1$
-				line, h);
+				line, handed);
 			warnings.add(msg);
 
 		}
-		thePC.setHanded(h);
+		HandedCompat.setCurrentHandedness(thePC.getCharID(), handed);
 	}
 
 	private void parseHeightLine(final String line)
@@ -5354,7 +5343,6 @@ final class PCGVer2Parser implements PCGParser
 		 * Returns a string representation of the element.  This string is
 		 * written in XML format.
 		 * @return An XML formatted string.
-		 * @see java.lang.Object#toString()
 		 */
 		@Override
 		public String toString()

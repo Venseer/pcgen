@@ -17,12 +17,15 @@
  */
 package pcgen.output.model;
 
+import java.util.Objects;
+
+import pcgen.core.UnitSet;
+import pcgen.output.base.SimpleWrapperLibrary;
+
 import freemarker.template.TemplateHashModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateScalarModel;
-import pcgen.core.UnitSet;
-import pcgen.output.base.SimpleWrapperLibrary;
 
 /**
  * An UnitSetModel wraps a UnitSet and serves as a TemplateHashModel for that
@@ -44,10 +47,7 @@ public class UnitSetModel implements TemplateHashModel, TemplateScalarModel
 	 */
 	public UnitSetModel(UnitSet set)
 	{
-		if (set == null)
-		{
-			throw new IllegalArgumentException("UnitSet may not be null");
-		}
+		Objects.requireNonNull(set, "UnitSet may not be null");
 		this.unitSet = set;
 	}
 

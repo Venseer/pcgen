@@ -17,10 +17,15 @@
  */
 package plugin.lsttokens.equipmentmodifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Test;
 
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.processor.ChangeArmorType;
@@ -31,6 +36,8 @@ import pcgen.rules.persistence.token.CDOMPrimaryToken;
 import plugin.lsttokens.testsupport.AbstractCDOMTokenTestCase;
 import plugin.lsttokens.testsupport.CDOMTokenLoader;
 import plugin.lsttokens.testsupport.ConsolidationRule;
+
+import org.junit.jupiter.api.Test;
 
 public class ArmortypeTokenTest extends
 		AbstractCDOMTokenTestCase<EquipmentModifier>
@@ -201,7 +208,7 @@ public class ArmortypeTokenTest extends
 					null, "Medium"));
 			assertBadUnparse();
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException e)
 		{
 			// Good here too :)
 		}
@@ -216,7 +223,7 @@ public class ArmortypeTokenTest extends
 					"Heavy", null));
 			assertBadUnparse();
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException e)
 		{
 			// Good here too :)
 		}

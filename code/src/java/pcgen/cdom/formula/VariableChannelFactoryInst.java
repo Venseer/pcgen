@@ -18,14 +18,10 @@ package pcgen.cdom.formula;
 import java.util.HashMap;
 import java.util.Map;
 
-import pcgen.base.formula.base.ScopeInstance;
-import pcgen.base.formula.base.ScopeInstanceFactory;
 import pcgen.base.formula.base.VarScoped;
 import pcgen.base.formula.base.VariableID;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.facet.FacetLibrary;
-import pcgen.cdom.facet.LoadContextFacet;
-import pcgen.cdom.facet.ScopeFacet;
 import pcgen.cdom.facet.SolverManagerFacet;
 import pcgen.cdom.facet.VariableStoreFacet;
 import pcgen.output.channel.ChannelUtilities;
@@ -36,16 +32,6 @@ import pcgen.output.channel.ChannelUtilities;
  */
 public class VariableChannelFactoryInst implements VariableChannelFactory
 {
-	/**
-	 * The LoadContextFacet for VariableID construction.
-	 */
-	private static final LoadContextFacet LOAD_CONTEXT_FACET = FacetLibrary.getFacet(LoadContextFacet.class);
-
-	/**
-	 * The ScopeFacet for VariableID construction.
-	 */
-	private static final ScopeFacet SCOPE_FACET = FacetLibrary.getFacet(ScopeFacet.class);
-
 	/**
 	 * The SolverManagerFacet for VariableID construction.
 	 */
@@ -64,16 +50,15 @@ public class VariableChannelFactoryInst implements VariableChannelFactory
 	@Override
 	public VariableChannel<?> getChannel(CharID id, VarScoped owner, String name)
 	{
-		ScopeInstanceFactory instFactory = SCOPE_FACET.get(id);
-		ScopeInstance scopeInst = instFactory.get(owner.getLocalScopeName(), owner);
-		return getChannel(id, scopeInst, name);
+		String varName = ChannelUtilities.createVarName(name);
+		return getChannel(id, VariableUtilities.getLocalVariableID(id, owner, varName));
 	}
 
 	@Override
 	public VariableChannel<?> getGlobalChannel(CharID id, String name)
 	{
-		ScopeInstance globalInstance = SCOPE_FACET.getGlobalScope(id);
-		return getChannel(id, globalInstance, name);
+		String varName = ChannelUtilities.createVarName(name);
+		return getChannel(id, VariableUtilities.getGlobalVariableID(id, varName));
 	}
 
 	@Override
@@ -81,14 +66,6 @@ public class VariableChannelFactoryInst implements VariableChannelFactory
 	{
 		channels.remove(variableChannel.getVariableID());
 		variableChannel.disconnect();
-	}
-
-	private VariableChannel<?> getChannel(CharID id, ScopeInstance scopeInst, String name)
-	{
-		String varName = ChannelUtilities.createVarName(name);
-		VariableID<?> varID =
-				LOAD_CONTEXT_FACET.get(id.getDatasetID()).get().getVariableContext().getVariableID(scopeInst, varName);
-		return getChannel(id, varID);
 	}
 
 	/**
@@ -116,9 +93,8 @@ public class VariableChannelFactoryInst implements VariableChannelFactory
 		if (ref == null)
 		{
 			MonitorableVariableStore varStore = RESULT_FACET.get(id);
-			ref = new VariableChannel<>(MGR_FACET.get(id), varStore, varID);
+			ref = VariableChannel.construct(MGR_FACET.get(id), varStore, varID);
 			channels.put(varID, ref);
-			varStore.addVariableListener(varID, ref);
 		}
 		return ref;
 	}

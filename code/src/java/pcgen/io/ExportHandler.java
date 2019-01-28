@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -42,11 +43,6 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import freemarker.template.Configuration;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.Version;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.base.Constants;
 import pcgen.cdom.enumeration.ListKey;
@@ -93,6 +89,12 @@ import pcgen.util.Delta;
 import pcgen.util.Logging;
 import pcgen.util.enumeration.View;
 
+import freemarker.template.Configuration;
+import freemarker.template.ObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.Version;
+
 /**
  * This class deals with exporting a PC to various types of output sheets 
  * including XML, HTML, PDF and Text.
@@ -109,7 +111,7 @@ public final class ExportHandler
 	private static final Float JEP_TRUE = 1.0f;
 
 	/** A map of output tokens to export */
-	private static final Map<String, Token> tokenMap = new HashMap<>();
+	private static final Map<String, Token> TOKEN_MAP = new HashMap<>();
 
 	/** 
 	 * A variable to hold the state of whether or not the output token map to
@@ -230,7 +232,7 @@ public final class ExportHandler
 		try
 		{
 			FileInputStream fis = new FileInputStream(templateFile);
-			InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
+			InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
 			br = new BufferedReader(isr);
 
 			// A Buffer to hold the result of the preparation
@@ -534,7 +536,7 @@ public final class ExportHandler
 	 */
 	private String processStringLengthTokens(String vString, PlayerCharacter aPC)
 	{
-		int strlenIndex = vString.indexOf("STRLEN[", 0);
+		int strlenIndex = vString.indexOf("STRLEN[");
 		while (strlenIndex >= 0)
 		{
 
@@ -572,7 +574,7 @@ public final class ExportHandler
 	 */
 	public static void addToTokenMap(Token newToken)
 	{
-		Token test = tokenMap.put(newToken.getTokenName(), newToken);
+		Token test = TOKEN_MAP.put(newToken.getTokenName(), newToken);
 
 		if (test != null)
 		{
@@ -1949,9 +1951,9 @@ public final class ExportHandler
 				return 0;
 			}
 			// Else if the token is in the list of valid output tokens
-			else if (tokenMap.get(firstToken) != null)
+			else if (TOKEN_MAP.get(firstToken) != null)
 			{
-				Token token = tokenMap.get(firstToken);
+				Token token = TOKEN_MAP.get(firstToken);
 				if (token.isEncoded())
 				{
 					FileAccess.encodeWrite(output, token.getToken(tokenString, aPC, this));
@@ -2137,7 +2139,7 @@ public final class ExportHandler
 		CharacterDisplay display = aPC.getDisplay();
 		if ("REGION".equals(aString.substring(1)))
 		{
-			if (display.getRegionString().equals(Constants.NONE))
+			if (display.getRegion().equals(Constants.NONE))
 			{
 				canWrite = false;
 			}
@@ -2481,7 +2483,7 @@ public final class ExportHandler
 		// Filter out SUBREGION
 		if ("SUBREGION".equals(aString.substring(1)))
 		{
-			if (display.getSubRegion().equals(Constants.NONE))
+			if (display.getSubRegion().isEmpty())
 			{
 				canWrite = false;
 			}
@@ -3302,7 +3304,7 @@ public final class ExportHandler
 
 		try
 		{
-			br = new BufferedReader(new InputStreamReader(new FileInputStream(templateFile), "UTF-8"));
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(templateFile), StandardCharsets.UTF_8));
 
 			boolean betweenPipes = false;
 			StringBuilder textBetweenPipes = new StringBuilder();
@@ -3627,7 +3629,7 @@ public final class ExportHandler
 		// Make sure the token list has been populated
 		populateTokenMap();
 
-		final Token token = tokenMap.get(firstToken);
+		final Token token = TOKEN_MAP.get(firstToken);
 		if (token != null)
 		{
 			return token.getToken(aString, aPC, null);
@@ -3703,7 +3705,7 @@ public final class ExportHandler
 						ignores = 0;
 					}
 
-					b.append(_forThisString.substring(i, i + 1));
+					b.append(_forThisString, i, i + 1);
 				}
 
 				aString = b.toString();
@@ -3795,4 +3797,8 @@ public final class ExportHandler
 		}
 	}
 
+	public static void clear()
+	{
+		TOKEN_MAP.clear();
+	}
 }

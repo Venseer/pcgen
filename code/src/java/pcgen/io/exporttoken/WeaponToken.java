@@ -21,7 +21,6 @@
 package pcgen.io.exporttoken;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,18 +107,12 @@ public class WeaponToken extends Token
 	/** One weapon, both-hands = 7 */
 	public static final int HITMODE_THHIT = 7;
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getTokenName()
-	 */
 	@Override
 	public String getTokenName()
 	{
 		return TOKENNAME;
 	}
 
-	/**
-	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
-	 */
 	@Override
 	public String getToken(String tokenSource, PlayerCharacter pc, ExportHandler eh)
 	{
@@ -158,49 +151,25 @@ public class WeaponToken extends Token
 		else if (token.equals("EQUIPPED"))
 		{
 			// remove all weapons which are not equipped from list
-			for (Iterator<Equipment> it = weaponList.iterator(); it.hasNext();)
-			{
-				if (!it.next().isEquipped())
-				{
-					it.remove();
-				}
-			}
+			weaponList.removeIf(equipment -> !equipment.isEquipped());
 			token = aTok.nextToken();
 		}
 		else if (token.equals("NOT_EQUIPPED"))
 		{
 			// remove all weapons which are equipped from list
-			for (Iterator<Equipment> it = weaponList.iterator(); it.hasNext();)
-			{
-				if (it.next().isEquipped())
-				{
-					it.remove();
-				}
-			}
+			weaponList.removeIf(Equipment::isEquipped);
 			token = aTok.nextToken();
 		}
 		else if (token.equals("CARRIED"))
 		{
 			// remove all weapons which are not carried from list
-			for (Iterator<Equipment> it = weaponList.iterator(); it.hasNext();)
-			{
-				if (it.next().numberCarried().intValue() == 0)
-				{
-					it.remove();
-				}
-			}
+			weaponList.removeIf(equipment -> equipment.numberCarried().intValue() == 0);
 			token = aTok.nextToken();
 		}
 		else if (token.equals("NOT_CARRIED"))
 		{
 			// remove all weapons which are carried from list
-			for (Iterator<Equipment> it = weaponList.iterator(); it.hasNext();)
-			{
-				if (it.next().numberCarried().intValue() > 0)
-				{
-					it.remove();
-				}
-			}
+			weaponList.removeIf(equipment -> equipment.numberCarried().intValue() > 0);
 			token = aTok.nextToken();
 		}
 
@@ -676,7 +645,7 @@ public class WeaponToken extends Token
 		{
 			for (String type : equip.typeList())
 			{
-				if (containerCapacity.indexOf(type) >= 0)
+				if (containerCapacity.contains(type))
 				{
 					++ammoCount;
 					break;
@@ -742,11 +711,11 @@ public class WeaponToken extends Token
 	public static String getHeft(PlayerCharacter pc, Equipment eq)
 	{
 		String retString = "";
-		if (pc.getDisplay().sizeInt() > eq.sizeInt())
+		if (pc.sizeInt() > eq.sizeInt())
 		{
 			retString = "LIGHT";
 		}
-		else if (pc.getDisplay().sizeInt() == eq.sizeInt())
+		else if (pc.sizeInt() == eq.sizeInt())
 		{
 			retString = "MEDIUM";
 		}
@@ -884,7 +853,7 @@ public class WeaponToken extends Token
 	public static String getRangeToken(Equipment eq, PlayerCharacter pc, boolean units)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(Globals.getGameModeUnitSet().displayDistanceInUnitSet(EqToken.getRange(pc, eq).intValue()));
+		sb.append(Globals.getGameModeUnitSet().displayDistanceInUnitSet(EqToken.getRange(pc, eq)));
 
 		if (units)
 		{
@@ -1146,7 +1115,7 @@ public class WeaponToken extends Token
 
 				for (String type : equip.typeList())
 				{
-					if (containerCapacity.indexOf(type) >= 0)
+					if (containerCapacity.contains(type))
 					{
 						++ammoCount;
 						anEquip = equip;
@@ -1251,7 +1220,7 @@ public class WeaponToken extends Token
 			}
 		}
 
-		if (weaponString.indexOf("/") > -1)
+		if (weaponString.contains("/"))
 		{
 			int i = weaponString.indexOf("/");
 			boolean progress = eq.getSafe(ObjectKey.ATTACKS_PROGRESS);
@@ -2420,7 +2389,7 @@ public class WeaponToken extends Token
 			{
 				if ((damString.charAt(index) == '+') || (damString.charAt(index) == '-'))
 				{
-					totalBonus = Delta.decode(damString.substring(index)).intValue();
+					totalBonus = Delta.decode(damString.substring(index));
 					break;
 				}
 			}
@@ -2638,7 +2607,7 @@ public class WeaponToken extends Token
 		if (eq.isMonk() && eq.isUnarmed())
 		{
 			int eqSize = pc.getDisplay().getRace().getSafe(FormulaKey.SIZE).resolve(pc, "").intValue();
-			int iMod = pc.getDisplay().sizeInt();
+			int iMod = pc.sizeInt();
 
 			/* This modifies damage (by size) from the default when the race is
 			 * not the default size and the character is the default size for
@@ -2699,9 +2668,8 @@ public class WeaponToken extends Token
 		String profKey = getProfName(eq);
 		if (eq.isNatural())
 		{
-			//			int eqSize = Globals.sizeInt(pc.getRace().getSize());
-			int eqSize = pc.getDisplay().racialSizeInt();
-			int iMod = pc.getDisplay().sizeInt();
+			int eqSize = pc.racialSizeInt();
+			int iMod = pc.sizeInt();
 			iMod += (int) pc.getTotalBonusTo("WEAPONPROF=" + profKey, "DAMAGESIZE");
 			iMod += (int) pc.getTotalBonusTo("COMBAT", "DAMAGESIZE");
 			retString = Globals.adjustDamage(retString, eqSize, iMod);
@@ -2732,7 +2700,7 @@ public class WeaponToken extends Token
 		{
 			for (String type : equip.typeList())
 			{
-				if (containerCapacity.indexOf(type) >= 0)
+				if (containerCapacity.contains(type))
 				{
 					++ammoCount;
 
@@ -2967,7 +2935,7 @@ public class WeaponToken extends Token
 	public static List<String> getRangeList(Equipment eq, boolean addShortRange, final PlayerCharacter aPC)
 	{
 		final List<String> aList = new ArrayList<>();
-		final int baseRange = EqToken.getRange(aPC, eq).intValue();
+		final int baseRange = EqToken.getRange(aPC, eq);
 		int aRange = baseRange;
 		int maxIncrements = 0;
 

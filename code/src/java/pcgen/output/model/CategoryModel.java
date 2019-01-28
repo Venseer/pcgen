@@ -17,9 +17,12 @@
  */
 package pcgen.output.model;
 
+import java.util.Objects;
+
+import pcgen.cdom.base.Category;
+
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateScalarModel;
-import pcgen.cdom.base.Category;
 
 /**
  * A CategoryModel wraps a Category object into a TemplateScalarModel
@@ -39,16 +42,10 @@ public class CategoryModel implements TemplateScalarModel
 	 */
 	public CategoryModel(Category<?> cat)
 	{
-		if (cat == null)
-		{
-			throw new IllegalArgumentException("Category cannot be null");
-		}
+		Objects.requireNonNull(cat, "Category cannot be null");
 		this.category = cat;
 	}
 
-	/*
-	 * @see freemarker.template.TemplateScalarModel#getAsString()
-	 */
 	@Override
 	public String getAsString() throws TemplateModelException
 	{

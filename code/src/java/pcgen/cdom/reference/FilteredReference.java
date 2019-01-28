@@ -20,10 +20,12 @@ package pcgen.cdom.reference;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.TreeSet;
 
+import pcgen.cdom.base.CDOMReference;
 import pcgen.cdom.base.PrimitiveCollection;
 import pcgen.cdom.enumeration.GroupingState;
 import pcgen.cdom.primitive.PrimitiveUtilities;
@@ -38,19 +40,13 @@ public class FilteredReference<T> extends CDOMGroupRef<T>
 	public FilteredReference(CDOMGroupRef<T> allRef)
 	{
 		super("Filtered Reference");
-		if (allRef == null)
-		{
-			throw new IllegalArgumentException("Base Set for FilteredReference cannot be null");
-		}
+		Objects.requireNonNull(allRef, "Base Set for FilteredReference cannot be null");
 		baseSet = allRef;
 	}
 
 	public void addProhibitedItem(CDOMSingleRef<? super T> prohibitedRef)
 	{
-		if (prohibitedRef == null)
-		{
-			throw new IllegalArgumentException("CDOMSingleRef to be added cannot be null");
-		}
+		Objects.requireNonNull(prohibitedRef, "CDOMSingleRef to be added cannot be null");
 		Class<?> refClass = prohibitedRef.getReferenceClass();
 		if (!baseSet.getReferenceClass().isAssignableFrom(refClass))
 		{
@@ -155,7 +151,7 @@ public class FilteredReference<T> extends CDOMGroupRef<T>
 	public String getReferenceDescription()
 	{
 		StringJoiner joiner = new StringJoiner(", ", baseSet.getReferenceDescription() + " except: [", "]");
-		filterSet.stream().map(r -> r.getReferenceDescription()).forEach(d -> joiner.add(d));
+		filterSet.stream().map(CDOMReference::getReferenceDescription).forEach(joiner::add);
 		return joiner.toString();
 	}
 

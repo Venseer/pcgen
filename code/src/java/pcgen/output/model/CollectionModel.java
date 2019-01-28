@@ -20,13 +20,15 @@ package pcgen.output.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+
+import pcgen.cdom.enumeration.CharID;
+import pcgen.cdom.facet.FacetLibrary;
+import pcgen.cdom.facet.ObjectWrapperFacet;
 
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.TemplateSequenceModel;
-import pcgen.cdom.enumeration.CharID;
-import pcgen.cdom.facet.FacetLibrary;
-import pcgen.cdom.facet.ObjectWrapperFacet;
 
 /**
  * A CollectionModel wraps a Collection into a TemplateSequenceModel
@@ -61,21 +63,12 @@ public class CollectionModel implements TemplateSequenceModel
 	 */
 	public CollectionModel(CharID id, Collection<?> c)
 	{
-		if (id == null)
-		{
-			throw new IllegalArgumentException("CharID may not be null");
-		}
-		if (c == null)
-		{
-			throw new IllegalArgumentException("Collection may not be null");
-		}
+		Objects.requireNonNull(id, "CharID may not be null");
+		Objects.requireNonNull(c, "Collection may not be null");
 		this.id = id;
 		this.list = new ArrayList<Object>(c);
 	}
 
-	/**
-	 * @see freemarker.template.TemplateSequenceModel#get(int)
-	 */
 	@Override
 	public TemplateModel get(int index) throws TemplateModelException
 	{
@@ -86,9 +79,6 @@ public class CollectionModel implements TemplateSequenceModel
 		return WRAPPER_FACET.wrap(id, list.get(index));
 	}
 
-	/**
-	 * @see freemarker.template.TemplateSequenceModel#size()
-	 */
 	@Override
 	public int size() throws TemplateModelException
 	{

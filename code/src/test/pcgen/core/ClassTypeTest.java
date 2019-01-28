@@ -1,37 +1,15 @@
 package pcgen.core;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
- * <code>ClassTypeTest</code> <strong>needs documentation</strong>.
- */
-public class ClassTypeTest extends TestCase
+import org.junit.jupiter.api.Test;
+
+class ClassTypeTest
 {
-	/**
-	 * Constructs a new <code>ClassTypeTest</code>.
-	 *
-	 * @see pcgen.PCGenTestCase#PCGenTestCase()
-	 */
-	public ClassTypeTest()
-	{
-		// Do Nothing
-	}
-
-	/**
-	 * Constructs a new <code>ClassTypeTest</code> with the given <var>name</var>.
-	 *
-	 * @param name the test case name
-	 *
-	 * @see pcgen.PCGenTestCase#PCGenTestCase(String)
-	 */
-	public ClassTypeTest(final String name)
-	{
-		super(name);
-	}
-
 	/**
 	 * test clone.
 	 */
+	@Test
 	public void testClone()
 	{
 		final ClassType expected = new ClassType();

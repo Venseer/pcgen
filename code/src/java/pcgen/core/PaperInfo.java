@@ -19,12 +19,13 @@
 package pcgen.core;
 
 import java.net.URI;
-
-import org.apache.commons.lang3.StringUtils;
+import java.util.Objects;
 
 import pcgen.cdom.base.Loadable;
 import pcgen.cdom.base.SortKeyRequired;
 import pcgen.system.LanguageBundle;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The Paper information for output sheets
@@ -160,10 +161,7 @@ public final class PaperInfo implements Loadable, SortKeyRequired
 
 	public void setSortKey(String value)
 	{
-		if (value == null)
-		{
-			throw new IllegalArgumentException("SortKey cannot be null");
-		}
+		Objects.requireNonNull(value, "SortKey cannot be null");
 		sortKey = value;
 	}
 

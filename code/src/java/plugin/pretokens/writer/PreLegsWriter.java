@@ -2,6 +2,7 @@ package plugin.pretokens.writer;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Locale;
 
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteOperator;
@@ -29,13 +30,13 @@ public class PreLegsWriter implements PrerequisiteWriterInterface
 		try
 		{
 			writer.write("PRELEGS" + (prereq.isOverrideQualify() ? "Q:" : ""));
-			writer.write(prereq.getOperator().toString().toUpperCase());
+			writer.write(prereq.getOperator().toString().toUpperCase(Locale.ENGLISH));
 			writer.write(':');
 			writer.write(prereq.getOperand());
 		}
 		catch (IOException e)
 		{
-			throw new PersistenceLayerException(e.getMessage());
+			throw new PersistenceLayerException(e);
 		}
 	}
 

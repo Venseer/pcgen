@@ -50,7 +50,7 @@ import pcgen.util.Logging;
 @SuppressWarnings("serial")
 public class SourcesPanel extends PCGenPrefsPanel
 {
-	private static final String in_sources = LanguageBundle.getString("in_Prefs_sources"); //$NON-NLS-1$
+	private static final String IN_SOURCES = LanguageBundle.getString("in_Prefs_sources"); //$NON-NLS-1$
 
 	private final JCheckBox campLoad = new JCheckBox();
 	private final JCheckBox charCampLoad = new JCheckBox();
@@ -58,7 +58,6 @@ public class SourcesPanel extends PCGenPrefsPanel
 	private final JCheckBox saveCustom = new JCheckBox();
 	private final JCheckBox showOGL = new JCheckBox();
 	private final JCheckBox showMature = new JCheckBox();
-	private final JCheckBox showSponsors = new JCheckBox();
 	private JComboBoxEx sourceOptions = new JComboBoxEx<>();
 	private final JCheckBox loadURL = new JCheckBox();
 	private final JCheckBox allowOverride = new JCheckBox();
@@ -75,7 +74,7 @@ public class SourcesPanel extends PCGenPrefsPanel
 		GridBagConstraints c = new GridBagConstraints();
 		JLabel label;
 		Border etched = null;
-		TitledBorder title1 = BorderFactory.createTitledBorder(etched, in_sources);
+		TitledBorder title1 = BorderFactory.createTitledBorder(etched, IN_SOURCES);
 
 		title1.setTitleJustification(TitledBorder.LEADING);
 		this.setBorder(title1);
@@ -108,11 +107,6 @@ public class SourcesPanel extends PCGenPrefsPanel
 		showOGL.setText(LanguageBundle.getString("in_Prefs_displayOGL")); //$NON-NLS-1$
 		gridbag.setConstraints(showOGL, c);
 		this.add(showOGL);
-
-		Utility.buildConstraints(c, 0, 6, GridBagConstraints.REMAINDER, 1, 0, 0);
-		showSponsors.setText(LanguageBundle.getString("in_Prefs_displaySponsors")); //$NON-NLS-1$
-		gridbag.setConstraints(showSponsors, c);
-		this.add(showSponsors);
 
 		Utility.buildConstraints(c, 0, 7, GridBagConstraints.REMAINDER, 1, 0, 0);
 		showMature.setText(LanguageBundle.getString("in_Prefs_displayMature")); //$NON-NLS-1$
@@ -170,18 +164,12 @@ public class SourcesPanel extends PCGenPrefsPanel
 		this.add(label);
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#getTitle()
-	 */
 	@Override
 	public String getTitle()
 	{
-		return in_sources;
+		return IN_SOURCES;
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#setOptionsBasedOnControls()
-	 */
 	@Override
 	public void setOptionsBasedOnControls()
 	{
@@ -193,7 +181,6 @@ public class SourcesPanel extends PCGenPrefsPanel
 		PCGenSettings.OPTIONS_CONTEXT.setBoolean(PCGenSettings.OPTION_SAVE_CUSTOM_EQUIPMENT, saveCustom.isSelected());
 		PCGenSettings.OPTIONS_CONTEXT.setBoolean(PCGenSettings.OPTION_SHOW_LICENSE, showOGL.isSelected());
 		PCGenSettings.OPTIONS_CONTEXT.setBoolean(PCGenSettings.OPTION_SHOW_MATURE_ON_LOAD, showMature.isSelected());
-		PCGenSettings.OPTIONS_CONTEXT.setBoolean(PCGenSettings.OPTION_SHOW_SPONSORS_ON_LOAD, showSponsors.isSelected());
 		SettingsHandler.setLoadURLs(loadURL.isSelected());
 		PCGenSettings.OPTIONS_CONTEXT.setBoolean(PCGenSettings.OPTION_ALLOW_OVERRIDE_DUPLICATES,
 			allowOverride.isSelected());
@@ -235,9 +222,6 @@ public class SourcesPanel extends PCGenPrefsPanel
 		}
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#applyOptionValuesToControls()
-	 */
 	@Override
 	public void applyOptionValuesToControls()
 	{
@@ -251,7 +235,6 @@ public class SourcesPanel extends PCGenPrefsPanel
 		saveCustom.setSelected(PCGenSettings.OPTIONS_CONTEXT.getBoolean(PCGenSettings.OPTION_SAVE_CUSTOM_EQUIPMENT));
 		showOGL.setSelected(PCGenSettings.OPTIONS_CONTEXT.getBoolean(PCGenSettings.OPTION_SHOW_LICENSE));
 		showMature.setSelected(PCGenSettings.OPTIONS_CONTEXT.getBoolean(PCGenSettings.OPTION_SHOW_MATURE_ON_LOAD));
-		showSponsors.setSelected(PCGenSettings.OPTIONS_CONTEXT.getBoolean(PCGenSettings.OPTION_SHOW_SPONSORS_ON_LOAD));
 		loadURL.setSelected(SettingsHandler.isLoadURLs());
 		allowOverride.setSelected(
 			PCGenSettings.OPTIONS_CONTEXT.initBoolean(PCGenSettings.OPTION_ALLOW_OVERRIDE_DUPLICATES, true));

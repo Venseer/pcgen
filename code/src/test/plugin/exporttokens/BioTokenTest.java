@@ -21,8 +21,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import junit.framework.Test;
-import junit.framework.TestSuite;
+
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.enumeration.NotePCAttribute;
 import pcgen.core.PlayerCharacter;
@@ -30,23 +29,10 @@ import pcgen.io.ExportHandler;
 import pcgen.io.FileAccess;
 
 /**
- * <code>BioTokenTest</code> is ...
+ * {@code BioTokenTest} is ...
  */
 public class BioTokenTest extends AbstractCharacterTestCase
 {
-
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(BioTokenTest.class);
-	}
-
-	/*
-	 * @see TestCase#setUp()
-	 */
     @Override
 	protected void setUp() throws Exception
 	{

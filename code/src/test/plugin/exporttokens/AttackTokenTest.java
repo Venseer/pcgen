@@ -17,8 +17,6 @@
  */
 package plugin.exporttokens;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.base.FormulaFactory;
 import pcgen.cdom.enumeration.FormulaKey;
@@ -32,25 +30,13 @@ import pcgen.core.character.EquipSet;
 import pcgen.rules.context.LoadContext;
 
 /**
- * <code>ACTokenTest</code> tests the function of the AC token and 
+ * {@code ACTokenTest} tests the function of the AC token and
  * thus the calculations of armor class.  
  */
 public class AttackTokenTest extends AbstractCharacterTestCase
 {
 	PCClass myClass = new PCClass();
 
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(AttackTokenTest.class);
-	}
-
-	/*
-	 * @see TestCase#setUp()
-	 */
     @Override
 	protected void setUp() throws Exception
 	{
@@ -80,15 +66,6 @@ public class AttackTokenTest extends AbstractCharacterTestCase
 		myClass.getOriginalClassLevel(1).addToListFor(ListKey.BONUS, babClassBonus);
 		Globals.getContext().getReferenceContext().importObject(myClass);
 
-	}
-
-	/*
-	 * @see TestCase#tearDown()
-	 */
-    @Override
-	protected void tearDown() throws Exception
-	{
-		super.tearDown();
 	}
 
 	/**

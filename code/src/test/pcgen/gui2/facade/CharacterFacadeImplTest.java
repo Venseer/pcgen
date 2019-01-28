@@ -17,17 +17,17 @@
  */
 package pcgen.gui2.facade;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import pcgen.AbstractCharacterTestCase;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.SettingsHandler;
 import pcgen.core.character.EquipSet;
 import plugin.lsttokens.testsupport.BuildUtilities;
 
+import org.junit.Before;
+import org.junit.Test;
+
 /**
- * The Class <code>CharacterFacadeImplTest</code> verifies the behaviour of 
+ * The Class {@code CharacterFacadeImplTest} verifies the behaviour of
  * CharacterFacadeImpl.
  *
  * <br/>
@@ -57,9 +57,6 @@ public class CharacterFacadeImplTest extends AbstractCharacterTestCase
 			EquipSet.DEFAULT_SET_PATH, defaultEquipSet.getIdPath());
 	}
 	
-	/**
-	 * @see pcgen.AbstractCharacterTestCase#setUp()
-	 */
 	@Override
 	@Before
 	public void setUp() throws Exception

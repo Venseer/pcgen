@@ -86,7 +86,6 @@ import pcgen.core.analysis.RaceUtilities;
 import pcgen.core.prereq.PrereqHandler;
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.spell.Spell;
-import pcgen.facade.core.CampaignFacade;
 import pcgen.facade.core.DataSetFacade;
 import pcgen.facade.core.SourceSelectionFacade;
 import pcgen.facade.core.UIDelegate;
@@ -196,9 +195,9 @@ public class SourceFileLoader extends PCGenTask implements Observer
 		}
 		this.uiDelegate = delegate;
 		selectedCampaigns = new ArrayList<>();
-		for (CampaignFacade campaign : selection.getCampaigns())
+		for (Campaign campaign : selection.getCampaigns())
 		{
-			Campaign camp = Globals.getCampaignKeyed(campaign.getName());
+			Campaign camp = Globals.getCampaignKeyed(campaign.getKeyName());
 			selectedCampaigns.add(camp);
 		}
 		selectedGame = SystemCollections.getGameModeNamed(selection.getGameMode().get().getName());
@@ -468,9 +467,9 @@ public class SourceFileLoader extends PCGenTask implements Observer
 		Globals.emptyLists();
 		PersistenceManager pManager = PersistenceManager.getInstance();
 		List<URI> uris = new ArrayList<>();
-		for (CampaignFacade campaignFacade : selectedCampaigns)
+		for (Campaign campaign : selectedCampaigns)
 		{
-			uris.add(((Campaign) campaignFacade).getSourceURI());
+			uris.add(campaign.getSourceURI());
 		}
 		pManager.setChosenCampaignSourcefiles(uris);
 
@@ -520,7 +519,6 @@ public class SourceFileLoader extends PCGenTask implements Observer
 			dataset = new DataSet(context, selectedGame, new DefaultListFacade<>(selectedCampaigns));
 			//			//  Show the licenses
 			//			showLicensesIfNeeded();
-			//			showSponsorsIfNeeded();
 		}
 		catch (Throwable thr)
 		{
@@ -567,10 +565,10 @@ public class SourceFileLoader extends PCGenTask implements Observer
 		processFactDefinitions(context);
 		tableLoader.loadLstFiles(context, fileLists.getListFor(ListKey.FILE_DATATABLE));
 
-		dynamicLoader.loadLstFiles(context, fileLists.getListFor(ListKey.FILE_DYNAMIC));
 		//Load Variables (foundation for other items)
 		variableLoader.loadLstFiles(context, fileLists.getListFor(ListKey.FILE_VARIABLE));
-		defineBuiltinVariables(gamemode, context);
+		defineBuiltinVariables(context);
+		dynamicLoader.loadLstFiles(context, fileLists.getListFor(ListKey.FILE_DYNAMIC));
 		List<CampaignSourceEntry> globalModFileList = fileLists.getListFor(ListKey.FILE_GLOBALMOD);
 		if (globalModFileList.isEmpty())
 		{
@@ -674,25 +672,43 @@ public class SourceFileLoader extends PCGenTask implements Observer
 	 *            The LoadContext in which the built in variables will be loaded, if
 	 *            necessary
 	 */
-	public static void defineBuiltinVariables(GameMode gameMode, LoadContext context)
+	public static void defineBuiltinVariables(LoadContext context)
 	{
-		VariableContext varContext = context.getVariableContext();
-		if (!ControlUtilities.hasControlToken(context, CControl.FACE))
+		CControl.getChannelConstants().stream()
+			.filter(control -> allowControl(context, control))
+			.forEach(control -> enableBuiltInControl(context, control));
+	}
+
+	private static boolean allowControl(LoadContext context, CControl control)
+	{
+		return control.getControllingFeature().isEmpty() || ControlUtilities
+			.hasControlToken(context, control.getControllingFeature().get());
+	}
+
+	/**
+	 * Enables the built-in version of the given Code Control.
+	 * 
+	 * @param context
+	 *            The LoadContext in which the CodeControl exists
+	 * @param control
+	 *            The CodeControl to be enabled using its default values
+	 */
+	private static void enableBuiltInControl(LoadContext context,
+		CControl control)
+	{
+		AbstractReferenceContext referenceContext = context.getReferenceContext();
+		FormatManager<?> formatManager = referenceContext.getFormatManager(control.getFormat());
+		String varName = control.getDefaultValue();
+		if (control.isChannel())
 		{
-			FormatManager<?> opManager = context.getReferenceContext().getFormatManager("ORDEREDPAIR");
-			defineVariable(varContext, opManager, CControl.FACE.getDefaultValue());
+			varName = ChannelUtilities.createVarName(varName);
 		}
-		if (!gameMode.getAlignmentText().isEmpty())
+		defineVariable(context.getVariableContext(), formatManager, varName);
+		if (control.isAutoGranted())
 		{
-			if (!ControlUtilities.hasControlToken(context, CControl.ALIGNMENTINPUT))
-			{
-				FormatManager<?> alignManager = context.getReferenceContext().getFormatManager("ALIGNMENT");
-				String varName = ChannelUtilities.createVarName(CControl.ALIGNMENTINPUT.getDefaultValue());
-				defineVariable(varContext, alignManager, varName);
-				GlobalModifiers modifiers = context.getReferenceContext().constructNowIfNecessary(GlobalModifiers.class,
-					GlobalModifierLoader.GLOBAL_MODIFIERS);
-				modifiers.addGrantedVariable(varName);
-			}
+			GlobalModifiers modifiers = referenceContext
+				.constructNowIfNecessary(GlobalModifiers.class, GlobalModifierLoader.GLOBAL_MODIFIERS);
+			modifiers.addGrantedVariable(varName);
 		}
 	}
 
@@ -757,14 +773,14 @@ public class SourceFileLoader extends PCGenTask implements Observer
 		context.getVariableContext().validateDefaults();
 		//Test for items we know we use (temporary)
 		//Alignment
-		if (!gameMode.getAlignmentText().isEmpty()
-			&& !context.getVariableContext().hasSolver(refContext.getManufacturer(PCAlignment.class)))
+		if (ControlUtilities.isFeatureEnabled(context, CControl.ALIGNMENTFEATURE)
+			&& !context.getVariableContext().hasDefaultModifier(refContext.getManufacturer(PCAlignment.class)))
 		{
 			Logging.errorPrint("GameMode " + gameMode.getName() + " has Alignment text - "
 				+ "Thus it  requires a default value for ALIGNMENT format");
 		}
 		//Face
-		if (!context.getVariableContext().hasSolver(FormatUtilities.ORDEREDPAIR_MANAGER))
+		if (!context.getVariableContext().hasDefaultModifier(FormatUtilities.ORDEREDPAIR_MANAGER))
 		{
 			Logging.errorPrint(gameMode.getName() + " did not have required default value for ORDEREDPAIR format");
 		}
@@ -922,7 +938,7 @@ public class SourceFileLoader extends PCGenTask implements Observer
 	 * @param aSelectedCampaignsList
 	 *            List of Campaign objects to sort
 	 */
-	private void sortCampaignsByRank(final List<Campaign> aSelectedCampaignsList)
+	public static void sortCampaignsByRank(final List<Campaign> aSelectedCampaignsList)
 	{
 		aSelectedCampaignsList.sort(new Comparator<Campaign>()
 		{
@@ -930,7 +946,7 @@ public class SourceFileLoader extends PCGenTask implements Observer
 			@Override
 			public int compare(Campaign c1, Campaign c2)
 			{
-				return c1.getSafe(IntegerKey.CAMPAIGN_RANK) - c2.getSafe(IntegerKey.CAMPAIGN_RANK);
+				return c2.getSafe(IntegerKey.CAMPAIGN_RANK) - c1.getSafe(IntegerKey.CAMPAIGN_RANK);
 			}
 
 		});

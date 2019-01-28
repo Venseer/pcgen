@@ -19,20 +19,20 @@ package actor.race;
 
 import pcgen.cdom.base.Persistent;
 import pcgen.core.WeaponProf;
+import plugin.lsttokens.race.WeaponbonusToken;
 
 import actor.testsupport.AbstractPersistentCDOMChoiceActorTestCase;
-import plugin.lsttokens.race.WeaponbonusToken;
 
 public class WeaponBonusListActorTest extends
 		AbstractPersistentCDOMChoiceActorTestCase<WeaponProf>
 {
 
-	private static final Persistent<WeaponProf> pca = new WeaponbonusToken();
+	private static final Persistent<WeaponProf> PCA = new WeaponbonusToken();
 
 	@Override
 	public Persistent<WeaponProf> getActor()
 	{
-		return pca;
+		return PCA;
 	}
 
 	@Override

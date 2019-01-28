@@ -20,9 +20,9 @@ package pcgen.system;
 
 import java.io.File;
 
-import org.apache.commons.lang3.SystemUtils;
-
 import pcgen.output.publish.OutputDB;
+
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * This stores some of the properties that pcgen uses.
@@ -32,21 +32,18 @@ import pcgen.output.publish.OutputDB;
 public final class PCGenSettings extends PropertyContext
 {
 
-	private static final PCGenSettings instance = new PCGenSettings();
+	private static final PCGenSettings INSTANCE = new PCGenSettings();
 	/**
 	 * This is the PropertyContext for the pcgen options, all keys that are used with
 	 * this context have a key name starting with 'OPTION'
 	 */
-	public static final PropertyContext OPTIONS_CONTEXT = instance.createChildContext("pcgen.options");
+	public static final PropertyContext OPTIONS_CONTEXT = INSTANCE.createChildContext("pcgen.options");
 	public static final String OPTION_SAVE_CUSTOM_EQUIPMENT = "saveCustomInLst";
 	public static final String OPTION_ALLOWED_IN_SOURCES = "optionAllowedInSources";
 	public static final String OPTION_SOURCES_ALLOW_MULTI_LINE = "optionSourcesAllowMultiLine";
 	public static final String OPTION_SHOW_LICENSE = "showLicense";
 	public static final String OPTION_SHOW_MATURE_ON_LOAD = "showMatureOnLoad";
-	public static final String OPTION_SHOW_SPONSORS_ON_LOAD = "showSponsorsOnLoad";
 	public static final String OPTION_CREATE_PCG_BACKUP = "createPcgBackup";
-	public static final String OPTION_SHOW_HP_DIALOG_AT_LEVELUP = "showHPDialogAtLevelUp";
-	public static final String OPTION_SHOW_STAT_DIALOG_AT_LEVELUP = "showStatDialogAtLevelUp";
 	public static final String OPTION_SHOW_WARNING_AT_FIRST_LEVEL_UP = "showWarningAtFirstLevelUp";
 	public static final String OPTION_AUTO_RESIZE_EQUIP = "autoResizeEquip";
 	public static final String OPTION_SHOW_SKILL_MOD_BREAKDOWN = "showSkillModBreakdown";
@@ -84,7 +81,7 @@ public final class PCGenSettings extends PropertyContext
 	public static final String CONVERT_SOURCES = "pcgen.convert.sources";
 	public static final String CONVERT_DATA_LOG_FILE = "pcgen.convert.dataLogFile";
 
-	public static final PropertyContext GMGEN_OPTIONS_CONTEXT = instance.createChildContext("gmgen.options");
+	public static final PropertyContext GMGEN_OPTIONS_CONTEXT = INSTANCE.createChildContext("gmgen.options");
 
 	private PCGenSettings()
 	{
@@ -113,7 +110,7 @@ public final class PCGenSettings extends PropertyContext
 
 	public static PCGenSettings getInstance()
 	{
-		return instance;
+		return INSTANCE;
 	}
 
 	public static String getSelectedSpellSheet()

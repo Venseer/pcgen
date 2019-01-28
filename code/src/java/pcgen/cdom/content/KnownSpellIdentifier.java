@@ -20,6 +20,7 @@ package pcgen.cdom.content;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import pcgen.base.util.HashMapToList;
 import pcgen.cdom.base.CDOMList;
@@ -67,10 +68,7 @@ public class KnownSpellIdentifier extends ConcretePrereqObject
 	 */
 	public KnownSpellIdentifier(CDOMReference<Spell> spellRef, Integer levelLimit)
 	{
-		if (spellRef == null)
-		{
-			throw new IllegalArgumentException("Known Spell Identifier cannot have null spell reference");
-		}
+		Objects.requireNonNull(spellRef, "Known Spell Identifier cannot have null spell reference");
 		if (levelLimit != null && levelLimit.intValue() < 0)
 		{
 			throw new IllegalArgumentException("Known Spell Identifier level limit cannot be negative");
@@ -165,24 +163,12 @@ public class KnownSpellIdentifier extends ConcretePrereqObject
 		return spellList;
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this KnownSpellIdentifier
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return spellLevel == null ? ref.hashCode() : spellLevel.intValue() * ref.hashCode();
 	}
 
-	/**
-	 * Returns true if this KnownSpellIdentifier is equal to the given Object.
-	 * Equality is defined as being another KnownSpellIdentifier object with
-	 * equal spell level and underlying reference.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{

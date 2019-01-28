@@ -1,20 +1,20 @@
 /*
  * Copyright 2010 Connor Petty <cpmeister@users.sourceforge.net>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * 
+ *
  */
 package pcgen.gui2.dialog;
 
@@ -24,12 +24,10 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collection;
+import java.net.URL;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -44,20 +42,17 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 
-import org.apache.commons.lang3.StringUtils;
-
-import pcgen.cdom.content.Sponsor;
-import pcgen.core.Globals;
 import pcgen.gui2.PCGenFrame;
+import pcgen.gui2.tools.DesktopBrowserLauncher;
 import pcgen.gui2.tools.Icons;
 import pcgen.gui2.tools.Utility;
 import pcgen.gui2.util.GridBoxLayout;
-import pcgen.gui2.util.JLabelPane;
 import pcgen.system.LanguageBundle;
 import pcgen.system.PCGenPropBundle;
 import pcgen.util.Logging;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class AboutDialog extends JDialog
 {
@@ -107,7 +102,6 @@ final class MainAbout extends JPanel
 		mainPane.add(LanguageBundle.getString("in_abt_libraries"), buildIncludesPanel()); //$NON-NLS-1$
 		mainPane.add(LanguageBundle.getString("in_abt_license"), buildLicensePanel()); //$NON-NLS-1$
 		mainPane.add(LanguageBundle.getString("in_abt_awards"), buildAwardsPanel()); //$NON-NLS-1$
-		mainPane.add(LanguageBundle.getString("in_abt_sponsors"), buildSponsorsPanel()); //$NON-NLS-1$
 
 		setLayout(new BorderLayout());
 
@@ -225,44 +219,30 @@ final class MainAbout extends JPanel
 
 		// Web site button
 		wwwSite.setText(PCGenPropBundle.getWWWHome());
-		wwwSite.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
+		wwwSite.addActionListener(event -> {
+			try
 			{
-				try
-				{
-					Utility.viewInBrowser(wwwSite.getText());
-				}
-				catch (IOException ioe)
-				{
-					Logging.errorPrint(LanguageBundle.getString("in_abt_browser_err"), ioe); //$NON-NLS-1$
-				}
+				DesktopBrowserLauncher.viewInBrowser(new URL(wwwSite.getText()));
 			}
-
+			catch (IOException ioe)
+			{
+				Logging.errorPrint(LanguageBundle.getString("in_abt_browser_err"), ioe); //$NON-NLS-1$
+			}
 		});
 		gridBagConstraints1 = buildConstraints(1, 4, GridBagConstraints.WEST);
 		aCreditsPanel.add(wwwSite, gridBagConstraints1);
 
 		// Mailing list button
 		mailingList.setText(PCGenPropBundle.getMailingList());
-		mailingList.addActionListener(new ActionListener()
-		{
-
-			@Override
-			public void actionPerformed(ActionEvent e)
+		mailingList.addActionListener(event -> {
+			try
 			{
-				try
-				{
-					Utility.viewInBrowser(mailingList.getText());
-				}
-				catch (IOException ioe)
-				{
-					Logging.errorPrint(LanguageBundle.getString("in_abt_browser_err"), ioe); //$NON-NLS-1$
-				}
+				DesktopBrowserLauncher.viewInBrowser(new URL(mailingList.getText()));
 			}
-
+			catch (IOException ioe)
+			{
+				Logging.errorPrint(LanguageBundle.getString("in_err_browser_err"), ioe); //$NON-NLS-1$
+			}
 		});
 		gridBagConstraints1 = buildConstraints(1, 5, GridBagConstraints.WEST);
 		aCreditsPanel.add(mailingList, gridBagConstraints1);
@@ -283,7 +263,7 @@ final class MainAbout extends JPanel
 		monkeyTabPane.add(LanguageBundle.getString("in_abt_eng_mky"), //$NON-NLS-1$
 			buildMonkeyList(PCGenPropBundle.getEngineeringMonkeys()));
 
-		// because there isn't one 
+		// because there isn't one
 		monkeyTabPane.setToolTipTextAt(2, LanguageBundle.getString("in_abt_easter_egg")); //$NON-NLS-1$
 
 		return aCreditsPanel;
@@ -372,7 +352,7 @@ final class MainAbout extends JPanel
 		JPanel aPanel = new JPanel();
 		aPanel.setLayout(new GridBoxLayout(2, 2));
 		aPanel.setBackground(Color.WHITE);
-		Icon goldIcon = Icons.createImageIcon("gold200x200-2005.gif");
+		Icon goldIcon = Icons.ennie_award_2005.getImageIcon();
 		if (goldIcon != null)
 		{
 			JLabel e2005 = new JLabel(goldIcon);
@@ -386,7 +366,7 @@ final class MainAbout extends JPanel
 			aPanel.add(title);
 		}
 
-		Icon bronzeIcon = Icons.createImageIcon("bronze200x200-2003.gif");
+		Icon bronzeIcon = Icons.ennie_award_2003.getImageIcon();
 		if (bronzeIcon != null)
 		{
 			JLabel e2003 = new JLabel(bronzeIcon);
@@ -405,37 +385,6 @@ final class MainAbout extends JPanel
 		return panel;
 	}
 
-	private JPanel buildSponsorsPanel()
-	{
-		TitledBorder title =
-				BorderFactory.createTitledBorder(null, LanguageBundle.getString("in_abt_sponsorsTitle")); //$NON-NLS-1$
-		title.setTitleJustification(TitledBorder.CENTER);
-		JLabelPane sponsorLabel = new JLabelPane();
-		JScrollPane sp = new JScrollPane(sponsorLabel);
-		sp.setBorder(title);
-		JPanel panel = new JPanel(new BorderLayout());
-		sponsorLabel.setBackground(panel.getBackground());
-		panel.add(sp, BorderLayout.CENTER);
-
-		Collection<Sponsor> sponsors =
-				Globals.getGlobalContext().getReferenceContext().getConstructedCDOMObjects(Sponsor.class);
-		StringBuilder sb = new StringBuilder();
-		sb.append("<html><b>");
-		sb.append(LanguageBundle.getString("in_abt_ourSponsors")).append("</b><br>");
-		for (Sponsor sponsor : sponsors)
-		{
-			if ("PCGEN".equals(sponsor.getKeyName()))
-			{
-				continue;
-			}
-
-			sb.append("<img src='").append(sponsor.getBannerImage()).append("'><br>");
-		}
-		sb.append("</html>");
-		sponsorLabel.setText(sb.toString());
-		return panel;
-	}
-
 	/**
 	 * Construct the license panel. This panel shows the full
 	 * text of the license under which PCGen is distributed.
@@ -447,11 +396,11 @@ final class MainAbout extends JPanel
 		JPanel lPanel = new JPanel();
 
 		JScrollPane license = new JScrollPane();
-		JTextArea LGPLArea = new JTextArea();
+		JTextArea lgplArea = new JTextArea();
 
 		lPanel.setLayout(new BorderLayout());
 
-		LGPLArea.setEditable(false);
+		lgplArea.setEditable(false);
 
 		InputStream lgpl = ClassLoader.getSystemResourceAsStream("LICENSE"); //$NON-NLS-1$
 
@@ -459,19 +408,19 @@ final class MainAbout extends JPanel
 		{
 			try
 			{
-				LGPLArea.read(new InputStreamReader(lgpl), "LICENSE"); //$NON-NLS-1$
+				lgplArea.read(new InputStreamReader(lgpl), "LICENSE"); //$NON-NLS-1$
 			}
 			catch (IOException ioe)
 			{
-				LGPLArea.setText(LanguageBundle.getString("in_abt_license_read_err1")); //$NON-NLS-1$
+				lgplArea.setText(LanguageBundle.getString("in_abt_license_read_err1")); //$NON-NLS-1$
 			}
 		}
 		else
 		{
-			LGPLArea.setText(LanguageBundle.getString("in_abt_license_read_err2")); //$NON-NLS-1$
+			lgplArea.setText(LanguageBundle.getString("in_abt_license_read_err2")); //$NON-NLS-1$
 		}
 
-		license.setViewportView(LGPLArea);
+		license.setViewportView(lgplArea);
 		lPanel.add(license, BorderLayout.CENTER);
 
 		return lPanel;

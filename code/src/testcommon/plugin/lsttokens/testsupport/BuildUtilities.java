@@ -14,9 +14,11 @@ import pcgen.cdom.enumeration.FactSetKey;
 import pcgen.cdom.enumeration.FormulaKey;
 import pcgen.cdom.enumeration.IntegerKey;
 import pcgen.cdom.enumeration.ListKey;
+import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.enumeration.StringKey;
 import pcgen.cdom.enumeration.Type;
 import pcgen.cdom.enumeration.VariableKey;
+import pcgen.cdom.inst.CodeControl;
 import pcgen.core.Ability;
 import pcgen.core.AbilityCategory;
 import pcgen.core.Globals;
@@ -24,6 +26,7 @@ import pcgen.core.PCAlignment;
 import pcgen.core.PCStat;
 import pcgen.core.Race;
 import pcgen.core.SizeAdjustment;
+import pcgen.rules.context.AbstractReferenceContext;
 import pcgen.rules.context.LoadContext;
 
 public final class BuildUtilities
@@ -122,7 +125,7 @@ public final class BuildUtilities
 	{
 		FactDefinition<?, String> fd = new FactDefinition<>();
 		fd.setUsableLocation(cls);
-		fd.setName("*" + factname);
+		fd.setName("TS_" + factname);
 		fd.setFactName(factname);
 		fd.setFormatManager(new StringManager());
 		context.getReferenceContext().importObject(fd);
@@ -141,7 +144,7 @@ public final class BuildUtilities
 	{
 		FactSetDefinition<?, String> fd = new FactSetDefinition<>();
 		fd.setUsableLocation(cls);
-		fd.setName("*" + factsetname);
+		fd.setName("TS_" + factsetname);
 		fd.setFactSetName(factsetname);
 		fd.setFormatManager(new StringManager());
 		context.getReferenceContext().importObject(fd);
@@ -200,5 +203,14 @@ public final class BuildUtilities
 	public static AbilityCategory getFeatCat()
 	{
 		return AbilityCategory.FEAT;
+	}
+
+	public static void enableAlignmentFeature(AbstractReferenceContext ref)
+	{
+		CodeControl controller =
+				ref.constructNowIfNecessary(CodeControl.class, "Controller");
+		ObjectKey<Boolean> objectKey =
+				ObjectKey.getKeyFor(Boolean.class, "*ALIGNMENTFEATURE");
+		controller.put(objectKey, Boolean.TRUE);
 	}
 }

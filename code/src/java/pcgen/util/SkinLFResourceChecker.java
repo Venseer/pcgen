@@ -17,22 +17,13 @@
  */
 package pcgen.util;
 
-/**
- * Description:
- * Copyright:    Copyright (c) 2001
- * Company:
- */
 public final class SkinLFResourceChecker
 {
-	private static int missingResourceCount;
-	private static StringBuilder resourceBuffer;
-	private static final String whereToGetIt =
-			"<a href=\"http://prdownloads.sourceforge.net/pcgen/skin.zip\">skin.zip</a>";
+	private static boolean hasMissingResources = false;
+	private static final StringBuilder resourceBuffer;
 
 	static
 	{
-		missingResourceCount = 0;
-
 		//optimize StringBuilder initial size (0 should be right length. Hopefully we don't get an error. :)
 		resourceBuffer = new StringBuilder(0);
 		checkResource();
@@ -46,31 +37,16 @@ public final class SkinLFResourceChecker
 	 * Get the missing resource count
 	 * @return the missing resource count
 	 */
-	public static int getMissingResourceCount()
+	public static boolean hasMissingResources()
 	{
-		return missingResourceCount;
-	}
-
-	/**
-	 * Get the missing resource message
-	 * @return the missing resource message
-	 */
-	public static String getMissingResourceMessage()
-	{
-		if (missingResourceCount != 0)
-		{
-			return resourceBuffer + "\n" + ResourceChecker.getItHereMsg + whereToGetIt + '\n'
-				+ ResourceChecker.missingLibMsg; //TODO Why does this have hardcoded file separators? JK070115
-		}
-
-		return "";
+		return hasMissingResources;
 	}
 
 	private static void checkResource()
 	{
 		if (!ResourceChecker.hasResource("com.l2fprod.gui.plaf.skin.SkinLookAndFeel", "skinlf.jar", resourceBuffer))
 		{
-			++missingResourceCount;
+			hasMissingResources = true;
 		}
 	}
 }

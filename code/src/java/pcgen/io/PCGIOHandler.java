@@ -31,6 +31,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,29 +39,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.Nullable;
-
 import pcgen.cdom.base.Constants;
 import pcgen.cdom.content.CNAbility;
 import pcgen.cdom.enumeration.Nature;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.inst.PCClassLevel;
 import pcgen.core.AbilityCategory;
+import pcgen.core.Campaign;
 import pcgen.core.Equipment;
 import pcgen.core.GameMode;
 import pcgen.core.PCClass;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.SpecialAbility;
 import pcgen.core.character.EquipSet;
-import pcgen.facade.core.CampaignFacade;
 import pcgen.facade.core.SourceSelectionFacade;
 import pcgen.system.LanguageBundle;
 import pcgen.system.PCGenPropBundle;
 import pcgen.system.PCGenSettings;
 import pcgen.util.FileHelper;
 import pcgen.util.Logging;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * {@code PCGIOHandler}<br>
@@ -274,7 +275,7 @@ public final class PCGIOHandler extends IOHandler
 
 		try
 		{
-			br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+			br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
 			String aLine;
 
@@ -317,7 +318,7 @@ public final class PCGIOHandler extends IOHandler
 	 */
 	@Deprecated
 	@Override
-	public void write(PlayerCharacter pcToBeWritten, GameMode mode, List<CampaignFacade> campaigns, OutputStream out)
+	public void write(PlayerCharacter pcToBeWritten, GameMode mode, List<Campaign> campaigns, OutputStream out)
 	{
 		final String pcgString;
 		pcgString = (new PCGVer2Creator(pcToBeWritten, mode, campaigns)).createPCGString();
@@ -326,7 +327,7 @@ public final class PCGIOHandler extends IOHandler
 
 		try
 		{
-			bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+			bw = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
 			bw.write(pcgString);
 			bw.flush();
 
@@ -363,7 +364,7 @@ public final class PCGIOHandler extends IOHandler
 	 * @param campaigns     The character's sources.
 	 * @param outFile       The file to write the character to.
 	 */
-	public void write(PlayerCharacter pcToBeWritten, GameMode mode, List<CampaignFacade> campaigns, File outFile)
+	public void write(PlayerCharacter pcToBeWritten, GameMode mode, List<Campaign> campaigns, File outFile)
 	{
 		final String pcgString;
 		pcgString = (new PCGVer2Creator(pcToBeWritten, mode, campaigns)).createPCGString();
@@ -377,7 +378,7 @@ public final class PCGIOHandler extends IOHandler
 		try
 		{
 			FileOutputStream out = new FileOutputStream(outFile);
-			bw = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+			bw = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
 			bw.write(pcgString);
 			bw.flush();
 
@@ -651,10 +652,7 @@ public final class PCGIOHandler extends IOHandler
 	{
 		String versionLine = "VERSION:" + PCGenPropBundle.getVersionNumber();
 		String[] files = new String[characterFiles.size()];
-		for (int i = 0; i < files.length; i++)
-		{
-			files[i] = FileHelper.findRelativePath(partyFile, characterFiles.get(i));
-		}
+		Arrays.setAll(files, i -> FileHelper.findRelativePath(partyFile, characterFiles.get(i)));
 		String filesLine = StringUtils.join(files, ',');
 		try
 		{

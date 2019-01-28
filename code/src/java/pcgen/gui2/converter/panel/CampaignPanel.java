@@ -33,8 +33,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.commons.lang3.StringUtils;
-
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.ObjectKey;
@@ -44,6 +42,8 @@ import pcgen.core.Globals;
 import pcgen.gui2.converter.event.ProgressEvent;
 import pcgen.gui2.tools.Utility;
 import pcgen.system.PCGenSettings;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The Class {@code CampaignPanel} displays a panel allowing
@@ -57,27 +57,18 @@ public class CampaignPanel extends ConvertSubPanel
 	private List<Campaign> gameModeCampaigns;
 	private String folderName;
 
-	/**
-	 * @see pcgen.gui2.converter.panel.ConvertSubPanel#autoAdvance(pcgen.cdom.base.CDOMObject)
-	 */
 	@Override
 	public boolean autoAdvance(CDOMObject pc)
 	{
 		return false;
 	}
 
-	/**
-	 * @see pcgen.gui2.converter.panel.ConvertSubPanel#returnAllowed()
-	 */
 	@Override
 	public boolean returnAllowed()
 	{
 		return true;
 	}
 
-	/**
-	 * @see pcgen.gui2.converter.panel.ConvertSubPanel#performAnalysis(pcgen.cdom.base.CDOMObject)
-	 */
 	@Override
 	public boolean performAnalysis(CDOMObject pc)
 	{
@@ -104,9 +95,6 @@ public class CampaignPanel extends ConvertSubPanel
 		return false;
 	}
 
-	/**
-	 * @see pcgen.gui2.converter.panel.ConvertSubPanel#setupDisplay(javax.swing.JPanel, pcgen.cdom.base.CDOMObject)
-	 */
 	@Override
 	public void setupDisplay(JPanel panel, final CDOMObject pc)
 	{
@@ -227,54 +215,36 @@ public class CampaignPanel extends ConvertSubPanel
 			}
 		}
 
-		/**
-		 * @see javax.swing.table.AbstractTableModel#getColumnName(int)
-		 */
 		@Override
 		public String getColumnName(int col)
 		{
 			return columnNames[col];
 		}
 
-		/**
-		 * @see javax.swing.table.TableModel#getRowCount()
-		 */
 		@Override
 		public int getRowCount()
 		{
 			return rowData.length;
 		}
 
-		/**
-		 * @see javax.swing.table.TableModel#getColumnCount()
-		 */
 		@Override
 		public int getColumnCount()
 		{
 			return columnNames.length;
 		}
 
-		/**
-		 * @see javax.swing.table.TableModel#getValueAt(int, int)
-		 */
 		@Override
 		public Object getValueAt(int row, int col)
 		{
 			return rowData[row][col];
 		}
 
-		/**
-		 * @see javax.swing.table.AbstractTableModel#isCellEditable(int, int)
-		 */
 		@Override
 		public boolean isCellEditable(int row, int col)
 		{
 			return false;
 		}
 
-		/**
-		 * @see javax.swing.table.AbstractTableModel#setValueAt(java.lang.Object, int, int)
-		 */
 		@Override
 		public void setValueAt(Object value, int row, int col)
 		{

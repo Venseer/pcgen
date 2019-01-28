@@ -17,7 +17,8 @@
  */
 package plugin.lsttokens;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import pcgen.cdom.base.ConcretePrereqObject;
 import pcgen.cdom.base.Constants;
@@ -28,6 +29,7 @@ import plugin.lsttokens.testsupport.AbstractGlobalTokenTestCase;
 import plugin.lsttokens.testsupport.CDOMTokenLoader;
 import plugin.lsttokens.testsupport.ConsolidationRule;
 
+import org.junit.jupiter.api.Test;
 public class PreTokenTest extends AbstractGlobalTokenTestCase
 {
 
@@ -47,7 +49,13 @@ public class PreTokenTest extends AbstractGlobalTokenTestCase
 	}
 
 	@Override
-	public CDOMPrimaryToken<ConcretePrereqObject> getToken()
+	public CDOMPrimaryToken<ConcretePrereqObject> getReadToken()
+	{
+		return token;
+	}
+
+	@Override
+	public CDOMPrimaryToken<ConcretePrereqObject> getWriteToken()
 	{
 		return token;
 	}

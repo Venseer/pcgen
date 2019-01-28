@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import pcgen.cdom.base.Constants;
 import pcgen.cdom.enumeration.CharID;
@@ -50,8 +51,6 @@ public class SpellBookFacet extends AbstractStorageFacet<CharID> implements Data
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataAdded(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataAdded(DataFacetChangeEvent<CharID, Equipment> dfce)
@@ -91,8 +90,6 @@ public class SpellBookFacet extends AbstractStorageFacet<CharID> implements Data
 	 * @param dfce
 	 *            The DataFacetChangeEvent containing the information about the
 	 *            change
-	 * 
-	 * @see pcgen.cdom.facet.event.DataFacetChangeListener#dataRemoved(pcgen.cdom.facet.event.DataFacetChangeEvent)
 	 */
 	@Override
 	public void dataRemoved(DataFacetChangeEvent<CharID, Equipment> dfce)
@@ -140,10 +137,7 @@ public class SpellBookFacet extends AbstractStorageFacet<CharID> implements Data
 	 */
 	public void add(CharID id, SpellBook sb)
 	{
-		if (sb == null)
-		{
-			throw new IllegalArgumentException("Object to add may not be null");
-		}
+		Objects.requireNonNull(sb, "Object to add may not be null");
 		Map<String, SpellBook> sbMap = getConstructingCachedMap(id);
 		String name = sb.getName();
 		sbMap.put(name, sb);

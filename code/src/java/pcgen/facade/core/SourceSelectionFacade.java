@@ -20,18 +20,20 @@ package pcgen.facade.core;
 
 import java.util.List;
 
+import pcgen.core.Campaign;
+import pcgen.core.GameMode;
 import pcgen.facade.util.ListFacade;
 import pcgen.facade.util.ReferenceFacade;
 
 public interface SourceSelectionFacade extends LoadableFacade
 {
 
-	public ListFacade<CampaignFacade> getCampaigns();
+	public ListFacade<Campaign> getCampaigns();
 
-	public ReferenceFacade<GameModeFacade> getGameMode();
+	public ReferenceFacade<GameMode> getGameMode();
 
-	public void setCampaigns(List<CampaignFacade> campaign);
+	public void setCampaigns(List<Campaign> campaign);
 
-	public void setGameMode(GameModeFacade gameMode);
+	public void setGameMode(GameMode gameMode);
 
 }

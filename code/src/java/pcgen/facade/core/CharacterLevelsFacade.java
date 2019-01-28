@@ -22,6 +22,8 @@ import java.util.EventListener;
 import java.util.EventObject;
 
 import pcgen.cdom.enumeration.SkillCost;
+import pcgen.core.PCClass;
+import pcgen.core.Skill;
 import pcgen.facade.util.ListFacade;
 
 public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
@@ -37,13 +39,11 @@ public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
 	 * @param points the amount of points to invest
 	 * @return true if the points were successfuly invested
 	 */
-	public boolean investSkillPoints(CharacterLevelFacade level, SkillFacade skill, int points);
+	public boolean investSkillPoints(CharacterLevelFacade level, Skill skill, int points);
 
-	public ClassFacade getClassTaken(CharacterLevelFacade level);
+	public PCClass getClassTaken(CharacterLevelFacade level);
 
-	public SkillCost getSkillCost(CharacterLevelFacade level, SkillFacade skill);
-
-	public int getRankCost(CharacterLevelFacade level, SkillCost cost);
+	public SkillCost getSkillCost(CharacterLevelFacade level, Skill skill);
 
 	public int getGainedSkillPoints(CharacterLevelFacade level);
 
@@ -64,11 +64,7 @@ public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
 
 	public void setHPRolled(CharacterLevelFacade level, int hp);
 
-	public int getSkillTotal(CharacterLevelFacade level, SkillFacade skill);
-
-	public int getSkillModifier(CharacterLevelFacade level, SkillFacade skill);
-
-	public float getSkillRanks(CharacterLevelFacade level, SkillFacade skill);
+	public float getSkillRanks(CharacterLevelFacade level, Skill skill);
 
 	/**
 	 * Retrieve a breakdown of the skill details at a particular level.
@@ -76,7 +72,7 @@ public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
 	 * @param skill The skill to retrieve
 	 * @return A SkillBreakdown containing the modifier, ranks and total for the skill at the level.
 	 */
-	public SkillBreakdown getSkillBreakdown(CharacterLevelFacade level, SkillFacade skill);
+	public SkillBreakdown getSkillBreakdown(CharacterLevelFacade level, Skill skill);
 
 	/**
 	 * Retrieve the maximum number of ranks the character may have in a skill at a level.
@@ -97,11 +93,9 @@ public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
 	 * @param skill The skill to be checked.
 	 * @return True if the skill should be treated as class.
 	 */
-	public boolean isClassSkillForMaxRanks(CharacterLevelFacade level, SkillFacade skill);
+	public boolean isClassSkillForMaxRanks(CharacterLevelFacade level, Skill skill);
 
 	void addClassListener(ClassListener listener);
-
-	void removeClassListener(ClassListener listener);
 
 	void addHitPointListener(HitPointListener listener);
 
@@ -124,8 +118,9 @@ public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
 	 * @param ranks  The new number of ranks. 
 	 * @return The recommended level.
 	 */
-	public CharacterLevelFacade findNextLevelForSkill(SkillFacade skill, CharacterLevelFacade baseLevel, float ranks);
+	public CharacterLevelFacade findNextLevelForSkill(Skill skill, CharacterLevelFacade baseLevel, float ranks);
 
+	@FunctionalInterface
 	public static interface ClassListener extends EventListener
 	{
 
@@ -133,6 +128,7 @@ public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
 
 	}
 
+	@FunctionalInterface
 	public static interface HitPointListener extends EventListener
 	{
 
@@ -140,6 +136,7 @@ public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
 
 	}
 
+	@FunctionalInterface
 	public static interface SkillBonusListener extends EventListener
 	{
 
@@ -147,6 +144,7 @@ public interface CharacterLevelsFacade extends ListFacade<CharacterLevelFacade>
 
 	}
 
+	@FunctionalInterface
 	public static interface SkillPointListener extends EventListener
 	{
 

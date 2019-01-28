@@ -17,10 +17,15 @@
  */
 package plugin.lsttokens.testsupport;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import pcgen.cdom.enumeration.StringKey;
 import pcgen.persistence.PersistenceLayerException;
+
+import org.junit.jupiter.api.Test;
 
 public abstract class AbstractGlobalStringTokenTestCase extends
 		AbstractGlobalTokenTestCase
@@ -103,7 +108,7 @@ public abstract class AbstractGlobalStringTokenTestCase extends
 	public void testUnparseNull()
 	{
 		primaryProf.put(getStringKey(), null);
-		assertNull(getToken().unparse(primaryContext, primaryProf));
+		assertNull(getWriteToken().unparse(primaryContext, primaryProf));
 	}
 
 	/*
@@ -120,7 +125,7 @@ public abstract class AbstractGlobalStringTokenTestCase extends
 	protected String[] setAndUnparse(String val)
 	{
 		primaryProf.put(getStringKey(), val);
-		return getToken().unparse(primaryContext, primaryProf);
+		return getWriteToken().unparse(primaryContext, primaryProf);
 	}
 
 	@Override

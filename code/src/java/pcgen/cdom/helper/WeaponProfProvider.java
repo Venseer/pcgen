@@ -44,7 +44,7 @@ import pcgen.core.WeaponProf;
 public class WeaponProfProvider extends ConcretePrereqObject implements QualifyingObject
 {
 
-	private static final ChangeProfFacet changeProfFacet = FacetLibrary.getFacet(ChangeProfFacet.class);
+	private static final ChangeProfFacet CHANGE_PROF_FACET = FacetLibrary.getFacet(ChangeProfFacet.class);
 
 	/**
 	 * Contains the list of primitive WeaponProf objects that this
@@ -181,12 +181,6 @@ public class WeaponProfProvider extends ConcretePrereqObject implements Qualifyi
 		return sb.toString();
 	}
 
-	/**
-	 * Returns true if the given object is a WeaponProfProvider with identical
-	 * underlying WeaponProfs and WeaponProf TYPEs and Prerequisites.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -240,11 +234,6 @@ public class WeaponProfProvider extends ConcretePrereqObject implements Qualifyi
 		return false;
 	}
 
-	/**
-	 * Returns a consistent-with-equals hashCode for this WeaponProfProvider
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
@@ -273,6 +262,6 @@ public class WeaponProfProvider extends ConcretePrereqObject implements Qualifyi
 
 	public List<WeaponProf> getWeaponProfsInTarget(CharID id, CDOMGroupRef<WeaponProf> master)
 	{
-		return changeProfFacet.getWeaponProfsInTarget(id, master);
+		return CHANGE_PROF_FACET.getWeaponProfsInTarget(id, master);
 	}
 }

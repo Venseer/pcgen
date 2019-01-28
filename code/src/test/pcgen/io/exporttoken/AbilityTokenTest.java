@@ -20,8 +20,6 @@ package pcgen.io.exporttoken;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.enumeration.AspectName;
 import pcgen.cdom.enumeration.ListKey;
@@ -42,27 +40,13 @@ import pcgen.util.enumeration.Visibility;
 import plugin.lsttokens.testsupport.BuildUtilities;
 
 /**
- * <code>AbilityTokenTest</code> tests the functioning of the ABILITY 
+ * {@code AbilityTokenTest} tests the functioning of the ABILITY
  * token processing code. 
  */
 public class AbilityTokenTest extends AbstractCharacterTestCase
 {
 
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(AbilityTokenTest.class);
-	}
-
-	private Ability skillFocus;
-
-	/*
-	 * @see TestCase#setUp()
-	 */
-    @Override
+	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
@@ -102,8 +86,7 @@ public class AbilityTokenTest extends AbstractCharacterTestCase
 		TestHelper.makeSkill("Listen", "Wisdom", wis, true,
 			SkillArmorCheck.NONE);
 
-		skillFocus =
-				TestHelper.makeAbility("Skill Focus", BuildUtilities.getFeatCat(), "General");
+		Ability skillFocus = TestHelper.makeAbility("Skill Focus", BuildUtilities.getFeatCat(), "General");
 		BonusObj aBonus = Bonus.newBonus(Globals.getContext(), "SKILL|LIST|3");
 		if (aBonus != null)
 		{
@@ -112,9 +95,9 @@ public class AbilityTokenTest extends AbstractCharacterTestCase
 		skillFocus.put(ObjectKey.MULTIPLE_ALLOWED, true);
 		Globals.getContext().unconditionallyProcess(skillFocus, "CHOOSE", "SKILL|ALL");
 		AbstractCharacterTestCase.applyAbility(character, BuildUtilities.getFeatCat(),
-			skillFocus, "KEY_Bluff");
+				skillFocus, "KEY_Bluff");
 		AbstractCharacterTestCase.applyAbility(character, BuildUtilities.getFeatCat(),
-			skillFocus, "KEY_Listen");
+				skillFocus, "KEY_Listen");
 		character.calcActiveBonuses();
 	}
 

@@ -292,12 +292,10 @@
 	<bean id="goldFacet" class="pcgen.cdom.facet.fact.GoldFacet"/>
 	<bean id="grantedAbilityFacet" class="pcgen.cdom.facet.GrantedAbilityFacet"/>
 	<bean id="grantedVarFacet" class="pcgen.cdom.facet.GrantedVarFacet">
-		<property name="cdomSourceFacet" ref="cdomSourceFacet"/>
-		<property name="scopeFacet" ref="scopeFacet"/>
+		<property name="varScopedFacet" ref="varScopedFacet"/>
 		<property name="variableStoreFacet" ref="variableStoreFacet"/>
 	</bean>
 	<!-- H -->
-	<bean id="handedFacet" class="pcgen.cdom.facet.fact.HandedFacet"/>
 	<bean id="handsFacet" class="pcgen.cdom.facet.analysis.HandsFacet">
 		<property name="templateFacet" ref="templateFacet"/>
 		<property name="raceFacet" ref="raceFacet"/>
@@ -375,7 +373,7 @@
 	<bean id="loadFacet" class="pcgen.cdom.facet.analysis.LoadFacet">
 		<property name="formulaResolvingFacet" ref="formulaResolvingFacet"/>
 		<property name="totalWeightFacet" ref="totalWeightFacet"/>
-		<property name="sizeFacet" ref="sizeFacet"/>
+		<property name="playerCharacterTrackingFacet" ref="playerCharacterTrackingFacet"/>
 		<property name="bonusCheckingFacet" ref="bonusCheckingFacet"/>
 	</bean>
 	<bean id="localAddedSkillCostFacet" class="pcgen.cdom.facet.input.LocalAddedSkillCostFacet"/>
@@ -497,13 +495,6 @@
 		<property name="templateFacet" ref="templateFacet"/>
 		<property name="raceFacet" ref="raceFacet"/>
 	</bean>
-	<bean id="regionChoiceFacet" class="pcgen.cdom.facet.RegionChoiceFacet">
-		<property name="raceFacet" ref="raceFacet"/>
-		<property name="deityFacet" ref="deityFacet"/>
-		<property name="domainFacet" ref="domainFacet"/>
-		<property name="skillFacet" ref="skillFacet"/>
-		<property name="templateFacet" ref="templateFacet"/>
-	</bean>
 	<bean id="regionFacet" class="pcgen.cdom.facet.fact.RegionFacet">
 		<property name="templateFacet" ref="templateFacet"/>
 	</bean>
@@ -527,6 +518,10 @@
 	<bean id="saveableBonusFacet" class="pcgen.cdom.facet.SaveableBonusFacet" />
 	<bean id="savedAbilitiesFacet" class="pcgen.cdom.facet.SavedAbilitiesFacet" />
 	<bean id="scopeFacet" class="pcgen.cdom.facet.ScopeFacet"/>
+	<bean id="scopedDistributionFacet" class="pcgen.cdom.facet.ScopedDistributionFacet">
+		<property name="characterConsolidationFacet" ref="characterConsolidationFacet"/>
+		<property name="varScopedFacet" ref="varScopedFacet"/>
+	</bean>
 	<bean id="secondaryWeaponFacet" class="pcgen.cdom.facet.SecondaryWeaponFacet"/>
 	<bean id="shieldProfFacet" class="pcgen.cdom.facet.ShieldProfFacet">
 		<property name="shieldProfProviderFacet" ref="shieldProfProviderFacet"/>
@@ -683,10 +678,7 @@
 	</bean>
 	<bean id="weightFacet" class="pcgen.cdom.facet.fact.WeightFacet"/>
 	<!-- X -->
-	<bean id="xpFacet" class="pcgen.cdom.facet.fact.XPFacet">
-		<property name="levelFacet" ref="levelFacet"/>
-		<property name="levelTableFacet" ref="levelTableFacet"/>
-	</bean>
+	<bean id="xpFacet" class="pcgen.cdom.facet.fact.XPFacet"/>
 	<bean id="xpTableFacet" class="pcgen.cdom.facet.XPTableFacet"/>
 	<!-- Y -->
 	<!-- Z -->

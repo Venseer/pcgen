@@ -18,9 +18,11 @@
 package pcgen.cdom.format.table;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import pcgen.base.util.FormatManager;
 import pcgen.base.util.Indirect;
+import pcgen.base.util.ValueStore;
 
 /**
  * A TableFormatManager is a FormatManager that defines the format of a
@@ -98,9 +100,9 @@ public final class TableFormatManager implements FormatManager<DataTable>
 	}
 
 	@Override
-	public FormatManager<?> getComponentManager()
+	public Optional<FormatManager<?>> getComponentManager()
 	{
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
@@ -136,5 +138,13 @@ public final class TableFormatManager implements FormatManager<DataTable>
 	public boolean isDirect()
 	{
 		return false;
+	}
+
+	@Override
+	public DataTable initializeFrom(ValueStore valueStore)
+	{
+		DataTable empty = new DataTable();
+		empty.setName("<empty table>");
+		return empty;
 	}
 }

@@ -17,12 +17,13 @@
  */
 package pcgen.output.actor;
 
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.output.base.OutputActor;
 import pcgen.output.base.SimpleWrapperLibrary;
+
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 
 /**
  * A DisplayNameActor is designed to process an interpolation and convert the
@@ -33,10 +34,6 @@ import pcgen.output.base.SimpleWrapperLibrary;
  */
 public class DisplayNameActor implements OutputActor<CDOMObject>
 {
-	/**
-	 * @see pcgen.output.base.OutputActor#process(pcgen.cdom.enumeration.CharID,
-	 *      java.lang.Object)
-	 */
 	@Override
 	public TemplateModel process(CharID id, CDOMObject d) throws TemplateModelException
 	{

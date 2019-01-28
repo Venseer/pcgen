@@ -17,12 +17,11 @@
  */
 package plugin.pretokens;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 import plugin.lsttokens.testsupport.TokenRegistration;
 import plugin.pretokens.parser.PreAgeSetParser;
 import plugin.pretokens.writer.PreAgeSetWriter;
+
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * {@code PreAgeSetRoundRobin} verifies that preageset tags can be
@@ -30,30 +29,7 @@ import plugin.pretokens.writer.PreAgeSetWriter;
  */
 public class PreAgeSetRoundRobin extends AbstractBasicRoundRobin
 {
-	
-	/**
-	 * The main method.
-	 * 
-	 * @param args the arguments
-	 */
-	public static void main(String[] args)
-	{
-		TestRunner.run(PreAgeSetRoundRobin.class);
-	}
-
-	/**
-	 * Suite.
-	 * 
-	 * @return Test
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(PreAgeSetRoundRobin.class);
-	}
-
-	/**
-	 * @see junit.framework.TestCase#setUp()
-	 */
+	@BeforeEach
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -62,18 +38,12 @@ public class PreAgeSetRoundRobin extends AbstractBasicRoundRobin
 		TokenRegistration.register(new PreAgeSetWriter());
 	}
 
-	/**
-	 * @see plugin.pretokens.AbstractBasicRoundRobin#getBaseString()
-	 */
 	@Override
 	public String getBaseString()
 	{
 		return "AGESET";
 	}
 
-	/**
-	 * @see plugin.pretokens.AbstractBasicRoundRobin#isTypeAllowed()
-	 */
 	@Override
 	public boolean isTypeAllowed()
 	{

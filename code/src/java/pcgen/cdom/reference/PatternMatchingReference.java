@@ -20,6 +20,7 @@ package pcgen.cdom.reference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import pcgen.cdom.base.CDOMReference;
 import pcgen.cdom.base.Constants;
@@ -77,10 +78,7 @@ public class PatternMatchingReference<T extends Loadable> extends CDOMReference<
 	public PatternMatchingReference(CDOMGroupRef<T> startingGroup, String patternText)
 	{
 		super(patternText);
-		if (startingGroup == null)
-		{
-			throw new IllegalArgumentException("Starting Group cannot be null in PatternMatchingReference");
-		}
+		Objects.requireNonNull(startingGroup, "Starting Group cannot be null in PatternMatchingReference");
 		all = startingGroup;
 		String lstPattern = Constants.PERCENT;
 		int patternchar = patternText.length() - lstPattern.length();
@@ -166,7 +164,6 @@ public class PatternMatchingReference<T extends Loadable> extends CDOMReference<
 	 * 
 	 * @return A representation of this PatternMatchingReference, suitable for
 	 *         storing in an LST file.
-	 * @see pcgen.cdom.base.CDOMReference#getLSTformat(boolean)
 	 */
 	@Override
 	public String getLSTformat(boolean useAny)
@@ -198,17 +195,6 @@ public class PatternMatchingReference<T extends Loadable> extends CDOMReference<
 		return count;
 	}
 
-	/**
-	 * Returns true if this PatternMatchingReference is equal to the given
-	 * Object. Equality is defined as being another PatternMatchingReference
-	 * object with equal Class represented by the reference, an equal staring
-	 * CDOMGroupRef and an equal pattern. This may or may not be a deep .equals,
-	 * depending on the behavior of the underlying CDOMGroupRef. You should
-	 * check the documentation for the .equals(Object) method of that class to
-	 * establish the actual behavior of this method.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -221,12 +207,6 @@ public class PatternMatchingReference<T extends Loadable> extends CDOMReference<
 		return false;
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this
-	 * PatternMatchingReference
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{

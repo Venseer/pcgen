@@ -17,15 +17,13 @@
  */
 package pcgen.gui2.facade;
 
-import org.junit.Test;
-
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.core.Ability;
+import pcgen.core.AbilityCategory;
 import pcgen.core.Globals;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.SettingsHandler;
-import pcgen.facade.core.AbilityCategoryFacade;
 import pcgen.facade.core.AbilityFacade;
 import pcgen.facade.util.ListFacade;
 import pcgen.rules.persistence.token.ParseResult;
@@ -33,8 +31,10 @@ import pcgen.util.TestHelper;
 import plugin.lsttokens.choose.StringToken;
 import plugin.lsttokens.testsupport.BuildUtilities;
 
+import org.junit.Test;
+
 /**
- * The Class <code>CharacterAbilitiesTest</code> verifies the operation of the 
+ * The Class {@code CharacterAbilitiesTest} verifies the operation of the
  * CharacterAbilities class.
  *
  * <br/>
@@ -56,7 +56,7 @@ public class CharacterAbilitiesTest extends AbstractCharacterTestCase
 		PlayerCharacter pc = getCharacter();
 		CharacterAbilities ca = new CharacterAbilities(pc, uiDelegate, dataset, todoManager);
 		ca.rebuildAbilityLists();
-		ListFacade<AbilityCategoryFacade> categories = ca.getActiveAbilityCategories();
+		ListFacade<AbilityCategory> categories = ca.getActiveAbilityCategories();
 		assertNotNull("Categories should not be null", categories);
 		assertTrue("Feat should be active", categories.containsElement(BuildUtilities.getFeatCat()));
 		ListFacade<AbilityFacade> abilities = ca.getAbilities(BuildUtilities.getFeatCat());
@@ -81,7 +81,7 @@ public class CharacterAbilitiesTest extends AbstractCharacterTestCase
 		PlayerCharacter pc = getCharacter();
 		CharacterAbilities ca = new CharacterAbilities(pc, uiDelegate, dataset, todoManager);
 		ca.rebuildAbilityLists();
-		ListFacade<AbilityCategoryFacade> categories = ca.getActiveAbilityCategories();
+		ListFacade<AbilityCategory> categories = ca.getActiveAbilityCategories();
 		assertNotNull("Categories should not be null", categories);
 		assertTrue("Feat should be active", categories.containsElement(BuildUtilities.getFeatCat()));
 		ListFacade<AbilityFacade> abilities = ca.getAbilities(BuildUtilities.getFeatCat());
@@ -112,9 +112,6 @@ public class CharacterAbilitiesTest extends AbstractCharacterTestCase
 		
 	}
 	
-	/**
-	 * @see pcgen.AbstractCharacterTestCase#setUp()
-	 */
 	@Override
 	protected void setUp() throws Exception
 	{

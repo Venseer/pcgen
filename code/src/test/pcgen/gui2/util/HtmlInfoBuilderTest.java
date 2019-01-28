@@ -17,38 +17,25 @@
  */
 package pcgen.gui2.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Locale;
 
 import pcgen.EnUsLocaleDependentTestCase;
 import pcgen.LocaleDependentTestCase;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
+
+import org.junit.jupiter.api.Test;
 
 
 /**
- * <code>InfoLabelTextBuilderTest</code> tests the HtmlInfoBuilder.
+ * {@code InfoLabelTextBuilderTest} tests the HtmlInfoBuilder.
  */
-@SuppressWarnings("nls")
-public class HtmlInfoBuilderTest extends TestCase
+public class HtmlInfoBuilderTest
 {
-	public static void main(String[] args)
-	{
-		TestRunner.run(HtmlInfoBuilderTest.class);
-	}
-
-	/**
-	 * @return Test
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(HtmlInfoBuilderTest.class);
-	}
-	
 	/**
 	 * Test adding a string.
 	 */
+	@Test
 	public void testAppendString()
 	{
 		HtmlInfoBuilder b = new HtmlInfoBuilder();
@@ -61,6 +48,7 @@ public class HtmlInfoBuilderTest extends TestCase
 	/**
 	 * Test adding a simple element with a key and a value.
 	 */
+	@Test
 	public void testAppendElement()
 	{
 		HtmlInfoBuilder b = new HtmlInfoBuilder();
@@ -73,6 +61,7 @@ public class HtmlInfoBuilderTest extends TestCase
 	/**
 	 * Test adding an element that gets its key from the language properties.
 	 */
+	@Test
 	public void testAppendI18nElement()
 	{
 		HtmlInfoBuilder b = new HtmlInfoBuilder();
@@ -85,6 +74,7 @@ public class HtmlInfoBuilderTest extends TestCase
 	/**
 	 * Test building a string with some different options.
 	 */
+	@Test
 	public void testAppendComplex()
 	{
 		HtmlInfoBuilder b = new HtmlInfoBuilder("Character");
@@ -93,7 +83,7 @@ public class HtmlInfoBuilderTest extends TestCase
 		b.appendLineBreak().appendI18nElement("in_player", "Koen");
 		EnUsLocaleDependentTestCase.after();
 		assertEquals("<html><b><font size=+1>Character</font></b>"
-					+ "<br><b>Player:</b>&nbsp;Koen</html>", b.toString());
+				+ "<br><b>Player:</b>&nbsp;Koen</html>", b.toString());
 	}
 	
 }

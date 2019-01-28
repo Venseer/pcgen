@@ -18,6 +18,8 @@
 package pcgen.rules.context;
 
 import java.util.Collection;
+import java.util.Objects;
+import java.util.Optional;
 
 import pcgen.base.util.FormatManager;
 import pcgen.base.util.Indirect;
@@ -39,8 +41,8 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 
 	protected TrackingManufacturer(TrackingReferenceContext trc, ReferenceManufacturer<T> mfg)
 	{
-		context = trc;
-		rm = mfg;
+		context = Objects.requireNonNull(trc);
+		rm = Objects.requireNonNull(mfg);
 	}
 
 	@Override
@@ -260,9 +262,9 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 	}
 
 	@Override
-	public FormatManager<?> getComponentManager()
+	public Optional<FormatManager<?>> getComponentManager()
 	{
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
@@ -282,4 +284,19 @@ class TrackingManufacturer<T extends Loadable> implements ReferenceManufacturer<
 	{
 		return rm.getPersistentFormat();
 	}
+
+	@Override
+	public int hashCode()
+	{
+		return 37 + rm.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return (obj instanceof TrackingManufacturer)
+			&& rm.equals(((TrackingManufacturer<?>) obj).rm);
+	}
+
+
 }

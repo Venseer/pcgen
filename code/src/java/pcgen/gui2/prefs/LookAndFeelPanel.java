@@ -37,8 +37,6 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
-import org.apache.commons.lang3.StringUtils;
-
 import pcgen.cdom.base.Constants;
 import pcgen.core.utils.MessageType;
 import pcgen.core.utils.ShowMessageDelegate;
@@ -46,6 +44,8 @@ import pcgen.gui2.plaf.LookAndFeelManager;
 import pcgen.gui2.tools.Utility;
 import pcgen.system.ConfigurationSettings;
 import pcgen.system.LanguageBundle;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * The Class {@code LookAndFeelPanel} is responsible for
@@ -55,10 +55,10 @@ import pcgen.system.LanguageBundle;
 @SuppressWarnings("serial")
 public class LookAndFeelPanel extends PCGenPrefsPanel
 {
-	private static final String in_lookAndFeel = LanguageBundle.getString("in_Prefs_lookAndFeel");
+	private static final String IN_LOOK_AND_FEEL = LanguageBundle.getString("in_Prefs_lookAndFeel");
 
-	private static final String in_skinnedLAF = LanguageBundle.getString("in_Prefs_skinnedLAF");
-	private static final String in_choose = "...";
+	private static final String IN_SKINNED_LAF = LanguageBundle.getString("in_Prefs_skinnedLAF");
+	private static final String IN_CHOOSE = "...";
 
 	private final JRadioButton[] laf;
 	private final JRadioButton skinnedLookFeel = new JRadioButton();
@@ -77,7 +77,7 @@ public class LookAndFeelPanel extends PCGenPrefsPanel
 		JLabel label;
 		ButtonGroup exclusiveGroup;
 		Border etched = null;
-		TitledBorder title1 = BorderFactory.createTitledBorder(etched, in_lookAndFeel);
+		TitledBorder title1 = BorderFactory.createTitledBorder(etched, IN_LOOK_AND_FEEL);
 
 		title1.setTitleJustification(TitledBorder.LEFT);
 		this.setBorder(title1);
@@ -106,7 +106,7 @@ public class LookAndFeelPanel extends PCGenPrefsPanel
 		}
 
 		skinnedLookFeel.addActionListener(actions[actions.length - 1]);
-		skinnedLookFeel.setText(in_skinnedLAF + ": ");
+		skinnedLookFeel.setText(IN_SKINNED_LAF + ": ");
 		skinnedLookFeel.setToolTipText(LanguageBundle.getString("in_Prefs_skinnedLAFTooltip"));
 		skinnedLookFeel.setMnemonic(LanguageBundle.getMnemonic("in_mn_Prefs_skinnedLAF"));
 		Utility.buildConstraints(c, 0, laf.length, 3, 1, 0, 0);
@@ -120,7 +120,7 @@ public class LookAndFeelPanel extends PCGenPrefsPanel
 		gridbag.setConstraints(themepackLabel, c);
 		this.add(themepackLabel);
 		Utility.buildConstraints(c, 4, laf.length, 1, 1, 0, 0);
-		themepack = new JButton(in_choose);
+		themepack = new JButton(IN_CHOOSE);
 		themepack.setToolTipText(LanguageBundle.getString("in_Prefs_chooseSkinTooltip"));
 		gridbag.setConstraints(themepack, c);
 		this.add(themepack);
@@ -201,18 +201,12 @@ public class LookAndFeelPanel extends PCGenPrefsPanel
 		}
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#getTitle()
-	 */
 	@Override
 	public String getTitle()
 	{
-		return in_lookAndFeel;
+		return IN_LOOK_AND_FEEL;
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#setOptionsBasedOnControls()
-	 */
 	@Override
 	public void setOptionsBasedOnControls()
 	{
@@ -236,9 +230,6 @@ public class LookAndFeelPanel extends PCGenPrefsPanel
 		return needsRestart;
 	}
 
-	/**
-	 * @see pcgen.gui2.prefs.PCGenPrefsPanel#applyOptionValuesToControls()
-	 */
 	@Override
 	public void applyOptionValuesToControls()
 	{

@@ -20,8 +20,6 @@ package plugin.exporttokens;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.base.UserSelection;
 import pcgen.cdom.content.CNAbility;
@@ -47,26 +45,13 @@ import pcgen.util.enumeration.Visibility;
 import plugin.lsttokens.testsupport.BuildUtilities;
 
 /**
- * <code>VAbilityTokenTest</code> tests the functioning of the VABILITY 
+ * {@code VAbilityTokenTest} tests the functioning of the VABILITY
  * token processing code. 
  */
 public class VAbilityTokenTest extends AbstractCharacterTestCase
 {
-
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(VAbilityTokenTest.class);
-	}
-
 	private Ability skillFocus;
 
-	/*
-	 * @see TestCase#setUp()
-	 */
     @Override
 	protected void setUp() throws Exception
 	{

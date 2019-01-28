@@ -21,9 +21,9 @@ package pcgen.core;
 
 import java.util.StringTokenizer;
 
-import org.apache.commons.lang3.StringUtils;
-
 import pcgen.util.Logging;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@code RollInfo}.
@@ -327,7 +327,7 @@ public final class RollInfo
 			{
 				Logging.errorPrint("Bad rolls: nothing to keep!");
 
-				return null;
+				return "";
 			}
 
 			// Note the ordering: by testing for bottom

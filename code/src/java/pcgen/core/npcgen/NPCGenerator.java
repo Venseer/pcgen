@@ -57,7 +57,7 @@ import pcgen.core.character.CharacterSpell;
 import pcgen.core.pclevelinfo.PCLevelInfo;
 import pcgen.core.spell.Spell;
 import pcgen.gui2.UIPropertyContext;
-import pcgen.output.channel.ChannelCompatibility;
+import pcgen.output.channel.compat.AlignmentCompat;
 import pcgen.util.Logging;
 import pcgen.util.chooser.ChooserFactory;
 import pcgen.util.enumeration.Visibility;
@@ -68,7 +68,7 @@ import pcgen.util.enumeration.Visibility;
  */
 public final class NPCGenerator
 {
-	private static final NPCGenerator theInstance = new NPCGenerator();
+	private static final NPCGenerator THE_INSTANCE = new NPCGenerator();
 
 	private Configuration theConfiguration = null;
 
@@ -87,8 +87,8 @@ public final class NPCGenerator
 	 */
 	public static NPCGenerator getInst()
 	{
-		theInstance.setConfiguration(SettingsHandler.getGame());
-		return theInstance;
+		THE_INSTANCE.setConfiguration(SettingsHandler.getGame());
+		return THE_INSTANCE;
 	}
 
 	private void setConfiguration(final GameMode aGameMode)
@@ -531,7 +531,7 @@ public final class NPCGenerator
 		final List<LevelGeneratorOption> levels, final RollMethod aRollMethod)
 	{
 		// Force a more quiet process
-		ChooserFactory.pushChooserClassname("pcgen.util.chooser.RandomChooser"); //$NON-NLS-1$
+		ChooserFactory.useRandomChooser(); //$NON-NLS-1$
 
 		boolean tempShowHP = SettingsHandler.getShowHPDialogAtLevelUp();
 		SettingsHandler.setShowHPDialogAtLevelUp(false);
@@ -549,7 +549,7 @@ public final class NPCGenerator
 				{
 					Logging.debugPrint("NPCGenerator: Selected " + randAlign //$NON-NLS-1$
 						+ " for alignment " + align); //$NON-NLS-1$
-					ChannelCompatibility.setCurrentAlignment(aPC.getCharID(), randAlign);
+					AlignmentCompat.setCurrentAlignment(aPC.getCharID(), randAlign);
 				}
 
 				final Race r = getRace(aRace);
@@ -779,7 +779,6 @@ public final class NPCGenerator
 		{
 			SettingsHandler.setShowHPDialogAtLevelUp(tempShowHP);
 			UIPropertyContext.setSingleChoiceAction(tempChoicePref);
-			ChooserFactory.popChooserClassname();
 		}
 	}
 }

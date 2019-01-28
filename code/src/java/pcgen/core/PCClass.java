@@ -23,12 +23,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
+import java.util.StringJoiner;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.StringUtils;
-
-import pcgen.base.lang.StringUtil;
 import pcgen.cdom.base.AssociatedPrereqObject;
 import pcgen.cdom.base.CDOMListObject;
 import pcgen.cdom.base.CDOMObject;
@@ -44,7 +42,6 @@ import pcgen.cdom.enumeration.IntegerKey;
 import pcgen.cdom.enumeration.ListKey;
 import pcgen.cdom.enumeration.MapKey;
 import pcgen.cdom.enumeration.ObjectKey;
-import pcgen.cdom.enumeration.Region;
 import pcgen.cdom.enumeration.StringKey;
 import pcgen.cdom.enumeration.Type;
 import pcgen.cdom.enumeration.VariableKey;
@@ -73,7 +70,7 @@ import pcgen.core.prereq.Prerequisite;
 import pcgen.core.spell.Spell;
 import pcgen.core.utils.MessageType;
 import pcgen.core.utils.ShowMessageDelegate;
-import pcgen.facade.core.ClassFacade;
+import pcgen.facade.core.InfoFacade;
 import pcgen.persistence.PersistenceLayerException;
 import pcgen.persistence.lst.output.prereq.PrerequisiteWriter;
 import pcgen.persistence.lst.prereq.PreParserFactory;
@@ -81,10 +78,12 @@ import pcgen.rules.context.AbstractReferenceContext;
 import pcgen.util.Logging;
 import pcgen.util.enumeration.AttackType;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * {@code PCClass}.
  */
-public class PCClass extends PObject implements ClassFacade, Cloneable
+public class PCClass extends PObject implements InfoFacade, Cloneable
 {
 
 	public static final CDOMReference<DomainList> ALLOWED_DOMAINS;
@@ -124,7 +123,6 @@ public class PCClass extends PObject implements ClassFacade, Cloneable
 	 * FINALPCCLASSANDLEVEL This is required in PCClassLevel and should be present in
 	 * PCClass for PCClassLevel creation (in the factory)
 	 */
-	@Override
 	public final String getAbbrev()
 	{
 		FactKey<String> fk = FactKey.valueOf("Abb");
@@ -346,7 +344,6 @@ public class PCClass extends PObject implements ClassFacade, Cloneable
 	 * FINALPCCLASSANDLEVEL This is required in PCClassLevel and should be present in
 	 * PCClass for PCClassLevel creation (in the factory)
 	 */
-	@Override
 	public final String getSpellType()
 	{
 		FactKey<String> fk = FactKey.valueOf("SpellType");
@@ -524,25 +521,22 @@ public class PCClass extends PObject implements ClassFacade, Cloneable
 	@Override
 	public String getPCCText()
 	{
-		final StringBuilder pccTxt = new StringBuilder(200);
-		pccTxt.append("CLASS:").append(getDisplayName());
-		pccTxt.append("\t");
-		pccTxt.append(PrerequisiteWriter.prereqsToString(this));
-		pccTxt.append("\t");
-		pccTxt.append(StringUtil.joinToStringBuilder(Globals.getContext().unparse(this), "\t"));
+		StringJoiner txt = new StringJoiner("\t");
+		txt.add("CLASS:" + getDisplayName());
+		txt.add(PrerequisiteWriter.prereqsToString(this));
+		Globals.getContext().unparse(this).forEach(item -> txt.add(item));
 
 		// now all the level-based stuff
 		final String lineSep = System.getProperty("line.separator");
 
 		for (Map.Entry<Integer, PCClassLevel> me : levelMap.entrySet())
 		{
-			pccTxt.append(lineSep).append(me.getKey()).append('\t');
-			pccTxt.append(PrerequisiteWriter.prereqsToString(me.getValue()));
-			pccTxt.append("\t");
-			pccTxt.append(StringUtil.joinToStringBuilder(Globals.getContext().unparse(me.getValue()), "\t"));
+			txt.add(lineSep + me.getKey());
+			txt.add(PrerequisiteWriter.prereqsToString(me.getValue()));
+			Globals.getContext().unparse(me.getValue()).forEach(item -> txt.add(item));
 		}
 
-		return pccTxt.toString();
+		return txt.toString();
 	}
 
 	/*
@@ -755,7 +749,7 @@ public class PCClass extends PObject implements ClassFacade, Cloneable
 	 */
 	String getUDamForEffLevel(int aLevel, final PlayerCharacter aPC, boolean adjustForPCSize)
 	{
-		int pcSize = adjustForPCSize ? aPC.sizeInt() : aPC.getDisplay().racialSizeInt();
+		int pcSize = adjustForPCSize ? aPC.sizeInt() : aPC.racialSizeInt();
 
 		//
 		// Check "Unarmed Strike", then default to "1d3"
@@ -1031,11 +1025,6 @@ public class PCClass extends PObject implements ClassFacade, Cloneable
 			for (TransitionChoice<Kit> kit : classLevel.getSafeListFor(ListKey.KIT_CHOICE))
 			{
 				kit.act(kit.driveChoice(aPC), classLevel, aPC);
-			}
-			TransitionChoice<Region> region = classLevel.get(ObjectKey.REGION_CHOICE);
-			if (region != null)
-			{
-				region.act(region.driveChoice(aPC), classLevel, aPC);
 			}
 		}
 
@@ -1326,12 +1315,6 @@ public class PCClass extends PObject implements ClassFacade, Cloneable
 		removeListFor(ListKey.KIT_CHOICE);
 		addAllToListFor(ListKey.KIT_CHOICE, otherClass.getSafeListFor(ListKey.KIT_CHOICE));
 
-		remove(ObjectKey.REGION_CHOICE);
-		if (otherClass.containsKey(ObjectKey.REGION_CHOICE))
-		{
-			put(ObjectKey.REGION_CHOICE, otherClass.get(ObjectKey.REGION_CHOICE));
-		}
-
 		removeListFor(ListKey.SAB);
 		addAllToListFor(ListKey.SAB, otherClass.getSafeListFor(ListKey.SAB));
 
@@ -1458,20 +1441,17 @@ public class PCClass extends PObject implements ClassFacade, Cloneable
 		return super.qualifies(aPC, owner);
 	}
 
-	@Override
 	public String getBaseStat()
 	{
 		return getSpellBaseStat();
 	}
 
-	@Override
 	public String getHD()
 	{
 		HitDie hd = getSafe(ObjectKey.LEVEL_HITDIE);
 		return String.valueOf(hd.getDie());
 	}
 
-	@Override
 	public String[] getTypes()
 	{
 		String type = getType();

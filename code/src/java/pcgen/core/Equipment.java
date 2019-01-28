@@ -32,6 +32,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
@@ -40,8 +41,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import org.apache.commons.lang3.StringUtils;
 
 import pcgen.base.formula.Formula;
 import pcgen.base.lang.StringUtil;
@@ -97,6 +96,8 @@ import pcgen.util.PjepPool;
 import pcgen.util.enumeration.Load;
 import pcgen.util.enumeration.View;
 import pcgen.util.enumeration.Visibility;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Represents Equipment for a PC.
@@ -976,8 +977,14 @@ public final class Equipment extends PObject
 	 */
 	public void addToEqModifierList(final EquipmentModifier eqMod, final boolean bPrimary)
 	{
-
-		usePrimaryCache = false;
+		if (bPrimary)
+		{
+			usePrimaryCache = false;
+		}
+		else
+		{
+			useSecondaryCache = false;
+		}
 		eqMod.setVariableParent(this);
 		getEquipmentHead(bPrimary ? 1 : 2).addToListFor(ListKey.EQMOD, eqMod);
 		setDirty(true);
@@ -2405,15 +2412,7 @@ public final class Equipment extends PObject
 				}
 			}
 
-			head.addToListFor(ListKey.EQMOD, aMod);
-			if (bPrimary)
-			{
-				usePrimaryCache = false;
-			}
-			else
-			{
-				useSecondaryCache = false;
-			}
+			addToEqModifierList(aMod, bPrimary);
 		}
 
 		//
@@ -5469,40 +5468,6 @@ public final class Equipment extends PObject
 	}
 
 	/**
-	 * calculates the value of all items in this container If this container
-	 * contains containers, also add the value of all items within that
-	 * container, etc, etc, etc.
-	 * 
-	 * @param aPC The PC that has the Equipment
-	 * @return contained value
-	 */
-	private double getContainedValue(final PlayerCharacter aPC)
-	{
-		double total = 0;
-
-		if (getChildCount() == 0)
-		{
-			return total;
-		}
-
-		for (int e = 0; e < getContainedEquipmentCount(); ++e)
-		{
-			final Equipment anEquip = getContainedEquipment(e);
-
-			if (anEquip.getContainedEquipmentCount() > 0)
-			{
-				total += anEquip.getContainedValue(aPC);
-			}
-			else
-			{
-				total += anEquip.getCost(aPC).floatValue();
-			}
-		}
-
-		return total;
-	}
-
-	/**
 	 * Gets the contained Weight this object recursis all child objects to get
 	 * their contained weight
 	 * 
@@ -5518,25 +5483,15 @@ public final class Equipment extends PObject
 	/**
 	 * Get Base contained weight
 	 * 
-	 * @return base contained weight
-	 */
-	private Float getBaseContainedWeight()
-	{
-		return getBaseContainedWeight(false);
-	}
-
-	/**
-	 * Get Base contained weight
-	 * 
 	 * @param effective Should we recurse child objects?
 	 * @return Base contained weight
 	 */
-	private Float getBaseContainedWeight(final boolean effective)
+	public Float getBaseContainedWeight()
 	{
 
 		Float total = (float) 0;
 
-		if ((getSafe(ObjectKey.CONTAINER_CONSTANT_WEIGHT) && !effective) || (getChildCount() == 0))
+		if ((getSafe(ObjectKey.CONTAINER_CONSTANT_WEIGHT)) || (getChildCount() == 0))
 		{
 			return total;
 		}
@@ -5718,8 +5673,8 @@ public final class Equipment extends PObject
 	 * Convenience method. <p> <br>
 	 * author: Thomas Behr 27-03-02
 	 * 
-	 * @return <code>true</code>, if this instance is a container;
-	 *         <code>false</code>, otherwise
+	 * @return {@code true}, if this instance is a container;
+	 *         {@code false}, otherwise
 	 */
 	public boolean isContainer()
 	{
@@ -6157,7 +6112,7 @@ public final class Equipment extends PObject
 	}
 
 	/**
-	 * The Class <code>EquipmentHeadCostSummary</code> carries the multi 
+	 * The Class {@code EquipmentHeadCostSummary} carries the multi
 	 * valued response back when calculating the cost of a head.  
 	 */
 	private static class EquipmentHeadCostSummary
@@ -6283,9 +6238,9 @@ public final class Equipment extends PObject
 	}
 
 	@Override
-	public String getLocalScopeName()
+	public Optional<String> getLocalScopeName()
 	{
-		return "PC.EQUIPMENT";
+		return Optional.of("PC.EQUIPMENT");
 	}
 
 	public Object getLocalVariable(CharID id, String varName)

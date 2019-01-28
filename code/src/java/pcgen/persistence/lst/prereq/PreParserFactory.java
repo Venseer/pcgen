@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import pcgen.base.lang.UnreachableError;
 import pcgen.core.prereq.Prerequisite;
 import pcgen.core.prereq.PrerequisiteOperator;
 import pcgen.persistence.PersistenceLayerException;
@@ -34,7 +35,7 @@ import pcgen.util.Logging;
 public final class PreParserFactory implements PluginLoader
 {
 	private static PreParserFactory instance = null;
-	private static Map<String, PrerequisiteParserInterface> parserLookup = new HashMap<>();
+	private Map<String, PrerequisiteParserInterface> parserLookup = new HashMap<>();
 
 	private PreParserFactory() throws PersistenceLayerException
 	{
@@ -70,27 +71,27 @@ public final class PreParserFactory implements PluginLoader
 		return instance;
 	}
 
-	public PrerequisiteParserInterface getParser(String kind)
+	private PrerequisiteParserInterface getParser(String kind)
 	{
 		return parserLookup.get(kind.toLowerCase());
 	}
 
-	public static void register(PrerequisiteParserInterface testClass) throws PersistenceLayerException
+	public void register(PrerequisiteParserInterface testClass) throws PersistenceLayerException
 	{
 		String[] kindsHandled = testClass.kindsHandled();
 
-		for (int i = 0; i < kindsHandled.length; i++)
+		for (String kind : kindsHandled)
 		{
-			Object test = parserLookup.get(kindsHandled[i].toLowerCase());
+			Object test = parserLookup.get(kind.toLowerCase());
 
 			if (test != null)
 			{
 				throw new PersistenceLayerException(
-					"Error registering '" + testClass.getClass().getName() + "' as test '" + kindsHandled[i]
-						+ "'. The test is already registered to '" + test.getClass().getName() + "'");
+						"Error registering '" + testClass.getClass().getName() + "' as test '" + kind
+								+ "'. The test is already registered to '" + test.getClass().getName() + "'");
 			}
 
-			parserLookup.put(kindsHandled[i].toLowerCase(), testClass);
+			parserLookup.put(kind.toLowerCase(), testClass);
 		}
 	}
 
@@ -167,7 +168,7 @@ public final class PreParserFactory implements PluginLoader
 		}
 		catch (Throwable t)
 		{
-			throw new PersistenceLayerException("Can not parse '" + prereqStr + "': " + t.getMessage());
+			throw new PersistenceLayerException("Can not parse '" + prereqStr + "': " + t.getMessage(), t);
 		}
 	}
 
@@ -184,17 +185,16 @@ public final class PreParserFactory implements PluginLoader
 
 	public static void clear()
 	{
-		parserLookup.clear();
 		if (instance != null)
 		{
+			instance.parserLookup.clear();
 			try
 			{
-				register(new PreMultParser());
+				instance.register(new PreMultParser());
 			}
 			catch (PersistenceLayerException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new UnreachableError("Should be impossible", e);
 			}
 		}
 	}

@@ -24,15 +24,24 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
-import javax.swing.undo.UndoManager;
-
 import pcgen.cdom.enumeration.BiographyField;
 import pcgen.cdom.enumeration.CharID;
+import pcgen.cdom.enumeration.Gender;
+import pcgen.cdom.enumeration.Handed;
 import pcgen.cdom.enumeration.Nature;
 import pcgen.cdom.enumeration.SkillFilter;
 import pcgen.cdom.meta.CorePerspective;
+import pcgen.core.AbilityCategory;
+import pcgen.core.Deity;
+import pcgen.core.EquipmentModifier;
+import pcgen.core.Kit;
+import pcgen.core.Language;
 import pcgen.core.PCAlignment;
+import pcgen.core.PCClass;
+import pcgen.core.PCStat;
+import pcgen.core.PCTemplate;
 import pcgen.core.PlayerCharacter;
+import pcgen.core.Race;
 import pcgen.core.VariableProcessor;
 import pcgen.facade.util.DefaultListFacade;
 import pcgen.facade.util.ListFacade;
@@ -50,7 +59,7 @@ import pcgen.io.ExportHandler;
  * can pick up on. To operate like this, all values returned
  * from this class, with a couple of exceptions, are models that can
  * be listenered to. Two of the most commonly used models are
- * the {@code ReferenceFacade} and the <code>ListFacade</code>
+ * the {@code ReferenceFacade} and the {@code ListFacade}
  *
  * Note: This facade returns references to items of interest.
  * These allow not only the values to be retrieved but also
@@ -63,15 +72,13 @@ public interface CharacterFacade extends CompanionFacade
 
 	public InfoFactory getInfoFactory();
 
-	public UndoManager getUndoManager();
-
-	public ReferenceFacade<GenderFacade> getGenderRef();
+	public ReferenceFacade<Gender> getGenderRef();
 
 	public void setAlignment(PCAlignment alignment);
 
 	public ReferenceFacade<PCAlignment> getAlignmentRef();
 
-	public void setGender(GenderFacade gender);
+	public void setGender(Gender gender);
 
 	public void setGender(String gender);
 
@@ -79,26 +86,26 @@ public interface CharacterFacade extends CompanionFacade
 	 * @param stat The stat to retrieve the base for
 	 * @return A reference to the base score for the stat
 	 */
-	public ReferenceFacade<Number> getScoreBaseRef(StatFacade stat);
+	public ReferenceFacade<Number> getScoreBaseRef(PCStat stat);
 
 	/**
 	 * @param stat The stat to retrieve the mod total for
 	 * @return The modifier for the stat total
 	 */
-	public int getModTotal(StatFacade stat);
+	public int getModTotal(PCStat stat);
 
 	/**
 	 * @param stat The stat to retrieve the base score of
 	 * @return The base (user set) score for the stat
 	 */
-	public int getScoreBase(StatFacade stat);
+	public int getScoreBase(PCStat stat);
 
 	/**
 	 * Update the base score of the stat.
 	 * @param stat The stat to be set.
 	 * @param score The new base score.
 	 */
-	public void setScoreBase(StatFacade stat, int score);
+	public void setScoreBase(PCStat stat, int score);
 
 	/**
 	 * Retrieve the display string for the score total. This may be a 
@@ -109,13 +116,13 @@ public interface CharacterFacade extends CompanionFacade
 	 * @param stat The stat to be retrieved
 	 * @return The display string for the score total
 	 */
-	public String getScoreTotalString(StatFacade stat);
+	public String getScoreTotalString(PCStat stat);
 
 	/**
 	 * @param stat The stat to retrieve the racial bonus of.
 	 * @return The racial bonus to the stat score.
 	 */
-	public int getScoreRaceBonus(StatFacade stat);
+	public int getScoreRaceBonus(PCStat stat);
 
 	/**
 	 * Retrieve the bonus to the stat score from sources other than the 
@@ -123,13 +130,13 @@ public interface CharacterFacade extends CompanionFacade
 	 * @param stat The stat to retrieve the other bonus of.
 	 * @return The misc bonus to the stat score
 	 */
-	public int getScoreOtherBonus(StatFacade stat);
+	public int getScoreOtherBonus(PCStat stat);
 
-	public void addAbility(AbilityCategoryFacade category, AbilityFacade ability);
+	public void addAbility(AbilityCategory category, AbilityFacade ability);
 
-	public void removeAbility(AbilityCategoryFacade category, AbilityFacade ability);
+	public void removeAbility(AbilityCategory category, AbilityFacade ability);
 
-	public boolean hasAbility(AbilityCategoryFacade category, AbilityFacade ability);
+	public boolean hasAbility(AbilityCategory category, AbilityFacade ability);
 
 	/**
 	 * Note: This method should never return null. If the character does not possess
@@ -138,7 +145,7 @@ public interface CharacterFacade extends CompanionFacade
 	 * @param category
 	 * @return a List of Abilities the character posseses in the specified category
 	 */
-	public ListFacade<AbilityFacade> getAbilities(AbilityCategoryFacade category);
+	public ListFacade<AbilityFacade> getAbilities(AbilityCategory category);
 
 	/**
 	 * Retrieve a list of the ability categories that are currently relevant to 
@@ -147,9 +154,9 @@ public interface CharacterFacade extends CompanionFacade
 	 * categories become active or inactive.
 	 * @return The list of active categories.
 	 */
-	public ListFacade<AbilityCategoryFacade> getActiveAbilityCategories();
+	public ListFacade<AbilityCategory> getActiveAbilityCategories();
 
-	public void addCharacterLevels(ClassFacade[] classes);
+	public void addCharacterLevels(PCClass[] classes);
 
 	public void removeCharacterLevels(int levels);
 
@@ -158,13 +165,13 @@ public interface CharacterFacade extends CompanionFacade
 	 * @param c a ClassFacade
 	 * @return the total level of a class
 	 */
-	public int getClassLevel(ClassFacade c);
+	public int getClassLevel(PCClass c);
 
-	public int getTotalSelections(AbilityCategoryFacade category);
+	public int getTotalSelections(AbilityCategory category);
 
-	public int getRemainingSelections(AbilityCategoryFacade category);
+	public int getRemainingSelections(AbilityCategory category);
 
-	public void setRemainingSelection(AbilityCategoryFacade category, int remaining);
+	public void setRemainingSelection(AbilityCategory category, int remaining);
 
 	/**
 	 * Adjust the cash held by the character.
@@ -254,9 +261,9 @@ public interface CharacterFacade extends CompanionFacade
 
 	public void deleteEquipmentSet(EquipmentSetFacade set);
 
-	public boolean isQualifiedFor(ClassFacade c);
+	public boolean isQualifiedFor(PCClass c);
 
-	public boolean isAutomatic(LanguageFacade language);
+	public boolean isAutomatic(Language language);
 
 	/**
 	 * Is the user allowed to remove this language currently? 
@@ -264,14 +271,13 @@ public interface CharacterFacade extends CompanionFacade
 	 * @param language The language to be checked.
 	 * @return true if the language can be removed.
 	 */
-	public boolean isRemovable(LanguageFacade language);
+	public boolean isRemovable(Language language);
 
-	public void addTemplate(TemplateFacade template);
+	public void addTemplate(PCTemplate template);
 
-	public void removeTemplate(TemplateFacade template);
+	public void removeTemplate(PCTemplate template);
 
-	public ListFacade<TemplateFacade> getTemplates();
-	//public boolean isBonus(LanguageFacade language);
+	public ListFacade<PCTemplate> getTemplates();
 
 	/**
 	 * Note: this returns both the bonuses that the character
@@ -318,18 +324,13 @@ public interface CharacterFacade extends CompanionFacade
 	 * @return a reference to this character's Race
 	 */
 	@Override
-	public ReferenceFacade<RaceFacade> getRaceRef();
-
-	/**
-	 * @return A reference to a list containing the character's race.
-	 */
-	public ListFacade<RaceFacade> getRaceAsList();
+	public ReferenceFacade<Race> getRaceRef();
 
 	/**
 	 * Sets this character's race
 	 * @param race
 	 */
-	public void setRace(RaceFacade race);
+	public void setRace(Race race);
 
 	/**
 	 * @return a reference to this character's tab name
@@ -366,12 +367,12 @@ public interface CharacterFacade extends CompanionFacade
 	/**
 	 * @return a reference to this character's handedness string
 	 */
-	public ReferenceFacade<HandedFacade> getHandedRef();
+	public ReferenceFacade<Handed> getHandedRef();
 
 	/**
 	 * @param handedness The new handedness string for the character
 	 */
-	public void setHanded(HandedFacade handedness);
+	public void setHanded(Handed handedness);
 
 	/**
 	 * @see CharacterFacade#setFile(File)
@@ -387,9 +388,9 @@ public interface CharacterFacade extends CompanionFacade
 	 */
 	public void setFile(File file);
 
-	public ReferenceFacade<DeityFacade> getDeityRef();
+	public ReferenceFacade<Deity> getDeityRef();
 
-	public void setDeity(DeityFacade deity);
+	public void setDeity(Deity deity);
 
 	/**
 	 * @return The domains that the character knows
@@ -415,16 +416,16 @@ public interface CharacterFacade extends CompanionFacade
 
 	public ReferenceFacade<Integer> getRemainingDomainSelectionsRef();
 
-	public ListFacade<HandedFacade> getAvailableHands();
+	public ListFacade<Handed> getAvailableHands();
 
-	public ListFacade<GenderFacade> getAvailableGenders();
+	public ListFacade<Gender> getAvailableGenders();
 
 	/**
 	 * @return The domains which the character has access to.
 	 */
 	public ListFacade<DomainFacade> getAvailableDomains();
 
-	public ListFacade<LanguageFacade> getLanguages();
+	public ListFacade<Language> getLanguages();
 
 	public ListFacade<LanguageChooserFacade> getLanguageChoosers();
 
@@ -432,7 +433,7 @@ public interface CharacterFacade extends CompanionFacade
 	 * Remove a bonus language from the character.
 	 * @param lang The language to be removed
 	 */
-	public void removeLanguage(LanguageFacade lang);
+	public void removeLanguage(Language lang);
 
 	/**
 	 * Write the character details, as defined by the export handler to the writer.
@@ -546,19 +547,19 @@ public interface CharacterFacade extends CompanionFacade
 	/**
 	 * @return A list of the defined age categories.  
 	 */
-	public ListFacade<SimpleFacade> getAgeCategories();
+	public ListFacade<String> getAgeCategories();
 
 	/**
 	 * Set the character's age category. Will also reset their age if the age category 
 	 * has changed.
 	 * @param ageCat The new age category to be set
 	 */
-	public void setAgeCategory(final SimpleFacade ageCat);
+	public void setAgeCategory(final String ageCat);
 
 	/**
 	 * @return A reference to the age category of the character.
 	 */
-	public ReferenceFacade<SimpleFacade> getAgeCategoryRef();
+	public ReferenceFacade<String> getAgeCategoryRef();
 
 	/**
 	 * @return A reference to the label text for the character's stats total 
@@ -614,11 +615,18 @@ public interface CharacterFacade extends CompanionFacade
 	public void refreshRollMethod();
 
 	/**
-	 * Check if the character meets all requirements to be of the onject.
+	 * Check if the character meets all requirements to be of the object.
 	 * @param infoFacade The object to be checked.
 	 * @return True if the character qualifies for the object, false if not.
 	 */
 	public boolean isQualifiedFor(InfoFacade infoFacade);
+
+	/**
+	 * Check if the character meets all requirements to be of the race.
+	 * @param race The race to be checked.
+	 * @return True if the character qualifies for the race, false if not.
+	 */
+	public boolean isQualifiedFor(Race race);
 
 	/**
 	 * Check if the character meets all requirements to take the domain.
@@ -632,7 +640,7 @@ public interface CharacterFacade extends CompanionFacade
 	 * @param deity The deity to be checked.
 	 * @return True if the character can take the deity, false if not.
 	 */
-	public boolean isQualifiedFor(DeityFacade deity);
+	public boolean isQualifiedFor(Deity deity);
 
 	/**
 	 * Check if the character meets all requirements to take the temporary bonus.
@@ -644,29 +652,18 @@ public interface CharacterFacade extends CompanionFacade
 	/**
 	 * Check if the character meets all requirements to know the spell.
 	 * @param spell The spell to be checked.
-	 * @param classFacade The class the spell would be added within.
+	 * @param pcClass The class the spell would be added within.
 	 * @return True if the character can know the spell, false if not.
 	 */
-	public boolean isQualifiedFor(SpellFacade spell, ClassFacade classFacade);
+	public boolean isQualifiedFor(SpellFacade spell, PCClass pcClass);
 
 	/**
 	 * Is the modifier able to be added to the item of equipment?
 	 * @param equipFacade The equipment item being modified.
-	 * @param eqModFacade The equipment modifier to be checked.
+	 * @param eqMod The equipment modifier to be checked.
 	 * @return True if it can be added, false if not.
 	 */
-	public boolean isQualifiedFor(EquipmentFacade equipFacade, EquipModFacade eqModFacade);
-
-	public void addCharacterChangeListener(CharacterChangeListener listener);
-
-	public void removeCharacterChangeListener(CharacterChangeListener listener);
-
-	public static interface CharacterChangeListener
-	{
-
-		public void characterChanged();
-
-	}
+	public boolean isQualifiedFor(EquipmentFacade equipFacade, EquipmentModifier eqMod);
 
 	public Nature getAbilityNature(AbilityFacade ability);
 	//
@@ -789,19 +786,19 @@ public interface CharacterFacade extends CompanionFacade
 	/**
 	 * @return The kits that have been applied to the character 
 	 */
-	public DefaultListFacade<KitFacade> getKits();
+	public DefaultListFacade<Kit> getKits();
 
 	/**
 	 * Add a kit to the character. This will test the kit is valid and warn the 
 	 * user if there are potential errors before applying the kit. 
 	 * @param object The kit to be added
 	 */
-	public void addKit(KitFacade object);
+	public void addKit(Kit object);
 
 	/**
 	 * @return The list of kits currently available to the character.
 	 */
-	public List<KitFacade> getAvailableKits();
+	public List<Kit> getAvailableKits();
 
 	/**
 	 * Record the default output sheet for this character.
@@ -873,4 +870,14 @@ public interface CharacterFacade extends CompanionFacade
 	public List<CoreViewNodeFacade> getCoreViewTree(CorePerspective pers);
 
 	CharID getCharID();
+
+	public boolean isQualifiedFor(PCTemplate element);
+
+	public boolean isQualifiedFor(Kit element);
+
+	/**
+	 * Return true if the feature with the given name is enabled for this PC; false
+	 * otherwise.
+	 */
+	public boolean isFeatureEnabled(String feature);
 }

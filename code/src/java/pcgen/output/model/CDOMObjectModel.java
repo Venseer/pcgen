@@ -17,15 +17,18 @@
  */
 package pcgen.output.model;
 
-import freemarker.template.TemplateHashModel;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import freemarker.template.TemplateScalarModel;
+import java.util.Objects;
+
 import pcgen.cdom.base.CDOMObject;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.facet.CDOMWrapperInfoFacet;
 import pcgen.cdom.facet.FacetLibrary;
 import pcgen.output.base.OutputActor;
+
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
+import freemarker.template.TemplateScalarModel;
 
 /**
  * A CDOMObjectModel is a wrapper around a CDOMObject which serves as a
@@ -55,21 +58,12 @@ public class CDOMObjectModel implements TemplateHashModel, TemplateScalarModel
 	 */
 	public CDOMObjectModel(CharID id, CDOMObject cdo)
 	{
-		if (id == null)
-		{
-			throw new IllegalArgumentException("CharID may not be null");
-		}
-		if (cdo == null)
-		{
-			throw new IllegalArgumentException("CDOMObject may not be null");
-		}
+		Objects.requireNonNull(id, "CharID may not be null");
+		Objects.requireNonNull(cdo, "CDOMObject may not be null");
 		this.id = id;
 		this.cdo = cdo;
 	}
 
-	/**
-	 * @see freemarker.template.TemplateHashModel#get(java.lang.String)
-	 */
 	@Override
 	public TemplateModel get(String key) throws TemplateModelException
 	{
@@ -95,9 +89,6 @@ public class CDOMObjectModel implements TemplateHashModel, TemplateScalarModel
 		return actor.process(id, obj);
 	}
 
-	/**
-	 * @see freemarker.template.TemplateHashModel#isEmpty()
-	 */
 	@Override
 	public boolean isEmpty() throws TemplateModelException
 	{
@@ -105,9 +96,6 @@ public class CDOMObjectModel implements TemplateHashModel, TemplateScalarModel
 		return false;
 	}
 
-	/**
-	 * @see freemarker.template.TemplateScalarModel#getAsString()
-	 */
 	@Override
 	public String getAsString() throws TemplateModelException
 	{

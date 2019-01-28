@@ -20,13 +20,13 @@ package pcgen.cdom.base;
 import java.util.Collection;
 import java.util.Objects;
 
-import org.jetbrains.annotations.NotNull;
-
 import pcgen.cdom.enumeration.GroupingState;
 import pcgen.core.PlayerCharacter;
 import pcgen.core.chooser.CDOMChoiceManager;
 import pcgen.core.chooser.ChoiceManagerList;
 import pcgen.rules.context.LoadContext;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This is a transitional class from PCGen 5.15+ to the final CDOM core. It is
@@ -156,12 +156,6 @@ public class BasicChooseInformation<T> implements ChooseInformation<T>
 		return choiceActor;
 	}
 
-	/**
-	 * Returns true if the given Object is a TransitionChoice and has identical
-	 * underlying choices and choiceCount
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -184,11 +178,6 @@ public class BasicChooseInformation<T> implements ChooseInformation<T>
 		return false;
 	}
 
-	/**
-	 * Returns a consistent-with-equals hashCode for this TransitionChoice.
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{

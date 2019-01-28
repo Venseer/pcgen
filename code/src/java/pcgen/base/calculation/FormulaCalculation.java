@@ -17,6 +17,8 @@
  */
 package pcgen.base.calculation;
 
+import java.util.Objects;
+
 import pcgen.base.formula.base.DependencyManager;
 import pcgen.base.formula.base.EvaluationManager;
 import pcgen.base.formula.inst.NEPFormula;
@@ -58,10 +60,7 @@ public final class FormulaCalculation<T> extends AbstractNEPCalculation<T>
 	public FormulaCalculation(NEPFormula<T> formula, BasicCalculation<T> calc)
 	{
 		super(calc);
-		if (formula == null)
-		{
-			throw new IllegalArgumentException("NEPFormula cannot be null");
-		}
+		Objects.requireNonNull(formula, "NEPFormula cannot be null");
 		this.formula = formula;
 	}
 
@@ -91,5 +90,11 @@ public final class FormulaCalculation<T> extends AbstractNEPCalculation<T>
 	public String getInstructions()
 	{
 		return formula.toString();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + ": " + getInstructions();
 	}
 }

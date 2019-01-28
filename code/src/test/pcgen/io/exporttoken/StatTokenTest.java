@@ -35,7 +35,7 @@ import pcgen.core.spell.Spell;
 import pcgen.rules.context.LoadContext;
 
 /**
- * <code>StatTokenTest</code> tests the functioning of the STAT token. 
+ * {@code StatTokenTest} tests the functioning of the STAT token.
  */
 
 public class StatTokenTest extends AbstractCharacterTestCase
@@ -47,14 +47,6 @@ public class StatTokenTest extends AbstractCharacterTestCase
 	PCTemplate template2;
 	PCTemplate template3;
 	PCTemplate template4;
-
-	/**
-	 * @param name
-	 */
-	public StatTokenTest(String name)
-	{
-		super(name);
-	}
 
     @Override
 	protected void setUp() throws Exception

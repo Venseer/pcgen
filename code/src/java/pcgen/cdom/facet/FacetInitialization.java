@@ -67,6 +67,7 @@ public final class FacetInitialization
 	{
 		doOtherInitialization();
 		doBridges();
+		ScopedDistributionFacet scopedDistributionFacet = FacetLibrary.getFacet(ScopedDistributionFacet.class);
 		GrantedVarFacet grantedVarFacet = FacetLibrary.getFacet(GrantedVarFacet.class);
 		TemplateFacet templateFacet = FacetLibrary.getFacet(TemplateFacet.class);
 		ConditionalTemplateFacet conditionalTemplateFacet = FacetLibrary.getFacet(ConditionalTemplateFacet.class);
@@ -150,7 +151,7 @@ public final class FacetInitialization
 
 		bonusChangeFacet.addBonusChangeListener(sizeFacet, "SIZEMOD", "NUMBER");
 
-		grantedVarFacet.addDataFacetChangeListener(charObjectFacet); //model done
+		grantedVarFacet.addDataFacetChangeListener(scopedDistributionFacet); //model done
 
 		expandedCampaignFacet.addDataFacetChangeListener(charObjectFacet); //model done
 		globalModifierFacet.addDataFacetChangeListener(charObjectFacet); //model done
@@ -182,7 +183,7 @@ public final class FacetInitialization
 		cdomSourceFacet.addDataFacetChangeListener(autoLangFacet);
 		cdomSourceFacet.addDataFacetChangeListener(dynamicWatchingFacet);
 
-		charObjectFacet.addDataFacetChangeListener(varScopedFacet);
+		cdomObjectFacet.addDataFacetChangeListener(varScopedFacet);
 		dynamicConsolidationFacet.addDataFacetChangeListener(varScopedFacet); //model done
 	}
 
@@ -218,7 +219,6 @@ public final class FacetInitialization
 		FacetLibrary.getFacet(ArmorProfFacet.class);
 		FacetLibrary.getFacet(MonsterClassFacet.class);
 		FacetLibrary.getFacet(KitChoiceFacet.class);
-		FacetLibrary.getFacet(RegionChoiceFacet.class);
 		FacetLibrary.getFacet(AddFacet.class);
 		FacetLibrary.getFacet(RemoveFacet.class);
 		FacetLibrary.getFacet(ModifierFacet.class);

@@ -18,9 +18,12 @@
 package pcgen.rules.persistence;
 
 import java.net.URI;
+import java.util.Optional;
 
+import pcgen.cdom.base.Loadable;
 import pcgen.cdom.inst.Dynamic;
 import pcgen.cdom.inst.DynamicCategory;
+import pcgen.persistence.PersistenceLayerException;
 import pcgen.persistence.lst.SimpleLoader;
 import pcgen.rules.context.LoadContext;
 import pcgen.util.Logging;
@@ -86,4 +89,16 @@ public class DynamicLoader extends SimpleLoader<Dynamic>
 		return d;
 	}
 
+	@Override
+	protected void processNonFirstToken(LoadContext context, URI sourceURI,
+		String token, Loadable loadable) throws PersistenceLayerException
+	{
+		Dynamic d = (Dynamic) loadable;
+		Optional<String> localScopeName = d.getLocalScopeName();
+		if (localScopeName.isPresent())
+		{
+			context = context.dropIntoContext(localScopeName.get());
+		}
+		super.processNonFirstToken(context, sourceURI, token, loadable);
+	}
 }

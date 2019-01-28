@@ -17,6 +17,7 @@
  */
 package pcgen.cdom.format.table;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import pcgen.base.formatmanager.FormatManagerFactory;
@@ -55,12 +56,9 @@ public class TableFormatFactory implements FormatManagerFactory
 	}
 
 	@Override
-	public FormatManager<?> build(String subFormatName, FormatManagerLibrary library)
+	public FormatManager<DataTable> build(String subFormatName, FormatManagerLibrary library)
 	{
-		if (subFormatName == null)
-		{
-			throw new IllegalArgumentException("Table Format cannot be built from no instructions");
-		}
+		Objects.requireNonNull(subFormatName, "Table Format cannot be built from no instructions");
 		if (SUB_PATTERN.matcher(subFormatName).find())
 		{
 			/*

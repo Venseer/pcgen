@@ -17,9 +17,6 @@
  */
 package pcgen.core.prereq;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.textui.TestRunner;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.core.Globals;
 import pcgen.core.PCClass;
@@ -35,22 +32,10 @@ public class PreSpellTypeTest extends AbstractCharacterTestCase
 	private PCClass wiz;
 	private PCClass cle;
 
-	public static void main(final String[] args)
-	{
-		TestRunner.run(PreSpellTypeTest.class);
-	}
-
-	/**
-	 * @return Test
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(PreSpellTypeTest.class);
-	}
-
 	@Override
-	protected void additionalSetUp() throws Exception
+	public void setUp() throws Exception
 	{
+		super.setUp();
 		LoadContext context = Globals.getContext();
 		wiz = context.getReferenceContext().constructCDOMObject(PCClass.class, "Wizard");
 		BuildUtilities.setFact(wiz, "SpellType", "Arcane");
@@ -92,6 +77,8 @@ public class PreSpellTypeTest extends AbstractCharacterTestCase
 		context.getReferenceContext().importObject(cure);
 		context.unconditionallyProcess(cure, "CLASSES", "Cleric=1");
 		context.unconditionallyProcess(cure, "TYPE", "Divine");
+
+		finishLoad();
 	}
 
 	public void testSimpleType() throws Exception
@@ -204,5 +191,11 @@ public class PreSpellTypeTest extends AbstractCharacterTestCase
 		character.incrementClassLevel(1, cle);
 		passes = PrereqHandler.passes(prereq, character, null);
 		assertFalse(passes);
+	}
+
+	@Override
+	protected void defaultSetupEnd()
+	{
+		//Nothing, we will trigger ourselves
 	}
 }

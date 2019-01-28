@@ -30,10 +30,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
 import pcgen.cdom.base.AssociatedPrereqObject;
 import pcgen.cdom.base.CDOMList;
 import pcgen.cdom.base.CDOMReference;
@@ -56,6 +52,10 @@ import pcgen.core.prereq.PrereqHandler;
 import pcgen.core.spell.Spell;
 import pcgen.util.Logging;
 import pcgen.util.enumeration.Visibility;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Parse a generator class data file.
@@ -179,8 +179,6 @@ class ClassDataHandler extends DefaultHandler
 	 * @throws SAXException
 	 * @throws IllegalArgumentException if the file being processed is not the
 	 * same GameMode as requested.
-	 *  
-	 * @see DefaultHandler#startElement(String, String, String, Attributes)
 	 */
 	@Override
 	public void startElement(final String uri, final String localName, final String aName, final Attributes anAttrs)
@@ -467,9 +465,6 @@ class ClassDataHandler extends DefaultHandler
 		}
 	}
 
-	/**
-	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public void endElement(final String uri, final String localName, final String qName)
 	{

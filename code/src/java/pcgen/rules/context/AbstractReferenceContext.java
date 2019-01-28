@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import pcgen.base.format.dice.DiceFormat;
+import pcgen.base.formatmanager.ArrayFormatFactory;
 import pcgen.base.formatmanager.FormatUtilities;
 import pcgen.base.formatmanager.SimpleFormatManagerLibrary;
 import pcgen.base.util.DoubleKeyMap;
@@ -60,14 +61,12 @@ import pcgen.cdom.reference.CDOMSingleRef;
 import pcgen.cdom.reference.ManufacturableFactory;
 import pcgen.cdom.reference.ReferenceManufacturer;
 import pcgen.cdom.reference.UnconstructedValidator;
-import pcgen.cdom.util.IntegerKeyComparator;
-import pcgen.cdom.util.SortKeyComparator;
 import pcgen.core.Domain;
 import pcgen.core.Globals;
 import pcgen.core.PCClass;
 import pcgen.core.SubClass;
+import pcgen.output.channel.compat.HandedCompat;
 import pcgen.util.Logging;
-import pcgen.util.StringPClassUtil;
 
 /**
  * An AbstractReferenceContext is responsible for dealing with References during load of a
@@ -112,7 +111,9 @@ public abstract class AbstractReferenceContext
 	public void initialize()
 	{
 		FormatUtilities.loadDefaultFormats(fmtLibrary);
+		fmtLibrary.addFormatManagerBuilder(new ArrayFormatFactory('\n', ','));
 		fmtLibrary.addFormatManager(new DiceFormat());
+		fmtLibrary.addFormatManager(HandedCompat.HANDED_MANAGER);
 		fmtLibrary.addFormatManagerBuilder(
 			new ColumnFormatFactory(this.getManufacturer(AbstractReferenceContext.TABLE_COLUMN_CLASS)));
 		fmtLibrary.addFormatManagerBuilder(
@@ -448,7 +449,7 @@ public abstract class AbstractReferenceContext
 		WeakReference<List<?>> wr = sortedMap.get(cl, key);
 		if ((wr == null) || ((returnList = (List<T>) wr.get()) == null))
 		{
-			returnList = generateList(cl, new IntegerKeyComparator(key));
+			returnList = generateList(cl, Comparator.comparing(o -> o.getSafe(key)));
 			sortedMap.put(cl, key, new WeakReference<>(returnList));
 		}
 		return Collections.unmodifiableList(returnList);
@@ -457,7 +458,7 @@ public abstract class AbstractReferenceContext
 	public <T extends CDOMObject> List<T> getSortOrderedList(Class<T> cl)
 	{
 		List<T> returnList;
-		Comparator<CDOMObject> comp = Globals.pObjectNameComp;
+		Comparator<CDOMObject> comp = Globals.P_OBJECT_NAME_COMP;
 		//We arbitrarily use the sort order comparator as the second key
 		WeakReference<List<?>> wr = sortedMap.get(cl, comp);
 		if ((wr == null) || ((returnList = (List<T>) wr.get()) == null))
@@ -496,27 +497,12 @@ public abstract class AbstractReferenceContext
 
 	public FormatManager<?> getFormatManager(String clName)
 	{
-		if ((!fmtLibrary.hasFormatManager(clName)) && (StringPClassUtil.getClassForBasic(clName) != null))
-		{
-			importCDOMToFormat(clName);
-		}
 		return fmtLibrary.getFormatManager(clName);
 	}
 
-	private void importCDOMToFormat(String name)
+	void importCDOMToFormat(Class<? extends Loadable> cl)
 	{
-		Class<? extends Loadable> cl = StringPClassUtil.getClassForBasic(name);
-		if (cl == null)
-		{
-			throw new IllegalArgumentException("Invalid Data Definition Location (no class): " + name);
-		}
-		ReferenceManufacturer<? extends Loadable> mgr = getManufacturer(cl);
-		if (!name.equalsIgnoreCase(mgr.getIdentifierType()))
-		{
-			throw new IllegalArgumentException(
-				"Invalid Data: " + name + " did not return a matching manufacturer: " + mgr.getIdentifierType());
-		}
-		fmtLibrary.addFormatManager(mgr);
+		fmtLibrary.addFormatManager(getManufacturer(cl));
 	}
 
 	/**
@@ -526,10 +512,10 @@ public abstract class AbstractReferenceContext
 	 *            The Class of object to return
 	 * @return The List of items, sorted by their sort key
 	 */
-	public <T extends Loadable & SortKeyRequired> List<T> getSortkeySortedCDOMObjects(Class<T> cl)
+	public <T extends SortKeyRequired & Loadable> List<T> getSortkeySortedCDOMObjects(Class<T> cl)
 	{
 		List<T> items = new ArrayList<>(getConstructedCDOMObjects(cl));
-		items.sort(SortKeyComparator.getInstance());
+		items.sort(Comparator.comparing(SortKeyRequired::getSortKey));
 		return items;
 	}
 
@@ -546,14 +532,4 @@ public abstract class AbstractReferenceContext
 	 */
 	public abstract <T extends Loadable> ReferenceManufacturer<T> getManufacturerByFormatName(String formatName,
 		Class<T> cl);
-
-	/**
-	 * Returns the ReferenceManufacturer for a given Format name and class.
-	 * 
-	 * @param formatName
-	 *            The (persistent) name of the format for which the ReferenceManufacturer
-	 *            should be returned
-	 * @return The ReferenceManufacturer for a given Format name and class
-	 */
-	public abstract ReferenceManufacturer<?> getManufacturerByFormatName(String formatName);
 }

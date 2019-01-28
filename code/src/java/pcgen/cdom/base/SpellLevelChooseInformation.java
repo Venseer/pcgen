@@ -21,9 +21,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
-
-import org.jetbrains.annotations.NotNull;
 
 import pcgen.base.lang.StringUtil;
 import pcgen.cdom.enumeration.GroupingState;
@@ -33,6 +32,8 @@ import pcgen.core.PlayerCharacter;
 import pcgen.core.chooser.CDOMChoiceManager;
 import pcgen.core.chooser.ChoiceManagerList;
 import pcgen.rules.context.LoadContext;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This is a transitional class from PCGen 5.15+ to the final CDOM core. It is
@@ -78,14 +79,8 @@ public class SpellLevelChooseInformation implements ChooseInformation<SpellLevel
 	 */
 	public SpellLevelChooseInformation(String name, List<SpellLevelInfo> choice)
 	{
-		if (name == null)
-		{
-			throw new IllegalArgumentException("Name cannot be null");
-		}
-		if (choice == null)
-		{
-			throw new IllegalArgumentException("PrimitiveChoiceSet cannot be null");
-		}
+		Objects.requireNonNull(name, "Name cannot be null");
+		Objects.requireNonNull(choice, "PrimitiveChoiceSet cannot be null");
 		// Need to populate info first to avoid thread issues
 		info = new ArrayList<>(choice);
 		if (info.isEmpty())
@@ -160,12 +155,6 @@ public class SpellLevelChooseInformation implements ChooseInformation<SpellLevel
 		return choiceActor;
 	}
 
-	/**
-	 * Returns true if the given Object is a TransitionChoice and has identical
-	 * underlying choices and choiceCount
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -188,11 +177,6 @@ public class SpellLevelChooseInformation implements ChooseInformation<SpellLevel
 		return false;
 	}
 
-	/**
-	 * Returns a consistent-with-equals hashCode for this TransitionChoice.
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{

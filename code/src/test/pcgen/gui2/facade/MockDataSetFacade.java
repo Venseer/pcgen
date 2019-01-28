@@ -20,34 +20,30 @@ package pcgen.gui2.facade;
 import java.util.List;
 
 import pcgen.core.AbilityCategory;
+import pcgen.core.BodyStructure;
+import pcgen.core.Campaign;
+import pcgen.core.Deity;
 import pcgen.core.GameMode;
+import pcgen.core.Kit;
 import pcgen.core.PCAlignment;
 import pcgen.core.PCClass;
-import pcgen.facade.core.AbilityCategoryFacade;
+import pcgen.core.PCStat;
+import pcgen.core.PCTemplate;
+import pcgen.core.Race;
+import pcgen.core.SizeAdjustment;
+import pcgen.core.Skill;
 import pcgen.facade.core.AbilityFacade;
-import pcgen.facade.core.BodyStructureFacade;
-import pcgen.facade.core.CampaignFacade;
-import pcgen.facade.core.ClassFacade;
 import pcgen.facade.core.DataSetFacade;
-import pcgen.facade.core.DeityFacade;
 import pcgen.facade.core.DomainFacade;
 import pcgen.facade.core.EquipmentFacade;
-import pcgen.facade.core.GameModeFacade;
 import pcgen.facade.core.GearBuySellFacade;
-import pcgen.facade.core.KitFacade;
-import pcgen.facade.core.RaceFacade;
-import pcgen.facade.core.SizeAdjustmentFacade;
-import pcgen.facade.core.SkillFacade;
-import pcgen.facade.core.StatFacade;
-import pcgen.facade.core.TemplateFacade;
-import pcgen.facade.core.generator.StatGenerationFacade;
 import pcgen.facade.util.DefaultListFacade;
 import pcgen.facade.util.DefaultMapFacade;
 import pcgen.facade.util.ListFacade;
 import pcgen.facade.util.MapFacade;
 
 /**
- * The Class <code></code> is ...
+ * The Class {@code} is ...
  *
  * <br/>
  * 
@@ -55,14 +51,14 @@ import pcgen.facade.util.MapFacade;
 public class MockDataSetFacade implements DataSetFacade
 {
 
-	private DefaultListFacade<BodyStructureFacade> equipmentLoc;
-	private DefaultMapFacade<AbilityCategoryFacade, ListFacade<AbilityFacade>> abilityMap;
+	private DefaultListFacade<BodyStructure> equipmentLoc;
+	private DefaultMapFacade<AbilityCategory, ListFacade<AbilityFacade>> abilityMap;
 	private final GameMode game;
-	private DefaultListFacade<RaceFacade> races;
-	private DefaultListFacade<SkillFacade> skills;
-	private DefaultListFacade<StatFacade> stats;
+	private DefaultListFacade<Race> races;
+	private DefaultListFacade<Skill> skills;
+	private DefaultListFacade<PCStat> stats;
 	private DefaultListFacade<GearBuySellFacade> gearBuySellSchemes;
-	private DefaultListFacade<ClassFacade> classes;
+	private DefaultListFacade<PCClass> classes;
 
 
 	public MockDataSetFacade(GameMode gameMode)
@@ -77,9 +73,6 @@ public class MockDataSetFacade implements DataSetFacade
 		classes  = new DefaultListFacade<>();
 	}
 	
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getPrereqAbilities(AbilityFacade)
-	 */
     @Override
 	public List<AbilityFacade> getPrereqAbilities(AbilityFacade abilityFacade)
 	{
@@ -96,9 +89,6 @@ public class MockDataSetFacade implements DataSetFacade
 		abilityMap.putValue(cat, null);
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getAlignments()
-	 */
     @Override
 	public ListFacade<PCAlignment> getAlignments()
 	{
@@ -106,21 +96,15 @@ public class MockDataSetFacade implements DataSetFacade
 		return null;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getCampaigns()
-	 */
     @Override
-	public ListFacade<CampaignFacade> getCampaigns()
+	public ListFacade<Campaign> getCampaigns()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getClasses()
-	 */
     @Override
-	public ListFacade<ClassFacade> getClasses()
+	public ListFacade<PCClass> getClasses()
 	{
 		return classes;
 	}
@@ -134,11 +118,8 @@ public class MockDataSetFacade implements DataSetFacade
 		classes.addElement(cls);
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getDeities()
-	 */
     @Override
-	public ListFacade<DeityFacade> getDeities()
+	public ListFacade<Deity> getDeities()
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -153,9 +134,6 @@ public class MockDataSetFacade implements DataSetFacade
 		return null;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getEquipment()
-	 */
     @Override
 	public ListFacade<EquipmentFacade> getEquipment()
 	{
@@ -163,26 +141,17 @@ public class MockDataSetFacade implements DataSetFacade
 		return null;
 	}
 
-    /**
-     * @see pcgen.facade.core.DataSetFacade#addEquipment(EquipmentFacade)
-     */
 	@Override
 	public void addEquipment(EquipmentFacade equip)
 	{
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getEquipmentLocations()
-	 */
     @Override
-	public ListFacade<BodyStructureFacade> getEquipmentLocations()
+	public ListFacade<BodyStructure> getEquipmentLocations()
 	{
 		return equipmentLoc;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getXPTableNames()
-	 */
     @Override
 	public ListFacade<String> getXPTableNames()
 	{
@@ -190,9 +159,6 @@ public class MockDataSetFacade implements DataSetFacade
 		return null;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getCharacterTypes()
-	 */
     @Override
 	public ListFacade<String> getCharacterTypes()
 	{
@@ -200,99 +166,62 @@ public class MockDataSetFacade implements DataSetFacade
 		return null;
 	}
 
-	public void addEquipmentLocation(BodyStructureFacade elf)
+	public void addEquipmentLocation(BodyStructure elf)
 	{
 		equipmentLoc.addElement(elf);
 	}
 	
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getGameMode()
-	 */
     @Override
-	public GameModeFacade getGameMode()
+	public GameMode getGameMode()
 	{
 		return game;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getRaces()
-	 */
     @Override
-	public ListFacade<RaceFacade> getRaces()
+	public ListFacade<Race> getRaces()
 	{
 		return races;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getSkills()
-	 */
     @Override
-	public ListFacade<SkillFacade> getSkills()
+	public ListFacade<Skill> getSkills()
 	{
 		return skills;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getSpeakLanguageSkill()
-	 */
     @Override
-	public SkillFacade getSpeakLanguageSkill()
+	public Skill getSpeakLanguageSkill()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getStatGenerators()
-	 */
     @Override
-	public ListFacade<StatGenerationFacade> getStatGenerators()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getStats()
-	 */
-    @Override
-	public ListFacade<StatFacade> getStats()
+	public ListFacade<PCStat> getStats()
 	{
 		return stats;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getTemplates()
-	 */
     @Override
-	public ListFacade<TemplateFacade> getTemplates()
+	public ListFacade<PCTemplate> getTemplates()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-    /**
-     * @see pcgen.facade.core.DataSetFacade#getGearBuySellSchemes()
-     */
 	@Override
 	public ListFacade<GearBuySellFacade> getGearBuySellSchemes()
 	{
 		return gearBuySellSchemes;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getKits()
-	 */
 	@Override
-	public ListFacade<KitFacade> getKits()
+	public ListFacade<Kit> getKits()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#refreshEquipment()
-	 */
 	@Override
 	public void refreshEquipment()
 	{
@@ -300,32 +229,16 @@ public class MockDataSetFacade implements DataSetFacade
 		
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getSizes()
-	 */
 	@Override
-	public ListFacade<SizeAdjustmentFacade> getSizes()
+	public ListFacade<SizeAdjustment> getSizes()
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#getAbilities()
-	 */
 	@Override
-	public MapFacade<AbilityCategoryFacade, ListFacade<AbilityFacade>> getAbilities()
+	public MapFacade<AbilityCategory, ListFacade<AbilityFacade>> getAbilities()
 	{
 		return abilityMap;
 	}
-
-	/**
-	 * @see pcgen.facade.core.DataSetFacade#hasDeityDomain()
-	 */
-	@Override
-	public boolean hasDeityDomain()
-	{
-		return game.hasDeityDomain();
-	}
-
 }

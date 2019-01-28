@@ -18,6 +18,7 @@
 package pcgen.cdom.util;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import pcgen.cdom.enumeration.ObjectKey;
 import pcgen.cdom.inst.CodeControl;
@@ -55,6 +56,29 @@ public final class ControlUtilities
 	}
 
 	/**
+	 * Returns true if a feature code control in the given LoadContext is enabled.
+	 * 
+	 * @param context
+	 *            The LoadContext in which the code control is being evaluated
+	 * @param feature
+	 *            The feature code control for which the value should be returned
+	 * @return true if a feature code control in the given LoadContext is enabled; false
+	 *         otherwise
+	 */
+	public static boolean isFeatureEnabled(LoadContext context, String feature)
+	{
+		CodeControl controller = context.getReferenceContext()
+			.silentlyGetConstructedCDOMObject(CodeControl.class, "Controller");
+		if (controller != null)
+		{
+			Boolean object = controller.get(ObjectKey.getKeyFor(Boolean.class,
+				"*" + Objects.requireNonNull(feature)));
+			return (object != null) && object;
+		}
+		return false;
+	}
+
+	/**
 	 * Returns the value of a code control in the given LoadContext. If the given CControl
 	 * is not present in the data, the default value of the given CControl will be
 	 * returned.
@@ -71,15 +95,12 @@ public final class ControlUtilities
 				context.getReferenceContext().silentlyGetConstructedCDOMObject(CodeControl.class, "Controller");
 		if (controller != null)
 		{
-			ObjectKey<String> ok = ObjectKey.getKeyFor(String.class, "*" + Objects.requireNonNull(control.getName()));
-			String value = controller.get(ok);
-			if (value == null)
-			{
-				return control.getDefaultValue();
-			}
-			return value;
+			ObjectKey<String> ok = ObjectKey.getKeyFor(String.class,
+				"*" + Objects.requireNonNull(control.getName()));
+			return Optional.ofNullable(controller.get(ok))
+				.orElse(control.getDefaultValue());
 		}
-		return null;
+		return control.getDefaultValue();
 	}
 
 	/**

@@ -54,12 +54,6 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.text.DefaultFormatter;
 import javax.swing.text.NumberFormatter;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
-
 import gmgen.GMGenSystem;
 import gmgen.gui.FlippingSplitPane;
 import gmgen.plugin.Combatant;
@@ -92,6 +86,12 @@ import plugin.initiative.PObjectModel;
 import plugin.initiative.SaveModel;
 import plugin.initiative.SpellModel;
 import plugin.initiative.XMLCombatant;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 public class Initiative extends javax.swing.JPanel
 {
@@ -1630,7 +1630,6 @@ public class Initiative extends javax.swing.JPanel
 			Document saveDocument = new Document(party);
 			xmlOut.output(saveDocument, fr);
 			fr.flush();
-			fr.close();
 		}
 	}
 
@@ -2773,7 +2772,7 @@ public class Initiative extends javax.swing.JPanel
 	 */
 	private void combatantUpdated(Combatant cbt)
 	{
-		messageHandler.handleMessage(new CombatantHasBeenUpdatedMessage(GMGenSystem.inst, cbt));
+		messageHandler.handleMessage(new CombatantHasBeenUpdatedMessage(GMGenSystem.inst));
 	}
 
 	//** End Other Variables **

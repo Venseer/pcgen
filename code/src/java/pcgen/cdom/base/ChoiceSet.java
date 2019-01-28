@@ -20,6 +20,7 @@
 package pcgen.cdom.base;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import pcgen.cdom.choiceset.AbilityRefChoiceSet;
 import pcgen.cdom.enumeration.GroupingState;
@@ -103,14 +104,8 @@ public class ChoiceSet<T> extends ConcretePrereqObject implements SelectableSet<
 	 */
 	public ChoiceSet(String name, PrimitiveChoiceSet<T> choice, boolean any)
 	{
-		if (choice == null)
-		{
-			throw new IllegalArgumentException("PrimitiveChoiceSet cannot be null");
-		}
-		if (name == null)
-		{
-			throw new IllegalArgumentException("Name cannot be null");
-		}
+		Objects.requireNonNull(choice, "PrimitiveChoiceSet cannot be null");
+		Objects.requireNonNull(name, "Name cannot be null");
 		pcs = choice;
 		setName = name;
 		useAny = any;
@@ -201,24 +196,12 @@ public class ChoiceSet<T> extends ConcretePrereqObject implements SelectableSet<
 		return pcs.getGroupingState();
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this ChoiceSet
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return setName.hashCode() ^ pcs.hashCode();
 	}
 
-	/**
-	 * Returns true if this ChoiceSet is equal to the given Object. Equality is
-	 * defined as being another ChoiceSet object with an equal name and equal
-	 * underlying PrimitiveChoiceSet.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{

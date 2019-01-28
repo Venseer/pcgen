@@ -19,6 +19,8 @@ package pcgen.cdom.facet;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import pcgen.base.formula.base.ScopeInstance;
 import pcgen.base.formula.base.ScopeInstanceFactory;
@@ -63,10 +65,7 @@ public class StatValueFacet extends AbstractScopeFacet<CharID, PCStat, Number>
 	 */
 	public Number get(CharID id, PCStat stat)
 	{
-		if (stat == null)
-		{
-			throw new IllegalArgumentException("Object for getting stat value may not be null");
-		}
+		Objects.requireNonNull(stat, "Object for getting stat value may not be null");
 		String channelName = getStatChannelName();
 		if (channelName == null)
 		{
@@ -99,14 +98,8 @@ public class StatValueFacet extends AbstractScopeFacet<CharID, PCStat, Number>
 	 */
 	public void set(CharID id, PCStat stat, Number value)
 	{
-		if (stat == null)
-		{
-			throw new IllegalArgumentException("Object to add may not be null");
-		}
-		if (value == null)
-		{
-			throw new IllegalArgumentException("Association may not be null");
-		}
+		Objects.requireNonNull(stat, "Object to add may not be null");
+		Objects.requireNonNull(value, "Association may not be null");
 		String channelName = getStatChannelName();
 		Number old;
 		if (channelName == null)
@@ -212,7 +205,8 @@ public class StatValueFacet extends AbstractScopeFacet<CharID, PCStat, Number>
 	{
 		String varName = ChannelUtilities.createVarName(channelName);
 		ScopeInstanceFactory instFactory = SCOPE_FACET.get(id);
-		ScopeInstance scopeInst = instFactory.get(stat.getLocalScopeName(), stat);
+		Optional<String> localScopeName = stat.getLocalScopeName();
+		ScopeInstance scopeInst = instFactory.get(localScopeName.get(), Optional.of(stat));
 		try
 		{
 			VariableID<Number> varID = (VariableID<Number>) loadContextFacet.get(id.getDatasetID()).get()

@@ -17,15 +17,18 @@
  */
 package pcgen.output.model;
 
-import freemarker.template.TemplateHashModel;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
+import java.util.Objects;
+
 import pcgen.cdom.base.Category;
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.facet.FacetLibrary;
 import pcgen.cdom.facet.ObjectWrapperFacet;
 import pcgen.cdom.helper.CNAbilitySelection;
 import pcgen.core.Ability;
+
+import freemarker.template.TemplateHashModel;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 
 /**
  * A CNAbilitySelectionModel is a TemplateHashModel that wraps a
@@ -52,14 +55,8 @@ public class CNAbilitySelectionModel implements TemplateHashModel
 	 */
 	public CNAbilitySelectionModel(CharID id, CNAbilitySelection cnas)
 	{
-		if (id == null)
-		{
-			throw new IllegalArgumentException("CharID cannot be null");
-		}
-		if (cnas == null)
-		{
-			throw new IllegalArgumentException("CNAbilitySelection cannot be null");
-		}
+		Objects.requireNonNull(id, "CharID cannot be null");
+		Objects.requireNonNull(cnas, "CNAbilitySelection cannot be null");
 		this.id = id;
 		this.cnas = cnas;
 	}
@@ -68,8 +65,6 @@ public class CNAbilitySelectionModel implements TemplateHashModel
 	 * Acts as a hash for producing the contents of this model.
 	 * 
 	 * Four items are supported: category, nature, ability and selection.
-	 * 
-	 * @see freemarker.template.TemplateHashModel#get(java.lang.String)
 	 */
 	@Override
 	public TemplateModel get(String key) throws TemplateModelException
@@ -104,9 +99,6 @@ public class CNAbilitySelectionModel implements TemplateHashModel
 		return WRAPPER_FACET.wrap(id, towrap);
 	}
 
-	/**
-	 * @see freemarker.template.TemplateHashModel#isEmpty()
-	 */
 	@Override
 	public boolean isEmpty() throws TemplateModelException
 	{

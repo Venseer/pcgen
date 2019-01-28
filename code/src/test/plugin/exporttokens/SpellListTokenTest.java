@@ -34,13 +34,10 @@ import pcgen.core.bonus.Bonus;
 import pcgen.core.bonus.BonusObj;
 import pcgen.persistence.lst.SimpleLoader;
 import pcgen.rules.context.LoadContext;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import plugin.lsttokens.testsupport.BuildUtilities;
 
 /**
- * <code>SpellListTokenTest</code> is ...
+ * {@code SpellListTokenTest} is ...
  */
 
 public class SpellListTokenTest extends AbstractCharacterTestCase
@@ -49,27 +46,6 @@ public class SpellListTokenTest extends AbstractCharacterTestCase
 	private PCClass divineClass = null;
 	private Race human = null;
 
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(SpellListTokenTest.class);
-	}
-
-	/**
-	 * Basic constructor, name only.
-	 * @param name The name of the test class.
-	 */
-	public SpellListTokenTest(String name)
-	{
-		super(name);
-	}
-
-	/*
-	 * @see TestCase#setUp()
-	 */
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -123,9 +99,6 @@ public class SpellListTokenTest extends AbstractCharacterTestCase
 		context.getReferenceContext().resolveReferences(null);
 	}
 
-	/*
-	 * @see TestCase#tearDown()
-	 */
 	@Override
 	protected void tearDown() throws Exception
 	{

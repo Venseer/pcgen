@@ -19,20 +19,20 @@ package actor.add;
 
 import pcgen.cdom.base.Persistent;
 import pcgen.core.Equipment;
+import plugin.lsttokens.add.EquipToken;
 
 import actor.testsupport.AbstractPersistentCDOMChoiceActorTestCase;
-import plugin.lsttokens.add.EquipToken;
 
 public class EquipTokenTest extends
 		AbstractPersistentCDOMChoiceActorTestCase<Equipment>
 {
 
-	private static final Persistent<Equipment> pca = new EquipToken();
+	private static final Persistent<Equipment> PCA = new EquipToken();
 
 	@Override
 	public Persistent<Equipment> getActor()
 	{
-		return pca;
+		return PCA;
 	}
 
 	@Override

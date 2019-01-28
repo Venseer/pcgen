@@ -21,6 +21,7 @@ package pcgen.cdom.choiceset;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import pcgen.base.util.WeightedCollection;
@@ -72,10 +73,7 @@ public class ReferenceChoiceSet<T> implements PrimitiveChoiceSet<T>
 	 */
 	public ReferenceChoiceSet(Collection<? extends CDOMReference<T>> col)
 	{
-		if (col == null)
-		{
-			throw new IllegalArgumentException("Choice Collection cannot be null");
-		}
+		Objects.requireNonNull(col, "Choice Collection cannot be null");
 		if (col.isEmpty())
 		{
 			throw new IllegalArgumentException("Choice Collection cannot be empty");
@@ -150,24 +148,12 @@ public class ReferenceChoiceSet<T> implements PrimitiveChoiceSet<T>
 		return returnSet;
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this ReferenceChoiceSet
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return refCollection.size();
 	}
 
-	/**
-	 * Returns true if this ReferenceChoiceSet is equal to the given Object.
-	 * Equality is defined as being another ReferenceChoiceSet object with equal
-	 * underlying contents.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{

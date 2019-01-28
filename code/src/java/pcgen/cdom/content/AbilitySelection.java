@@ -186,12 +186,6 @@ public class AbilitySelection extends Selection<Ability, String> implements Comp
 		return getObject().getKeyName();
 	}
 
-	public boolean containsAssociation(String a)
-	{
-		String assoc = getSelection();
-		return (a == assoc) || ((a != null) && a.equalsIgnoreCase(assoc));
-	}
-
 	@Override
 	public String toString()
 	{
@@ -228,9 +222,6 @@ public class AbilitySelection extends Selection<Ability, String> implements Comp
 		return selection.compareTo(oselection);
 	}
 
-	/**
-	 * @see pcgen.cdom.base.Reducible#getCDOMObject()
-	 */
 	@Override
 	public CDOMObject getCDOMObject()
 	{

@@ -19,8 +19,6 @@ package plugin.exporttokens;
 
 import java.util.Collections;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.content.ACControl;
 import pcgen.cdom.enumeration.IntegerKey;
@@ -39,7 +37,7 @@ import pcgen.rules.context.LoadContext;
 import pcgen.util.TestHelper;
 
 /**
- * <code>ACTokenTest</code> tests the function of the AC token and 
+ * {@code ACTokenTest} tests the function of the AC token and
  * thus the calculations of armor class.  
  */
 public class ACTokenTest extends AbstractCharacterTestCase
@@ -49,18 +47,6 @@ public class ACTokenTest extends AbstractCharacterTestCase
 	private EquipmentModifier plus1;
 	private Equipment chainShirt;
 
-	/**
-	 * Quick test suite creation - adds all methods beginning with "test"
-	 * @return The Test suite
-	 */
-	public static Test suite()
-	{
-		return new TestSuite(ACTokenTest.class);
-	}
-
-	/*
-	 * @see TestCase#setUp()
-	 */
     @Override
 	protected void setUp() throws Exception
 	{
@@ -143,9 +129,6 @@ public class ACTokenTest extends AbstractCharacterTestCase
 
 	}
 
-	/*
-	 * @see TestCase#tearDown()
-	 */
     @Override
 	protected void tearDown() throws Exception
 	{

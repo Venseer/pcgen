@@ -23,6 +23,7 @@ import java.util.EventObject;
 
 import pcgen.facade.util.ListFacade;
 import pcgen.facade.util.ReferenceFacade;
+import pcgen.gui2.facade.EquipNode;
 
 /**
  * {@code EquipmentSetFacade}defines the interface layer between the UI
@@ -147,35 +148,6 @@ public interface EquipmentSetFacade
 
 	}
 
-	public static interface EquipNode extends Comparable<EquipNode>
-	{
-
-		public enum NodeType
-		{
-			/** This is a body location which can contain other slots rather 
-			 * than equipment. */
-			BODY_SLOT,
-
-			/** This is a node which shows an empty slot that takes a specific 
-			 * equipment type (e.g. Ring). It is removed from the tree when the 
-			 * slot it represents is full and added back in when there is space 
-			 * in the slot. */
-			PHANTOM_SLOT,
-
-			/** This is a node representing an equipped item of equipment. */
-			EQUIPMENT;
-		}
-
-		public NodeType getNodeType();
-
-		public EquipNode getParent();
-
-		public EquipmentFacade getEquipment();
-
-		public BodyStructureFacade getBodyStructure();
-
-	}
-
 	/**
 	 * Move the equipment a certain number of slots up (negative) or down 
 	 * (positive) in the tree.
@@ -193,5 +165,7 @@ public interface EquipmentSetFacade
 	 * @return true if the sort was successful, false if it could not be done.
 	 */
 	public boolean sortEquipment(EquipNode parentNode);
+
+	public boolean isRoot();
 
 }

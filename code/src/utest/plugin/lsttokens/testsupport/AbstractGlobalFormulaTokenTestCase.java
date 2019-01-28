@@ -17,12 +17,17 @@
  */
 package plugin.lsttokens.testsupport;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import pcgen.base.formula.Formula;
 import pcgen.cdom.base.FormulaFactory;
 import pcgen.cdom.enumeration.FormulaKey;
 import pcgen.persistence.PersistenceLayerException;
+
+import org.junit.jupiter.api.Test;
 
 public abstract class AbstractGlobalFormulaTokenTestCase extends
 		AbstractGlobalTokenTestCase
@@ -106,7 +111,7 @@ public abstract class AbstractGlobalFormulaTokenTestCase extends
 	public void testUnparseNull()
 	{
 		primaryProf.put(getFormulaKey(), null);
-		assertNull(getToken().unparse(primaryContext, primaryProf));
+		assertNull(getWriteToken().unparse(primaryContext, primaryProf));
 	}
 
 	private void setAndUnparseMatch(Formula val)
@@ -117,7 +122,7 @@ public abstract class AbstractGlobalFormulaTokenTestCase extends
 	protected String[] setAndUnparse(Formula val)
 	{
 		setFormula(val);
-		return getToken().unparse(primaryContext, primaryProf);
+		return getWriteToken().unparse(primaryContext, primaryProf);
 	}
 
 	protected void setFormula(Formula val)

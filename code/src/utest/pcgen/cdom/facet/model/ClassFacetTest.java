@@ -17,13 +17,17 @@
  */
 package pcgen.cdom.facet.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import junit.framework.TestCase;
-
-import org.junit.Test;
 
 import pcgen.cdom.enumeration.CharID;
 import pcgen.cdom.enumeration.DataSetID;
@@ -37,7 +41,11 @@ import pcgen.cdom.facet.model.ClassFacet.ClassLevelObjectChangeEvent;
 import pcgen.cdom.inst.PCClassLevel;
 import pcgen.core.PCClass;
 
-public class ClassFacetTest extends TestCase
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class ClassFacetTest
 {
 	private CharID id;
 	private CharID altid;
@@ -84,15 +92,23 @@ public class ClassFacetTest extends TestCase
 
 	}
 
-	@Override
+	@BeforeEach
 	public void setUp() throws Exception
 	{
-		super.setUp();
 		DataSetID cid = DataSetID.getID();
 		id = CharID.getID(cid);
 		altid = CharID.getID(cid);
 		facet.addDataFacetChangeListener(classListener);
 		facet.addLevelChangeListener(classListener);
+	}
+
+	@AfterEach
+	public void tearDown()
+	{
+		id = null;
+		altid = null;
+		facet = null;
+		classListener = null;
 	}
 
 	private void assertEventCount(int a, int r, int l)
@@ -146,7 +162,7 @@ public class ClassFacetTest extends TestCase
 			facet.addClass(id, null);
 			fail();
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException e)
 		{
 			// Yep!
 		}
@@ -332,7 +348,7 @@ public class ClassFacetTest extends TestCase
 			facet.removeClass(id, null);
 			fail();
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException e)
 		{
 			// Expected
 		}
@@ -651,7 +667,7 @@ public class ClassFacetTest extends TestCase
 			facet.setLevel(id, null, 2);
 			fail();
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException e)
 		{
 			// Yep!
 		}
@@ -694,7 +710,7 @@ public class ClassFacetTest extends TestCase
 			assertFalse(facet.setClassLevel(id, null, pcl));
 			fail();
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException e)
 		{
 			// Yep!
 		}
@@ -715,7 +731,7 @@ public class ClassFacetTest extends TestCase
 			assertFalse(facet.setClassLevel(id, t1, null));
 			fail();
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException e)
 		{
 			// Yep!
 		}
@@ -916,7 +932,7 @@ public class ClassFacetTest extends TestCase
 			facet.getClassLevel(id, null, 1);
 			fail();
 		}
-		catch (IllegalArgumentException e)
+		catch (NullPointerException e)
 		{
 			//Yep!
 		}

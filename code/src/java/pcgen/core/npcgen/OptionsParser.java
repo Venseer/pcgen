@@ -26,12 +26,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import pcgen.core.GameMode;
+import pcgen.core.SystemCollections;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import pcgen.core.GameMode;
-import pcgen.core.SystemCollections;
 
 /**
  * Parse a generator options file.
@@ -97,11 +97,6 @@ class OptionHandler extends DefaultHandler
 		theList = aList;
 	}
 
-	/**
-	 * @throws SAXException 
-	 * 
-	 * @see DefaultHandler#startElement(String, String, String, Attributes)
-	 */
 	@Override
 	public void startElement(final String uri, final String localName, final String aName, final Attributes anAttrs)
 		throws SAXException

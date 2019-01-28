@@ -36,8 +36,6 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import org.apache.commons.lang3.SystemUtils;
-
 import gmgen.gui.PreferencesDialog;
 import gmgen.gui.PreferencesRootTreeNode;
 import gmgen.pluginmgr.messages.AddMenuItemToGMGenToolsMenuMessage;
@@ -51,9 +49,9 @@ import gmgen.pluginmgr.messages.GMGenBeingClosedMessage;
 import gmgen.pluginmgr.messages.RequestAddPreferencesPanelMessage;
 import gmgen.pluginmgr.messages.RequestAddTabToGMGenMessage;
 import gmgen.util.LogUtilities;
-import gmgen.util.OSXAdapter;
 import pcgen.core.SettingsHandler;
 import pcgen.gui2.PCGenActionMap;
+import pcgen.gui2.plaf.MacGUIHandler;
 import pcgen.gui2.tools.CommonMenuText;
 import pcgen.gui2.tools.Icons;
 import pcgen.gui2.tools.Utility;
@@ -66,6 +64,8 @@ import pcgen.pluginmgr.messages.RequestFileOpenedMessageForCurrentlyOpenedPCsMes
 import pcgen.system.LanguageBundle;
 import pcgen.system.PCGenPropBundle;
 import pcgen.util.Logging;
+
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * {@code GMGenSystem} is the main class of the GMGen application.
@@ -171,8 +171,9 @@ public final class GMGenSystem extends JFrame
 
 		if (SystemUtils.IS_OS_MAC_OSX)
 		{
-			OSXAdapter.initialize(this);
+			MacGUIHandler.initialize();
 		}
+
 		Utility.setApplicationTitle(APPLICATION_NAME);
 
 		inst = this;

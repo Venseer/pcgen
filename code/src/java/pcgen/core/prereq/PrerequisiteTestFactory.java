@@ -28,7 +28,7 @@ import pcgen.util.Logging;
 public final class PrerequisiteTestFactory implements PluginLoader
 {
 	private static PrerequisiteTestFactory instance = null;
-	private static final Map<String, PrerequisiteTest> testLookup = new HashMap<>();
+	private final Map<String, PrerequisiteTest> TEST_LOOKUP = new HashMap<>();
 
 	/**
 	 * @return Returns the instance.
@@ -52,17 +52,17 @@ public final class PrerequisiteTestFactory implements PluginLoader
 	 * Registers this PrerequisiteTest as handling a kind of prereq
 	 * @param testClass PrerequisiteTest to register.
 	 */
-	public static void register(final PrerequisiteTest testClass)
+	public void register(final PrerequisiteTest testClass)
 	{
 		final String kindHandled = testClass.kindHandled();
-		final PrerequisiteTest test = testLookup.get(kindHandled);
+		final PrerequisiteTest test = TEST_LOOKUP.get(kindHandled);
 		if (test != null)
 		{
 			Logging.errorPrint(
 				LanguageBundle.getFormattedString("PrerequisiteTestFactory.error.already_registered", //$NON-NLS-1$
 				testClass.getClass().getName(), kindHandled, test.getClass().getName()));
 		}
-		testLookup.put(kindHandled.toUpperCase(), testClass);
+		TEST_LOOKUP.put(kindHandled.toUpperCase(), testClass);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public final class PrerequisiteTestFactory implements PluginLoader
 		}
 		else
 		{
-			test = testLookup.get(kind.toUpperCase());
+			test = TEST_LOOKUP.get(kind.toUpperCase());
 			if (test == null)
 			{
 				Logging.errorPrintLocalised("PrerequisiteTestFactory.error.cannot_find_test", kind); //$NON-NLS-1$
@@ -99,5 +99,13 @@ public final class PrerequisiteTestFactory implements PluginLoader
 	public Class<?>[] getPluginClasses()
 	{
 		return new Class[]{PrerequisiteTest.class};
+	}
+
+	public static void clear()
+	{
+		if (instance != null)
+		{
+			instance.TEST_LOOKUP.clear();
+		}
 	}
 }

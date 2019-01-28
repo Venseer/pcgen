@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Objects;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -34,7 +35,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.plaf.UIResource;
 
 import pcgen.cdom.base.Constants;
-import pcgen.facade.core.CampaignFacade;
+import pcgen.core.Campaign;
 import pcgen.facade.core.CharacterFacade;
 import pcgen.facade.core.SourceSelectionFacade;
 import pcgen.facade.util.event.ReferenceEvent;
@@ -50,17 +51,22 @@ import pcgen.system.LanguageBundle;
  * Note: this class extends UIResource so that the component can be added
  * as a child of a JTabbedPane without it becoming a tab
  */
-public class InfoGuidePane extends JComponent implements UIResource
+class InfoGuidePane extends JComponent implements UIResource
 {
 
+	/**
+	 * The context indicating what items are currently loaded/being processed in the UI
+	 */
+	private final UIContext uiContext;
 	private final PCGenFrame frame;
 	private final JEditorPane gameModeLabel;
 	private final JEditorPane campaignList;
 	private final JEditorPane tipPane;
 	private JPanel mainPanel;
 
-	public InfoGuidePane(PCGenFrame frame)
+	InfoGuidePane(PCGenFrame frame, UIContext uiContext)
 	{
+		this.uiContext = Objects.requireNonNull(uiContext);
 		this.frame = frame;
 		this.gameModeLabel = createHtmlPane();
 		this.campaignList = createHtmlPane();
@@ -138,16 +144,17 @@ public class InfoGuidePane extends JComponent implements UIResource
 			}
 
 		});
-		frame.getCurrentSourceSelectionRef().addReferenceListener(new ReferenceListener<SourceSelectionFacade>()
-		{
-
-			@Override
-			public void referenceChanged(ReferenceEvent<SourceSelectionFacade> e)
+		uiContext.getCurrentSourceSelectionRef()
+			.addReferenceListener(new ReferenceListener<SourceSelectionFacade>()
 			{
-				refreshDisplayedSources(e.getNewReference());
-			}
 
-		});
+				@Override
+				public void referenceChanged(ReferenceEvent<SourceSelectionFacade> e)
+				{
+					refreshDisplayedSources(e.getNewReference());
+				}
+
+			});
 	}
 
 	private void refreshDisplayedSources(SourceSelectionFacade sources)
@@ -167,9 +174,9 @@ public class InfoGuidePane extends JComponent implements UIResource
 		else
 		{
 			HtmlInfoBuilder builder = new HtmlInfoBuilder();
-			for (CampaignFacade campaign : sources.getCampaigns())
+			for (Campaign campaign : sources.getCampaigns())
 			{
-				builder.append(campaign.getName()).appendLineBreak();
+				builder.append(campaign.getKeyName()).appendLineBreak();
 			}
 			campaignList.setText(builder.toString());
 		}

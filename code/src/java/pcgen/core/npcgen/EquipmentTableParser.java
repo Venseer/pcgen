@@ -28,15 +28,15 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
 import pcgen.core.Equipment;
 import pcgen.core.GameMode;
 import pcgen.core.Globals;
 import pcgen.core.SystemCollections;
 import pcgen.util.Logging;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * Parse a equipment table (random treasure) data file.
@@ -157,8 +157,6 @@ public class EquipmentTableParser
 		/**
 		 * @throws  SAXException
 		 * @throws  IllegalArgumentException if the file being processed is not the same GameMode as requested.
-		 * 
-		 * @see  DefaultHandler#startElement(String, String, String, Attributes)
 		 */
 		@Override
 		public void startElement(final String uri, final String localName, final String aName, final Attributes anAttrs)
@@ -362,9 +360,6 @@ public class EquipmentTableParser
 			}
 		}
 
-		/**
-		 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String, java.lang.String, java.lang.String)
-		 */
 		@Override
 		public void endElement(final String uri, final String localName, final String qName)
 		{

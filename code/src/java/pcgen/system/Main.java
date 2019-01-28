@@ -32,14 +32,6 @@ import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
-
-import net.sourceforge.argparse4j.ArgumentParsers;
-import net.sourceforge.argparse4j.impl.Arguments;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.MutuallyExclusiveGroup;
-import net.sourceforge.argparse4j.inf.Namespace;
 import pcgen.cdom.base.Constants;
 import pcgen.cdom.formula.PluginFunctionLibrary;
 import pcgen.core.CustomData;
@@ -64,6 +56,14 @@ import pcgen.pluginmgr.PluginManager;
 import pcgen.rules.persistence.TokenLibrary;
 import pcgen.util.Logging;
 import pcgen.util.PJEP;
+
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.impl.Arguments;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.MutuallyExclusiveGroup;
+import net.sourceforge.argparse4j.inf.Namespace;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * Main entry point for pcgen.
@@ -430,11 +430,11 @@ public final class Main
 	}
 
 	/**
-	 * @return an ArgumentParser used to peform argument parsing
+	 * @return an ArgumentParser used to perform argument parsing
 	 */
 	private static ArgumentParser getParser()
 	{
-		ArgumentParser parser = ArgumentParsers.newArgumentParser(Constants.APPLICATION_NAME).defaultHelp(false)
+		ArgumentParser parser = ArgumentParsers.newFor(Constants.APPLICATION_NAME).build().defaultHelp(false)
 			.description("RPG Character Generator").version(PCGenPropBundle.getVersionNumber());
 
 		parser.addArgument("-v", "--verbose").help("verbose logging").type(Boolean.class).action(Arguments.count());
@@ -481,7 +481,7 @@ public final class Main
 		@Override
 		public void uncaughtException(Thread t, Throwable e)
 		{
-			Logging.errorPrint("Uncaught error - ignoring", e);
+			Logging.errorPrint("Uncaught error on thread  " + t + " - ignoring", e);
 		}
 	}
 }

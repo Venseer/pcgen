@@ -98,7 +98,7 @@ public class KitTemplate extends BaseKit
 		SettingsHandler.setShowHPDialogAtLevelUp(false);
 		if (!apply)
 		{
-			ChooserFactory.pushChooserClassname("pcgen.util.chooser.RandomChooser"); //$NON-NLS-1$
+			ChooserFactory.useRandomChooser(); //$NON-NLS-1$
 		}
 		HashMapToList<PCTemplate, PCTemplate> selectedMap = new HashMapToList<>();
 
@@ -122,10 +122,6 @@ public class KitTemplate extends BaseKit
 			selectedMap.addAllToListFor(templateToAdd, subAdded);
 		}
 
-		if (!apply)
-		{
-			ChooserFactory.popChooserClassname();
-		}
 		SettingsHandler.setShowHPDialogAtLevelUp(tempShowHP);
 		return selectedMap;
 	}

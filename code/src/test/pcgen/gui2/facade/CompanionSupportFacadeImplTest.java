@@ -17,8 +17,6 @@
  */
 package pcgen.gui2.facade;
 
-import org.junit.Test;
-
 import pcgen.AbstractCharacterTestCase;
 import pcgen.cdom.base.BasicClassIdentity;
 import pcgen.cdom.base.CDOMReference;
@@ -27,6 +25,7 @@ import pcgen.cdom.list.CompanionList;
 import pcgen.cdom.reference.CDOMDirectSingleRef;
 import pcgen.cdom.reference.CDOMSimpleSingleRef;
 import pcgen.cdom.reference.CDOMSingleRef;
+import pcgen.core.Campaign;
 import pcgen.core.DataSet;
 import pcgen.core.FollowerOption;
 import pcgen.core.Globals;
@@ -34,20 +33,15 @@ import pcgen.core.PlayerCharacter;
 import pcgen.core.Race;
 import pcgen.core.SettingsHandler;
 import pcgen.core.character.Follower;
-import pcgen.facade.core.CampaignFacade;
 import pcgen.facade.core.CharacterFacade;
 import pcgen.facade.core.DataSetFacade;
-import pcgen.facade.util.DefaultReferenceFacade;
 import pcgen.facade.util.DefaultListFacade;
+import pcgen.facade.util.DefaultReferenceFacade;
 import pcgen.facade.util.ListFacade;
 import pcgen.util.TestHelper;
 
-/**
- * The Class <code></code> ...
- *
- * <br/>
- * 
- */
+import org.junit.Test;
+
 public class CompanionSupportFacadeImplTest extends AbstractCharacterTestCase
 {
 
@@ -63,9 +57,11 @@ public class CompanionSupportFacadeImplTest extends AbstractCharacterTestCase
 	{
 		super.setUp();
 		
+		companionList = Globals.getContext().getReferenceContext().constructNowIfNecessary(CompanionList.class,
+				"Familiar");
 		uiDelegate = new MockUIDelegate();
 		todoManager = new TodoManager();
-		ListFacade<CampaignFacade> campaigns = new DefaultListFacade<>();
+		ListFacade<Campaign> campaigns = new DefaultListFacade<>();
 		dataSetFacade = new DataSet(Globals.getContext(), SettingsHandler.getGame(), campaigns);
 		masterRace = TestHelper.makeRace("Wood Elf");
 		companionRace = TestHelper.makeRace("Weasel");
@@ -76,6 +72,7 @@ public class CompanionSupportFacadeImplTest extends AbstractCharacterTestCase
 			companionList.getKeyName());
 		FollowerOption option = new FollowerOption(race, ref);
 		masterRace.addToListFor(ListKey.COMPANIONLIST, option);
+		finishLoad();
 	}
 
 	/**
@@ -113,10 +110,8 @@ public class CompanionSupportFacadeImplTest extends AbstractCharacterTestCase
 	}
 
 	@Override
-	protected void additionalSetUp() throws Exception
+	protected void defaultSetupEnd()
 	{
-		companionList = Globals.getContext().getReferenceContext().constructNowIfNecessary(CompanionList.class,
-			"Familiar");
+		//Nothing, we will trigger ourselves
 	}
-
 }

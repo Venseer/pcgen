@@ -18,6 +18,7 @@
 package pcgen.cdom.primitive;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -38,10 +39,7 @@ public class CompoundAndPrimitive<T> implements PrimitiveCollection<T>
 
 	public CompoundAndPrimitive(Collection<PrimitiveCollection<T>> pcfCollection)
 	{
-		if (pcfCollection == null)
-		{
-			throw new IllegalArgumentException("Collection for CompoundAndPrimitive cannot be null");
-		}
+		Objects.requireNonNull(pcfCollection, "Collection for CompoundAndPrimitive cannot be null");
 		if (pcfCollection.isEmpty())
 		{
 			throw new IllegalArgumentException("Collection for CompoundAndPrimitive cannot be empty");
@@ -134,24 +132,12 @@ public class CompoundAndPrimitive<T> implements PrimitiveCollection<T>
 		return PrimitiveUtilities.joinLstFormat(primCollection, Constants.COMMA, useAny);
 	}
 
-	/**
-	 * Returns the consistent-with-equals hashCode for this CompoundAndPrimitive
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
 		return primCollection.hashCode();
 	}
 
-	/**
-	 * Returns true if this CompoundAndPrimitive is equal to the given Object.
-	 * Equality is defined as being another CompoundAndPrimitive object with
-	 * equal underlying contents.
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
